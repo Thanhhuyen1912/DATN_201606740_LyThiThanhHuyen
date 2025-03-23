@@ -1,0 +1,182 @@
+﻿<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com">
+
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/css/css.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- Header -->
+    <header class="border-b bg-white relative">
+        <div class="container mx-auto flex justify-between items-center  px-6">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img alt="Rosie Beauty logo" class="hidden md:block" height="60" src="/images/2.jpg" width="120" />
+            </div>
+
+            <!-- Button Toggle Menu (Mobile) -->
+            <button id="menu-toggle" class="md:hidden text-gray-800 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+
+            <!-- Navbar -->
+            <nav id="nav-menu" class="hidden md:flex flex-col md:flex-row
+      space-y-4 md:space-y-0 md:space-x-6
+      absolute md:relative top-8 left-0 md:top-auto md:left-auto
+      bg-white md:bg-transparent w-full md:w-auto shadow-md md:shadow-none
+      p-4 md:p-0 z-50">
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">TRANG CHỦ</a>
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">GIỚI THIỆU</a>
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2 flex items-center" href="#">
+                    SẢN PHẨM <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
+                </a>
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">LIÊN HỆ</a>
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">TIN TỨC</a>
+            </nav>
+            <div class=" d-none d-md-flex space-x-4">
+                <i class="fas fa-search text-gray-800"></i>
+                <i class="fas fa-user text-gray-800"></i>
+                <div class="relative">
+                    <i class="fas fa-shopping-bag text-gray-800"></i>
+                    <span class="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-[10px] rounded-full px-[3px] py-[1px] leading-none">
+                        0
+                    </span>
+
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Script Toggle Navbar -->
+    <script>
+        document.getElementById("menu-toggle").addEventListener("click", function () {
+          let menu = document.getElementById("nav-menu");
+          menu.classList.toggle("hidden");
+          menu.classList.toggle("flex");
+        });
+    </script>
+
+
+
+
+    <!-- Breadcrumb -->
+    <div class="bg1 py-2">
+        <div class="container mx-auto px-6">
+            <a class="text-gray-600" href="#">
+                Trang chủ
+            </a>
+            <span class="text-gray-600">
+                »
+            </span>
+            <span class="text-orange-600">
+                Giỏ hàng
+            </span>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!---- End main -->
+    <!-- Footer -->
+    <div class="bg1 py-6">
+        <div class="container">
+            <!-- Social Icons -->
+            <div class="flex justify-center space-x-6 mb-6">
+                <a class="text-orange-600" href="#"><i class="fab fa-facebook-f"></i></a>
+                <a class="text-orange-600" href="#"><i class="fab fa-facebook-messenger"></i></a>
+                <a class="text-orange-600" href="#"><i class="fab fa-instagram"></i></a>
+                <a class="text-orange-600" href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+
+            <!-- Subscription Section -->
+            <div class="flex flex-wrap md:flex-nowrap justify-center items-center text-center gap-4">
+                <!-- Logo -->
+                <div class="flex justify-center md:justify-start">
+                    <img src="/images/mess.jpg" class="mt-1" width="60" />
+                </div>
+
+                <!-- Text -->
+                <div class="text-center md:text-left">
+                    <span class="font-bold">Nhận thông tin mới nhất từ cửa hàng chúng tôi</span>
+                </div>
+
+                <!-- Email Input -->
+                <div class="flex flex-col md:flex-row w-full md:w-auto">
+                    <input class="border border-gray-300 px-4 py-2 md:rounded-l  w-full md:w-auto" placeholder="Nhập email của bạn" type="email" />
+                    <button class="bg2 text-orange-700 px-4 py-2 md:rounded-r  w-full md:w-auto">Đăng kí</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <footer class="bg-white py-8 w-full">
+        <div class="w-full px-8">
+            <div class="flex flex-wrap px-8 justify-between">
+                <div class="hidden md:block w-full md:w-1/4 mb-6 md:mb-0">
+                    <h3 class="font-bold text-brown-600 mb-2 bg4">VỀ CHÚNG TÔI</h3>
+                    <ul>
+                        <li style="text-align:justify">Ra đời vào ngày 14/8/2004 và hiện tại là nơi cung cấp hơn 200 nhãn hiệu nước hoa cao cấp trên thế giới. Là website nước hoa đầu tiên tại Việt Nam. Định hướng của chúng tôi là trở thành nhà cung cấp nước hoa số 1 tại VN, mang lại sự lựa chọn đa dạng, sự thuận tiện, tiết kiệm tiền & thời gian, đồng thời mang đến sự yên tâm & hài lòng đến với khách hàng.</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="font-bold text-brown-600 mb-2 bg4">ĐỊA CHỈ - LIÊN HỆ</h3>
+
+                    @* <img alt="Rosie Beauty logo" class="mb-4 d-md-flex d-none" height="50" src="/images/2.jpg" width="150" /> *@
+                    <p class="mb-2"><i class="bg3 fas fa-map-marker-alt mr-1"></i> Quảng Phú Cầu - Ứng Hòa - Hà Nội</p>
+                    <p class="mb-2"><i class="bg3 fas fa-envelope mr-1"></i> huyenlythithanh55@gmail.com</p>
+                    <p class="mb-2"><i class="bg3 fas fa-phone mr-1"></i> 1800 6750</p>
+                    <p class="mb-2"><i class="bg3 fas fa-map-marker-alt mr-1"></i> Hệ thống cửa hàng</p><br/>
+                    <h3 class="font-bold text-brown-600 mb-2 bg4">GIỜ MỞ CỬA</h3>
+                    <p class="mb-2">Từ 9:00 - 21:30 tất cả các ngày trong tuần (bao gồm cả các ngày lễ, nghỉ Tết).</p>
+                    <h3 class="font-bold text-brown-600 mb-2 bg4 mt-3">GÓP Ý, KHIẾU NẠI</h3>
+                    <p class="mb-1"><i class="fas fa-phone bg3"></i> 1800 6750</p>
+                </div>
+                <div class="hidden md:block w-full md:w-1/4 mb-6 md:mb-0">
+                    <h3 class="font-bold text-brown-600 mb-2 bg4">HỖ TRỢ KHÁCH HÀNG</h3>
+                    <ul>
+                        <li class="mb-2"><a class="hover:underline" href="#">Khách hàng thân thiết</a></li>
+                        <li class="mb-2"><a class="hover:underline" href="#">Hướng dẫn đặt hàng & thanh toán</a></li>
+                        <li class="mb-2"><a class="hover:underline" href="#">Điều khoản sử dụng website</a></li>
+                        <li class="mb-2"><a class="hover:underline" href="#">Chính sách bảo mật</a></li>
+                        <li class="mb-2"><a class="hover:underline" href="#">Chính sách bảo hành & đổi trả</a></li>
+                        <li class="mb-2"><a class="hover:underline" href="#">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+                
+                <div class="hidden md:block w-full md:w-1/4 mb-6 md:mb-0">
+                    <h3 class="font-bold text-brown-600 mb-2 bg4">VỀ CHÚNG TÔI</h3>
+                    <ul>
+                        <li style="text-align:justify">Ra đời vào ngày 14/8/2004 và hiện tại là nơi cung cấp hơn 200 nhãn hiệu nước hoa cao cấp trên thế giới. Là website nước hoa đầu tiên tại Việt Nam. Định hướng của chúng tôi là trở thành nhà cung cấp nước hoa số 1 tại VN, mang lại sự lựa chọn đa dạng, sự thuận tiện, tiết kiệm tiền & thời gian, đồng thời mang đến sự yên tâm & hài lòng đến với khách hàng.</li>
+                    </ul>
+                </div>
+               
+            </div>
+            <div class="bg1 text-center mt-2 bg4 w-full py-1 ">
+                <p>© 2025 Bản quyền thuộc về LTTT</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
