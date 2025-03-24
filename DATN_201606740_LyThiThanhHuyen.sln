@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35728.132 d17.12
+VisualStudioVersion = 17.12.35728.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DATN", "DATN\DATN.csproj", "{DD82E713-5BD8-4E08-9A08-1D622D1B7C87}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLib", "Lib Core\CoreLib.csproj", "{EE19ECEF-B139-42BD-8074-42F3BA459EA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServiceLib", "DataServiceLib\DataServiceLib.csproj", "{BDD12068-96BB-4254-8DEA-78BBB69496C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E602C30D-F565-4B43-9D14-EA0EF4602D7C}"
+	ProjectSection(SolutionItems) = preProject
+		..\SQL_DATN.sql = ..\SQL_DATN.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
