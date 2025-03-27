@@ -11,6 +11,7 @@ namespace CoreLib.Entity
     {
         [Key]
         public int MaNhomHuong { get; set; }
+        [Required(ErrorMessage = "Tên nhóm hương không được để trống.")]
         public string TenNhomHuong { get; set; }
         public string MoTa { get; set; }
         public DateTime NgayCapNhat { get; set; }

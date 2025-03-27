@@ -12,6 +12,7 @@ namespace CoreLib.Entity
     {
         [Key]
         public int MaAnh { get; set; }
+        [Required(ErrorMessage = "Tên ảnh không được để trống.")]
         public string TenAnh { get; set; }
         public string DuongDan { get; set; }
         public string MoTa { get; set; }

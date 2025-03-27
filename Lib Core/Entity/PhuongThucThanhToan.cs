@@ -11,6 +11,7 @@ namespace CoreLib.Entity
     {
         [Key]
         public int MaPhuongThuc { get; set; }
+        [Required(ErrorMessage = "Tên phương thức thanh toán không được để trống.")]
         public string TenPhuongThuc { get; set; }
         public string MoTa { get; set; }
         public DateTime NgayCapNhat { get; set; }

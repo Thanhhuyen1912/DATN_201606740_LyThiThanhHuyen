@@ -14,6 +14,7 @@ namespace CoreLib.Entity
         public int MaThuongHieu { get; set; }
         public int MaNhomHuong { get; set; }
         public int MaNongDo { get; set; }
+        [Required(ErrorMessage = "Tên sản phẩm không được để trống.")]
         public string TenSanPham { get; set; }
         public string GioiTinh { get; set; }
         public bool TrangThai { get; set; }

@@ -11,6 +11,7 @@ namespace CoreLib.Entity
     {
         [Key]
         public int MaNongDo { get; set; }
+        [Required(ErrorMessage = "Tên nồng độ không được để trống.")]
         public string TenNongDo { get; set; }
         public string MoTa { get; set; }
         public DateTime NgayCapNhat { get; set; }
