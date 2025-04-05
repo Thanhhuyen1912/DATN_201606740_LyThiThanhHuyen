@@ -1,0 +1,682 @@
+﻿@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+
+<div id="loading" class="loading" style="display: none;">Đang tải...</div>
+<div class="container" id="noidung">
+    <div class="gsm-daihoi-info">
+        <div style="background-color: #fdb9a4; color: #a75851" class="row d-flex justify-content-center">
+            <span style="background-color: #fdb9a4; color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách sản phẩm</span>
+        </div>
+    </div>
+    <div class="k-portlet__body mt-3">
+        <ul class="nav nav-pills nav-tabs-btn nav-pills-btn-success row" role="tablist">
+            <li style="background-color: #fdb9a4; color: #a75851; border-radius:10%" class="nav-item col gsm-link-tab">
+                <a style="background-color: #fdb9a4; color: #a75851" class="nav-link active show" data-toggle="tab" href="#subjectListTab" role="tab" aria-selected="true">
+                    <span style="background-color: #fdb9a4; color: white;" class=" text-uppercase">Danh sách sản phẩm</span>
+                </a>
+            </li>
+            @* @if (Context.Session.GetString("UserRole") != null) *@
+            @* { *@
+            @*     string[] roles = Context.Session.GetString("UserRole").Split(","); *@
+            @*     @* @if (roles.Any(role => CConfig.Admin.Contains(role)) || roles.Any(role => CConfig.QuanlySP.Contains(role)) || roles.Any(role => CConfig.Quanly.Contains(role))) *@ 
+            @*     { *@
+            <li style=" color: #a75851" class="nav-item col gsm-link-tab">
+                <a style=" color: #a75851" class="nav-link custom-tab-link" data-toggle="tab" href="#subjectFormTab" role="tab" aria-selected="false">
+                    <span class="nav-link-title text-uppercase">Tạo mới</span>
+                </a>
+            </li>
+
+            @*     } *@
+            @* } *@
+        </ul>
+
+        <div style="background-color: #fdb9a4; color: #a75851" class="line_top col-md-12"></div>
+
+        <div class="tab-content">
+
+            <!-- Subject List Tab -->
+            <div class="tab-pane fade show active" id="subjectListTab">
+
+                <div class="form-group row nopadding col-12">
+                    <!-- Product Name Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="sproductName">
+                    </div>
+                    <!-- Product Quantity Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="squantity">Số lượng</label>
+                        <input type="text" class="form-control" id="squantity">
+                    </div>
+                    <!-- Product Price Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="sprice">Giá</label>
+                        <input type="text" class="form-control" id="sprice">
+                    </div>
+
+                    <!-- Product Category Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="scategoryId">Loại sản phẩm</label>
+                        <select class="form-control" id="scategoryId">
+                            <!-- Các option sẽ được thêm vào đây -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div style="background-color: #fdb9a4; color: #a75851" class="row d-flex justify-content-center col-12">
+                        <button style="background-color: #fdb9a4; color: #a75851" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton">
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <button id="alphabetSortBtn" class="btn btn-secondary">Sắp xếp </button>
+                </div>
+                <!-- Add custom sort button here -->
+
+
+
+                <table id="listGrid" class="display mt-3" style="width: 100%;">
+
+                    <thead style="height:50px;font-size:17px">
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>Mã</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Loại sản phẩm</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            @* @if (Context.Session.GetString("UserRole") != null) *@
+            @* { *@
+            @* string[] roles = Context.Session.GetString("UserRole").Split(","); *@
+            @* @if (roles.Any(role => CConfig.Admin.Contains(role)) || roles.Any(role => CConfig.QuanlySP.Contains(role)) || roles.Any(role => CConfig.Quanly.Contains(role))) *@
+            @* { *@
+            <!-- Add/Edit Product Form Tab (Unified for Create/Edit) -->
+            <div class="tab-pane fade boxshadow pt-2" id="subjectFormTab" role="tabpanel">
+                <div class="form-group row nopadding">
+                    <form id="SubjectForm" class="col-12 ">
+                        <input type="hidden" class="form-control" id="">
+                        <!-- Product Id Field -->
+                        <div class="col-md-12 d-inline-block">
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tProductID">Mã sản phẩm (*)</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tProductID" required>
+                                </div>
+                            </div>
+
+                            <!-- Product Name Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label">Tên sản phẩm (*)</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tProductName">
+                                </div>
+                            </div>
+                            <!-- Product Price Field -->
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tProductPrice">Giá</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tProductPrice" required>
+                                </div>
+                            </div>
+                            <!-- Product Quantity Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tProductQuantity">Số lượng</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tProductQuantity" required>
+                                </div>
+                            </div>
+                            <!-- Product Category Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tProductCategory">Loại sản phẩm</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="tProductCategory">
+                                        <!-- Các option sẽ được thêm vào đây -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+
+                <!-- Button Group -->
+                <div class="form-group row">
+                    <div class="row d-flex justify-content-center col-12">
+                        <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button>
+                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">
+                            Cập nhật
+                        </button>
+                        <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button>
+                    </div>
+                </div>
+            </div>
+            @* } *@
+            @* } *@
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                function fetchUserRoles() {
+            fetch("/Account/GetRoles")
+                .then(response => response.json())
+                .then(data => {
+                    sessionStorage.setItem("UserRoles", data);
+                })
+                .catch(error => console.error("Lỗi lấy quyền:", error));
+        }
+
+        // Gọi hàm khi trang load
+        document.addEventListener("DOMContentLoaded", fetchUserRoles);
+
+
+        $(document).ready(function () {
+            // Load initial data
+                loadGridData();
+            // Function to load data into the grid
+                function loadGridData() {
+                            var url = "https://localhost:44300/Products/GetAll";
+                            $.get(url, {}, function (response) {
+                        var dulieu = response.data || [];
+
+                        // Khởi tạo hoặc cập nhật DataTable
+                        $('#listGrid').DataTable({
+                            dom: '<"top"f>rt<"bottom"ip><"clear">',
+                            destroy: true,
+                            lengthChange: true,
+                            fixedColumns: true,
+                            autoWidth: false,
+                            searching: false,
+                            ordering: true,
+                            data: dulieu,
+                            paging: true,
+                            columns: [
+                                        { "data": "producT_ID",
+                                            "width": "5%",
+                                            render: function (data, type, row) {
+                                                return `<input type="checkbox" data-id="${data}">`;
+                                            }
+                                        },
+                                        { "data": "producT_ID","width": "10%" },
+                                        { "data": "producT_NAME","width": "25%" },
+                                        { "data": "quantity", "width": "15%" },
+                                        { "data": "price","width": "10%" },
+                                        { "data": "categorY_ID", "width": "15%",
+                                    render: function (data, type, row, meta) {
+                                        const spanId = `category-${meta.row}`;
+                                        const placeholder = `<span id="${spanId}">Loading...</span>`;
+
+                                        // Gọi AJAX để lấy tên danh mục
+                                        $.ajax({
+                                            url: `https://localhost:44300/Categories/GetDetails?id=${data}`,
+                                            method: 'GET',
+                                            success: function (response) {
+                                                $(`#${spanId}`).text(response.data.categorY_NAME || 'Unknown');
+                                            },
+                                            error: function () {
+                                                $(`#${spanId}`).text('Error');
+                                            }
+                                        });
+
+                                        return placeholder;
+                                    }
+                                },
+                                                {
+
+            "data": "producT_ID", "width": "10%",
+            render: function (data) {
+                // Lấy danh sách quyền từ sessionStorage
+                let userRoles = sessionStorage.getItem("UserRoles");
+
+                // Kiểm tra xem userRoles có giá trị không
+                if (!userRoles) {
+                    userRoles = [];
+                } else {
+                    userRoles = userRoles.split(",");
+                }
+
+                // Kiểm tra quyền chỉnh sửa và xóa
+                let canEdit = userRoles.includes("Admin") || userRoles.includes("Quản lý sản phẩm");
+                let canDelete = userRoles.includes("Admin");
+
+                let editButton = canEdit ? `
+                    <button class='ViewDetails btn btn-link' data-id="${data}">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                ` : "";
+
+                let deleteButton = canDelete ? `
+                    <button class='DeleteSubject btn btn-link' data-id="${data}">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                ` : "";
+
+                return editButton + deleteButton;
+            }
+        }
+
+
+                                    ],
+                            language: {
+                                search: "Tìm kiếm:",
+                                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                zeroRecords: "Không tìm thấy kết quả nào.",
+
+                            }
+                                });
+
+            // Sự kiện sắp xếp theo alphabet
+                $('#alphabetSortBtn').off('click').on('click', function () {
+                                    let table = $('#listGrid').DataTable();
+                                    let currentOrder = table.order();
+
+                                    if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
+                                        table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
+                                    } else {
+                                        table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
+                                    }
+                                });
+                            })
+                            .fail(function () {
+                                alert("Có lỗi xảy ra khi tải dữ liệu.");
+                            });
+                        }
+            // Reset form
+                $('#Reset').click(function () {
+                            $('#SubjectForm')[0].reset();
+                            $("#tProductID").val('').prop('readonly', false);;
+                            $('#Insert').show();
+                            $('#Update').hide();
+                            $('#formTabTitle').text('Tạo mới');
+                        });
+            // Insert new product
+                $('#Insert').click(function () {
+                            const productData = {
+                                PRODUCT_ID: $("#tProductID").val(),
+                                PRODUCT_NAME: $("#tProductName").val(),
+                                QUANTITY: $("#tProductQuantity").val(),
+                                PRICE: $("#tProductPrice").val(),
+                                CATEGORY_ID: $("#tProductCategory").val()
+                            };
+
+                            $.ajax({
+                                url: "https://localhost:44300/Products/Add",
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify(productData),
+                                success: function () {
+                                    $("#tProductID").val('');
+                                    $("#tProductName").val('');
+                                    $("#tProductQuantity").val('');
+                                    $("#tProductPrice").val('');
+                                    $("#tProductCategory").val('');
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Sản phẩm mới đã được thêm.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    loadGridData(); // Reload dữ liệu
+                                },
+                                error: function (xhr) {
+                                    Swal.fire({
+                                        title: 'Thất bại!',
+                                        text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            });
+                        });
+            // View product details
+                $(document).on('click', '.ViewDetails', function () {
+                          let table = $('#listGrid').DataTable();
+                            let row = $(this).closest('tr');
+                            let rowData = table.row(row).data();
+                            let id = rowData.producT_ID;
+
+                            $.ajax({
+                                url: `https://localhost:44300/Products/GetDetails?productId=${id}`,
+                                type: 'GET',
+                                success: function (respone) {
+                                    if (respone && respone.data ) {
+                                        const data = respone.data;
+                                        $("#tProductID").val(data.producT_ID).prop('readonly', true);
+                                        $("#tProductName").val(data.producT_NAME);
+                                        $("#tProductPrice").val(data.price);
+                                        $("#tProductQuantity").val(data.quantity);
+                                        $("#tProductCategory").val(data.categorY_ID);
+                                        $('#Insert').hide();
+                                        $('#Update').show();
+                                        $('#formTabTitle').text('Chi tiết');
+                                        $('a[href="#subjectFormTab"]').tab('show');
+                                    } else {
+                                        alert('Chi tiết sản phẩm không tìm thấy.');
+                                    }
+                                },
+                                error: function () {
+                                    alert('Có lỗi xảy ra khi tải chi tiết.');
+                                }
+                            });
+                        });
+            // Delete product
+                $(document).on('click', '.DeleteSubject', function () {
+            if (confirm("Bạn có chắc chắn muốn xóa?")) {
+                let table = $('#listGrid').DataTable();
+                let row = $(this).closest('tr');
+                let rowData = table.row(row).data();
+                let id = rowData.producT_ID;
+                $.ajax({
+                    url: '@Url.Action("DeleteProduct", "Products")'  + '?id=' + id,
+                    type: 'DELETE',
+                    contentType: 'application/json; charset=utf-8', // Đảm bảo header đúng
+                    success: function (response) {
+                        // Kiểm tra kết quả trả về từ server
+                        if (response && response.code === 0) {
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Sản phẩm đã được xóa.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Xóa hàng trong DataTable và vẽ lại
+                                table.row(row).remove().draw();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Thất bại!',
+                                text: response.message || 'Không thể xóa sản phẩm.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                            error: function (xhr) {
+                        Swal.fire({
+                            title: 'Thất bại!',
+                            text: 'Đã xảy ra lỗi khi xóa sản phẩm.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+            // Update
+                $('#Update').click(function () {
+                            const productData = {
+                                PRODUCT_ID: $("#tProductID").val(),
+                                PRODUCT_NAME: $("#tProductName").val(),
+                                QUANTITY: $("#tProductQuantity").val(),
+                                PRICE: $("#tProductPrice").val(),
+                                CATEGORY_ID: $("#tProductCategory").val()
+                            };
+
+                            $.ajax({
+                                url: "https://localhost:44300/Products/Update",
+                                method: "PUT",
+                                contentType: "application/json",
+                                data: JSON.stringify(productData),
+                                success: function () {
+                                    $("#tProductID").val('').prop('readonly', false);;
+                                    $("#tProductName").val('');
+                                    $("#tProductQuantity").val('');
+                                    $("#tProductPrice").val('');
+                                    $("#tProductCategory").val('');
+                                    $('#Insert').show();
+                                    $('#Update').hide();
+                                    $('#formTabTitle').text('Tạo mới');
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Sản phẩm đã được cập nhật.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    loadGridData(); // Reload dữ liệu
+                                },
+                                error: function (xhr) {
+                                    Swal.fire({
+                                        title: 'Thất bại!',
+                                        text: 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            });
+                        });
+            // Search
+                $('#searchButton').on('click', function () {
+                // Collect form data
+                var sproductName = $('#sproductName').val() || null;
+                var sprice = $('#sprice').val() || null;
+                var squantity = $('#squantity').val() || null;
+                var scategoryId = $('#scategoryId').val() || null;
+
+                // Perform the AJAX request
+                $.ajax({
+                    url: 'https://localhost:44300/Products/Search',
+                    method: 'GET',
+                    data: {
+                        productName: sproductName,
+                        price: sprice,
+                        quantity: squantity,
+                        categoryId: scategoryId
+                    },
+                    success: function (response) {
+                        var dulieu = response.data || [];
+
+
+                        // Khởi tạo hoặc cập nhật DataTable
+                        $('#listGrid').DataTable({
+                            dom: '<"top"f>rt<"bottom"ip><"clear">',
+                            destroy: true,
+                            lengthChange: true,
+                            fixedColumns: true,
+                            autoWidth: false,
+                            searching: false,
+                            ordering: true,
+                            data: dulieu,
+                            paging: true,
+                            columns: [
+                                        { "data": "producT_ID","width": "5%",
+                                            render: function (data, type, row) {
+                                                return `<input type="checkbox" data-id="${data}">`;
+                                            }
+                                        },
+                                        { "data": "producT_ID","width": "10%" },
+                                        { "data": "producT_NAME","width": "25%" },
+                                        { "data": "quantity", "width": "15%" },
+                                        { "data": "price","width": "10%" },
+                                        { "data": "categorY_ID", "width": "15%",
+                                    render: function (data, type, row, meta) {
+                                        const spanId = `category-${meta.row}`;
+                                        const placeholder = `<span id="${spanId}">Loading...</span>`;
+
+                                        // Gọi AJAX để lấy tên danh mục
+                                        $.ajax({
+                                            url: `https://localhost:44300/Categories/GetDetails?id=${data}`,
+                                            method: 'GET',
+                                            success: function (response) {
+                                                $(`#${spanId}`).text(response.data.categorY_NAME || 'Unknown');
+                                            },
+                                            error: function () {
+                                                $(`#${spanId}`).text('Error');
+                                            }
+                                        });
+
+                                        return placeholder;
+                                    }
+                                },
+                                        {
+                                                       "data": "producT_ID", "width": "10%",
+            render: function (data) {
+                // Lấy danh sách quyền từ sessionStorage
+                let userRoles = sessionStorage.getItem("UserRoles");
+
+                // Kiểm tra xem userRoles có giá trị không
+                if (!userRoles) {
+                    userRoles = [];
+                } else {
+                    userRoles = userRoles.split(","); // Chuyển chuỗi thành mảng
+                }
+
+                // Kiểm tra quyền chỉnh sửa và xóa
+                let canEdit = userRoles.includes("Admin") || userRoles.includes("Quản lý sản phẩm");
+                let canDelete = userRoles.includes("Admin");
+
+                let editButton = canEdit ? `
+                    <button class='ViewDetails btn btn-link' data-id="${data}">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                ` : "";
+
+                let deleteButton = canDelete ? `
+                    <button class='DeleteSubject btn btn-link' data-id="${data}">
+                        <i class="bi bi-trash-fill"></i>
+                    </button>
+                ` : "";
+
+                return editButton + deleteButton;
+            }
+        }
+
+                            ],
+                            language: {
+                                search: "Tìm kiếm:",
+                                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                zeroRecords: "Không tìm thấy kết quả nào.",
+
+                            }
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Swal.fire({
+                            title: 'Lỗi tìm kiếm',
+                            text: 'Không thể tải danh sách sản phẩm.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+                });
+            // DropDown List
+                $(document).ready(function () {
+                // Gọi AJAX để lấy dữ liệu loại sản phẩm
+                $.ajax({
+                    url: 'https://localhost:44300/Categories/GetAll', // Đường dẫn API
+                    method: 'GET',
+                    success: function (response) {
+                        var categories = response.data || []; // Danh sách loại sản phẩm
+                        var $select = $('#scategoryId');
+                        var $select1 = $('#tProductCategory');
+
+                        // Xóa các option cũ (nếu có)
+                        $select.empty();
+                        $select1.empty();
+
+                        // Thêm option mặc định
+                        $select.append('<option value="">-- Chọn loại sản phẩm --</option>');
+                        $select1.append('<option value="">-- Chọn loại sản phẩm --</option>');
+
+                        // Thêm dữ liệu vào combobox
+                        categories.forEach(function (category) {
+                            $select.append(`<option value="${category.id}">${category.categorY_NAME}</option>`);
+                            $select1.append(`<option value="${category.id}">${category.categorY_NAME}</option>`);
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: 'Lỗi',
+                            text: 'Không thể tải danh sách loại sản phẩm.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+                });
+        });
+    </script>
+}
+
+<style>
+    /* Hide default sorting arrows */
+    #listGrid thead th {
+        cursor: default;
+        position: relative;
+    }
+
+        /* Hide the sorting arrows */
+        #listGrid thead th.sorting:before,
+        #listGrid thead th.sorting:after,
+        #listGrid thead th.sorting_asc:before,
+        #listGrid thead th.sorting_asc:after,
+        #listGrid thead th.sorting_desc:before,
+        #listGrid thead th.sorting_desc:after {
+            display: none;
+        }
+    /* Align search bar to the top left */
+    .dataTables_filter {
+        text-align: center;
+    }
+
+    /* Center the pagination controls at the bottom */
+    .dataTables_length, .dataTables_filter, .dataTables_paginate {
+        text-align: center;
+    }
+    /* Align custom sort button with search and pagination */
+    .dataTables_wrapper .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Ưu tiên cao hơn để ghi đè màu mặc định */
+    /* Đổi màu khi được chọn (tab active) */
+    /* Khi tab được chọn (active), đổi màu nền và màu chữ */
+    li.gsm-link-tab > a.custom-tab-link.active {
+        background-color: #fdb9a4 !important; /* Màu nền hồng */
+        color: #a75851 !important; /* Màu chữ tùy chỉnh */
+        border-color: transparent !important;
+    }
+
+        /* Đảm bảo không bị ghi đè bởi các quy tắc khác cho màu chữ trong span */
+        li.gsm-link-tab > a.custom-tab-link.active span {
+            color: #a75851 !important; /* Màu chữ trong span */
+        }
+
+    /* Nếu vẫn không được, ghi đè lại trong các tình huống khác */
+    li.gsm-link-tab > a.custom-tab-link.active {
+        color: #a75851 !important; /* Màu chữ chữ cho tất cả trạng thái */
+    }
+
+</style>

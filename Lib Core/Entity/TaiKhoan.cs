@@ -25,7 +25,7 @@ namespace CoreLib.Entity
         [Required(ErrorMessage = "Số điện thoại không được để trống.")]
         [RegularExpression(@"^0[0-9]{9}$", ErrorMessage = "Số điện thoại chưa đúng định dạng chuẩn.")]
         public string SoDienThoai { get; set; }
-        public string LoaiTaiKhoan { get; set; }
+        public int LoaiTaiKhoan { get; set; }
         public bool TrangThai { get; set; }
         public DateTime NgayCapNhat { get; set; }
 

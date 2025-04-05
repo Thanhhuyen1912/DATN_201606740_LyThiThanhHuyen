@@ -1,0 +1,86 @@
+{
+  "_from": "jquery-offcanvas",
+  "_id": "jquery-offcanvas@3.4.7",
+  "_inBundle": false,
+  "_integrity": "sha1-3eH0kvWQT/dr3Zi6QvHlFPpS7XA=",
+  "_location": "/jquery-offcanvas",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "jquery-offcanvas",
+    "name": "jquery-offcanvas",
+    "escapedName": "jquery-offcanvas",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/jquery-offcanvas/-/jquery-offcanvas-3.4.7.tgz",
+  "_shasum": "dde1f492f5904ff76bdd98ba42f1e514fa52ed70",
+  "_spec": "jquery-offcanvas",
+  "_where": "F:\\FPTS\\trunk\\EzSearchInternal\\wwwroot\\assets\\vendors\\general\\jquery",
+  "author": {
+    "name": "Lars Graubner",
+    "email": "mail@larsgraubner.de",
+    "url": "http://larsgraubner.de"
+  },
+  "bugs": {
+    "url": "https://github.com/lgraubner/jquery-offcanvas/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Easy to use jQuery offcanvas plugin.",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "eslint": "3.7.1",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-import": "1.16.0",
+    "eslint-plugin-jsx-a11y": "2.2.2",
+    "eslint-plugin-react": "6.3.0",
+    "gulp": "^3.9.0",
+    "gulp-cssnano": "^2.1.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-header": "^1.8.8",
+    "gulp-mocha-phantomjs": "^0.12.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-uglify": "^2.0.0",
+    "mocha": "^3.1.0",
+    "sinon": "^1.17.6"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "homepage": "http://lgraubner.github.io/jquery-offcanvas/",
+  "keywords": [
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "offcanvas",
+    "canvas",
+    "animation",
+    "mobile",
+    "velocity",
+    "browser"
+  ],
+  "license": "MIT",
+  "main": "dist/jquery.offcanvas.min.js",
+  "name": "jquery-offcanvas",
+  "peerDependencies": {
+    "jquery": ">=1.7.0",
+    "velocity-animate": "^1.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lgraubner/jquery-offcanvas.git"
+  },
+  "scripts": {
+    "build": "gulp",
+    "lint": "gulp lint",
+    "test": "gulp test"
+  },
+  "version": "3.4.7"
+}

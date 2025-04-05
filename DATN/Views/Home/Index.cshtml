@@ -1,8 +1,156 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model List<CoreLib.Entity.ChiTietSanPham>
+<div class="text-center mt-3">
+    <div class="anhdau">
+        <img class="anhsp1" style="width:98%; height:auto" src="@Url.Content("~/images/pc1_trangchu.png")">
+    </div>
+    <div class="khuyenmai">
+        <a href="#" id="id_khuyenmai">KHUYẾN MÃI</a>
+    </div>
+    <div class="product-container mt-3">
+        <button class="scroll-left" onclick="scrollProducts(-1)">&#10094;</button>
+        <div class="product-list">
+            @foreach (var product in Model)
+            {
+                <div class="product-item col-3">
+                    <div class="product-image">
+                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
+                        <div class="overlay">
+                            <a href="#" class="text-decoration-none buy ">Mua ngay</a>
+                            <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <div class="divgia">
+                        <p class="gia">@product.Gia  ₫</p>
+                        <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p>
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="scroll-right" onclick="scrollProducts(1)">&#10095;</button>
+    </div>
+
+    <div class="hangmoive">
+        <a href="#" id="id_hangmoive">HÀNG MỚI VỀ</a>
+    </div>
+    <div class="product-container mt-3">
+        <button class="scroll-left1" onclick="scrollProducts1(-1)">&#10094;</button>
+        <div class="product-list1">
+            @foreach (var product in Model)
+            {
+                <div class="product-item col-3">
+                    <div class="product-image">
+                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
+                        <div class="overlay">
+                            <a href="#" class="text-decoration-none buy ">Mua ngay</a>
+                            <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <div class="divgia">
+                        <p class="gia">@product.Gia  ₫</p>
+                        @* <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p> *@
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="scroll-right1" onclick="scrollProducts1(1)">&#10095;</button>
+    </div>
+    <div class="spchay">
+        <a href="#" id="id_spchay">SẢN PHẨM BÁN CHẠY</a>
+    </div>
+    <div class="product-container mt-3">
+        <button class="scroll-left2" onclick="scrollProducts2(-1)">&#10094;</button>
+        <div class="product-list2">
+            @foreach (var product in Model)
+            {
+                <div class="product-item col-3">
+                    <div class="product-image">
+                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
+                        <div class="overlay">
+                            <a href="#" class="text-decoration-none buy ">Mua ngay</a>
+                            <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <div class="divgia">
+                        <p class="gia">@product.Gia  ₫</p>
+                        @* <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p> *@
+                    </div>
+                </div>
+            }
+        </div>
+        <button class="scroll-right2" onclick="scrollProducts2(1)">&#10095;</button>
+    </div>
+    <div class="blog1">
+        <div class="anh1">
+            <img src="@Url.Content("~/images/nuochoa.jpg")" />
+        </div>
+        <div class="noidung1">
+            <h2>Giải pháp làm đẹp</h2>
+            <p>
+                Dựa trên kinh nghiệm 15 năm chinh chiến trong ngành làm đẹp và hợp tác với các
+                tập đoàn mỹ phẩm nổi tiếng trên Thế giới, Makeup Artist Quách Ánh cùng những cộng
+                sự của mình đã tạo nên thương hiệu mỹ phẩm Lemonade. Với các dòng sản phẩm đa công
+                năng và tiện dụng được nghiên cứu dựa trên khí hậu và làn da của phụ nữ Việt, Lemonade
+                giúp bạn hoàn thiện vẻ đẹp một cách nhanh chóng và dễ dàng hơn: Dễ dàng sử dụng,
+                dễ dàng kết hợp và dễ dàng mang đi.
+            </p>
+        </div>
+    </div>
 </div>
+<style>
+
+</style>
+<script>
+                   function smoothScrollBy(element, distance, duration) {
+        let start = element.scrollLeft;
+        let startTime = performance.now();
+
+        function scrollStep(currentTime) {
+            let elapsedTime = currentTime - startTime;
+            let progress = Math.min(elapsedTime / duration, 1);
+            let ease = progress * (2 - progress); // Hiệu ứng easing
+
+            element.scrollLeft = start + distance * ease;
+
+            if (progress < 1) {
+                requestAnimationFrame(scrollStep);
+            }
+        }
+
+        requestAnimationFrame(scrollStep);
+    }
+
+    function scrollProducts(direction) {
+        const productList = document.querySelector('.product-list');
+        const productWidth = document.querySelector('.product-item').offsetWidth + 10;
+
+        smoothScrollBy(productList, direction * productWidth, 500); // Cuộn trong 500ms
+    }
+
+     function scrollProducts1(direction) {
+        const productList1 = document.querySelector('.product-list1');
+        const productWidth1 = document.querySelector('.product-item1').offsetWidth + 10;
+        productList1.scrollBy({
+            left: direction * productWidth1,
+            behavior: 'smooth'
+        });
+    }
+
+     function scrollProducts2(direction) {
+        const productList2 = document.querySelector('.product-list2');
+        const productWidth2 = document.querySelector('.product-item2').offsetWidth + 10;
+        productList2.scrollBy({
+            left: direction * productWidth2,
+            behavior: 'smooth'
+        });
+    }
+
+
+
+</script>

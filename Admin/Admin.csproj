@@ -1,0 +1,81 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\encodings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\modules.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\vcs.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\workspace.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\compiler.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\copyright\profiles_settings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\jsLibraryMappings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\misc.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\modules.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\vcs.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\watcherTasks.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\workspace.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\package.json" />
+    <Content Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\package.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\vendors\general\bootstrap-select\.github\ISSUE_TEMPLATE.md" />
+    <None Include="wwwroot\assets\vendors\general\dropzone\.idea\github-dropzone.iml" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\.idea\handlebars.js.iml" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\.bin\uglifyjs" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\.bin\uglifyjs.cmd" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\assert-shim.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\mini-require.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\prefix-source-map.jsm" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\prefix-utils.jsm" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\suffix-browser.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\suffix-source-map.jsm" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\suffix-utils.jsm" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\test-prefix.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\build\test-suffix.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\array-set.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\base64-vlq.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\base64.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\binary-search.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\mapping-list.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\quick-sort.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\source-map-consumer.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\source-map-generator.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\source-node.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\lib\source-map\util.js" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\node_modules\source-map\README.md" />
+    <None Include="wwwroot\assets\vendors\general\jquery-form\.circleci\config.yml" />
+    <None Include="wwwroot\assets\vendors\general\jquery-form\.github\issue_template.md" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\.bin\nopt" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\.bin\nopt.cmd" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\.npmignore" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\bin\nopt.js" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\examples\my-program.js" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\lib\nopt.js" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\LICENSE" />
+    <None Include="wwwroot\assets\vendors\general\markdown\node_modules\nopt\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\API\API.csproj" />
+    <ProjectReference Include="..\DataServiceLib\DataServiceLib.csproj" />
+    <ProjectReference Include="..\Lib Core\CoreLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\js\highcharts-lib.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Content>
+  </ItemGroup>
+
+</Project>

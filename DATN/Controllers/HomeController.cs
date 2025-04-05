@@ -1,21 +1,34 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using DATN.Models;
 using Microsoft.AspNetCore.Mvc;
+using CoreLib.AppDbContext;
+using CoreLib.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace DATN.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly AppDbContext _context;
+        public HomeController(AppDbContext context, ILogger<HomeController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
+
         public IActionResult Index()
         {
-            return View();
+            ViewBag.tieude1 = "";
+            ViewBag.tieude2 = "";
+
+            var result = _context.ChiTietSanPham
+       .Include(x => x.SanPham) // Nếu cần include các bảng liên quan
+       .ToList();  // Truyền danh sách ChiTietSanPham thực tế
+
+            return View(result);
         }
 
         public IActionResult Privacy()
