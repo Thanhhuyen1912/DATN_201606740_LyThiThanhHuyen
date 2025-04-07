@@ -11,6 +11,15 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()    // Cho phép tất cả domain (hoặc bạn có thể chỉ định domain cụ thể)
+               .AllowAnyMethod()    // Cho phép tất cả các phương thức (GET, POST, PUT, DELETE,...)
+               .AllowAnyHeader();   // Cho phép mọi loại header
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,6 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
+
 
 app.UseAuthorization();
 

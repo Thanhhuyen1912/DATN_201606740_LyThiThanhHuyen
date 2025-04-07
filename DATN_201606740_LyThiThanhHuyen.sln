@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E6
 		..\SQL_DATN.sql = ..\SQL_DATN.sql
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Admin\Admin.csproj", "{F9C3538F-80A4-4BDE-B359-B4AB5A247FAE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,10 +38,6 @@ Global
 		{BDD12068-96BB-4254-8DEA-78BBB69496C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDD12068-96BB-4254-8DEA-78BBB69496C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDD12068-96BB-4254-8DEA-78BBB69496C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9C3538F-80A4-4BDE-B359-B4AB5A247FAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9C3538F-80A4-4BDE-B359-B4AB5A247FAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9C3538F-80A4-4BDE-B359-B4AB5A247FAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9C3538F-80A4-4BDE-B359-B4AB5A247FAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

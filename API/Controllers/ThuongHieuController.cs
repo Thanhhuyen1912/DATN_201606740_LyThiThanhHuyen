@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ThuongHieuController : Controller
     {
         private readonly AppDbContext _context;
@@ -12,6 +14,7 @@ namespace API.Controllers
             _context = context;
         }
         [HttpGet]
+        [Route("/ThuongHieu/Danhsach")]
         public IActionResult getAll()
         {
             var list = _context.ThuongHieu.ToList();
@@ -23,6 +26,7 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy danh sách thành công", code = 0, data = list });
         }
         [HttpGet]
+        [Route("/ThuongHieu/ChiTiet")]
         public IActionResult getDetails(int math)
         {
             var th = _context.ThuongHieu.FirstOrDefault(th => th.MaThuongHieu == math);
@@ -60,6 +64,7 @@ namespace API.Controllers
 
         }
         [HttpGet]
+        [Route("/ThuongHieu/TrangThai")]
         public IActionResult getByTrangthai(bool tt)
         {
             var th = _context.ThuongHieu.Where(th => th.TrangThai == tt).ToList();

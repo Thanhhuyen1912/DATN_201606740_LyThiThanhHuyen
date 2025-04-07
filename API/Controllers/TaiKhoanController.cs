@@ -3,6 +3,7 @@ using CoreLib.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data;
 
 namespace API.Controllers
@@ -75,7 +76,15 @@ namespace API.Controllers
         [Route("/TaiKhoan/ThemMoi")]
         public IActionResult Themmoi(TaiKhoan tk)
         {
-            return Ok();
+            try
+            {
+                _context.TaiKhoan.Add(tk);
+                return Ok(new { code = 0, message = "Thêm thành công" });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
     }

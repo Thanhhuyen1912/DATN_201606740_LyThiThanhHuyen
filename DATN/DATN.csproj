@@ -7,6 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\encodings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\modules.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\vcs.xml" />
+    <Content Include="wwwroot\assets\vendors\general\dropzone\.idea\workspace.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\compiler.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\copyright\profiles_settings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\jsLibraryMappings.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\misc.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\modules.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\vcs.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\watcherTasks.xml" />
+    <Content Include="wwwroot\assets\vendors\general\handlebars\.idea\workspace.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\vendors\general\bootstrap-select\.github\ISSUE_TEMPLATE.md" />
+    <None Include="wwwroot\assets\vendors\general\dropzone\.idea\github-dropzone.iml" />
+    <None Include="wwwroot\assets\vendors\general\handlebars\.idea\handlebars.js.iml" />
+    <None Include="wwwroot\assets\vendors\general\jquery-form\.circleci\config.yml" />
+    <None Include="wwwroot\assets\vendors\general\jquery-form\.github\issue_template.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
