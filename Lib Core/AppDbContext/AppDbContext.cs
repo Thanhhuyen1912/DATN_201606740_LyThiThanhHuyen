@@ -16,7 +16,7 @@ namespace CoreLib.AppDbContext
 
         public DbSet<Anh> Anh { get; set; } // Bảng ảnh
         public DbSet<SanPham> SanPham { get; set; } // Bảng sản phẩm
-        public DbSet<AnhSanPham> Anh_SanPham { get; set; } // Bảng ảnh sản phẩm
+        public DbSet<AnhSanPham> AnhSanPham { get; set; } // Bảng ảnh sản phẩm
         public DbSet<ChiTietDonHang> ChiTietDonHang { get; set; } // Bảng chi tiết đơn hàng
         public DbSet<ChiTietGioHang> ChiTietGioHang { get; set; } // Bảng chi tiết giỏ hàng
         public DbSet<ChiTietSanPham> ChiTietSanPham { get; set; } // Bảng chi tiết sản phẩm
@@ -26,7 +26,6 @@ namespace CoreLib.AppDbContext
         public DbSet<GioHang> GioHang { get; set; } // Bảng giỏ hàng
         public DbSet<KichThuoc> KichThuoc { get; set; } // Bảng kích thước
         public DbSet<MaGiamGia> MaGiamGia { get; set; } // Bảng mã giảm giá
-        public DbSet<NongDo> NongDo { get; set; } // Bảng nồng độ
         public DbSet<NhomHuong> NhomHuong { get; set; } // Bảng nhóm hương
         public DbSet<PhuongThucThanhToan> PhuongThucThanhToan { get; set; } // Bảng phương thức thanh toán
         public DbSet<TaiKhoan> TaiKhoan { get; set; } // Bảng tài khoản

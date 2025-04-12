@@ -25,8 +25,8 @@ namespace CoreLib.Entity
         public DateTime NgayCapNhat { get; set; }
         public bool TrangThai { get; set; }
         [ForeignKey("MaSanPham")]
-        public SanPham SanPham { get; set; }
+        public SanPham? SanPham { get; set; }
         [ForeignKey("MaKichThuoc")]
-        public KichThuoc KichThuoc { get; set; }
+        public KichThuoc? KichThuoc { get; set; }
     }
 }

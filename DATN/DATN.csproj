@@ -45,4 +45,9 @@
     <ProjectReference Include="..\Lib Core\CoreLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Products\" />
+    <Folder Include="wwwroot\images\Products\" />
+  </ItemGroup>
+
 </Project>

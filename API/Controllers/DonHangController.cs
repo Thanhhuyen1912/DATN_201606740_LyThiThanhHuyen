@@ -6,18 +6,18 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NongDoController : Controller
+    public class DonHangController : Controller
     {
         private readonly AppDbContext _context;
-        public NongDoController(AppDbContext context)
+        public DonHangController(AppDbContext context)
         {
             _context = context;
         }
         [HttpGet]
-        [Route("/NongDo/Danhsach")]
+        [Route("/DonHang/Danhsach")]
         public IActionResult getAll()
         {
-            var list = _context.NongDo.ToList();
+            var list = _context.DonHang.ToList();
             if (list == null)
             {
                 return NotFound();
@@ -26,10 +26,10 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy danh sách thành công", code = 0, data = list });
         }
         [HttpGet]
-        [Route("/TaiKhoan/ChiTiet")]
+        [Route("/DonHang/ChiTiet")]
         public IActionResult getDetails(int math)
         {
-            var th = _context.NongDo.FirstOrDefault(th => th.MaNongDo == math);
+            var th = _context.DonHang.FirstOrDefault(th => th.MaDonHang == math);
             if (th == null)
             {
                 return NotFound();
@@ -38,11 +38,12 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy thông tin thành công", code = 0, data = th });
         }
         [HttpPut]
-        public IActionResult Update(NongDo th)
+        [Route("/DonHang/sua")]
+        public IActionResult Update(DonHang th)
         {
             try
             {
-                _context.NongDo.Update(th);
+                _context.DonHang.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
             }
@@ -51,23 +52,36 @@ namespace API.Controllers
 
         }
         [HttpPost]
-        public IActionResult post(NongDo th)
+        [Route("/DonHang/them")]
+        public IActionResult post(DonHang th)
         {
             try
             {
-                _context.NongDo.Add(th);
+                _context.DonHang.Add(th);
                 _context.SaveChanges();
-                return Ok(new { message = "Thêm nồng độ thành công", code = 0 });
+                return Ok(new { message = "Thêm thành công", code = 0 });
             }
             catch
             { return BadRequest(); }
 
         }
         [HttpGet]
-        [Route("/NongDo/TrangThai")]
-        public IActionResult getByTrangthai(bool tt)
+        [Route("/DonHang/TrangThaiTT")]
+        public IActionResult getByTrangthai(bool ttthanhtoan)
         {
-            var th = _context.NongDo.Where(th => th.TrangThai == tt).ToList();
+            var th = _context.DonHang.Where(th => th.TrangThaiThanhToan == ttthanhtoan).ToList();
+            if (th == null)
+            {
+                return NotFound();
+            }
+            else
+                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = th });
+        }
+        [HttpGet]
+        [Route("/DonHang/TrangThaiVC")]
+        public IActionResult getByTrangthaiVC(string vc)
+        {
+            var th = _context.DonHang.Where(th => th.TrangThaiVanChuyen == vc).ToList();
             if (th == null)
             {
                 return NotFound();

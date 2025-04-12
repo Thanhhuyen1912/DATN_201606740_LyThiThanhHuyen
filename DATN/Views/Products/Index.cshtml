@@ -10,8 +10,11 @@
 <div id="loading" class="loading" style="display: none;">Đang tải...</div>
 <div class="container" id="noidung">
     <div class="gsm-daihoi-info">
-        <div style=" color: #a75851" class="row d-flex justify-content-center">
+        <div style=" color: #a75851" class="row justify-content-center" id="tt">
             <span style=" color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách sản phẩm</span>
+        </div>
+        <div style=" color: #a75851" class="row justify-content-center" id="tt1">
+            <span style=" color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách chi tiết sản phẩm</span>
         </div>
     </div>
     <div class="k-portlet__body mt-3">
@@ -21,19 +24,11 @@
                     <span style="background-color: #fdb9a4; color: white;" class=" text-uppercase">Danh sách sản phẩm</span>
                 </a>
             </li>
-            @* @if (Context.Session.GetString("UserRole") != null) *@
-            @* { *@
-            @*     string[] roles = Context.Session.GetString("UserRole").Split(","); *@
-            @*     @* @if (roles.Any(role => CConfig.Admin.Contains(role)) || roles.Any(role => CConfig.QuanlySP.Contains(role)) || roles.Any(role => CConfig.Quanly.Contains(role))) *@ 
-            @*     { *@
             <li style=" color: #a75851" class="nav-item col gsm-link-tab">
                 <a style=" color: #a75851" class="nav-link custom-tab-link" data-toggle="tab" href="#subjectFormTab" role="tab" aria-selected="false">
                     <span class="nav-link-title text-uppercase " id="formTabTitle">Tạo mới</span>
                 </a>
             </li>
-
-            @*     } *@
-            @* } *@
         </ul>
 
         <div style="background-color: #fdb9a4; color: #a75851" class="line_top col-md-12"></div>
@@ -41,9 +36,9 @@
         <div class="tab-content">
 
             <!-- Subject List Tab -->
-            <div class="tab-pane fade show active" id="subjectListTab">
+            <div class="tab-pane fade show active " id="subjectListTab">
 
-                <div class="form-group row nopadding col-12">
+                <div class="form-group row nopadding col-12 form10">
                     <div style="display: none" class="form-group col-md-2">
                         <label class="col-form-label">MaSP</label>
                         <input type="text" class="form-control" id="tmasp">
@@ -51,24 +46,21 @@
                     <!-- Product Name Field -->
                     <div class="form-group col-md-2">
                         <label class="col-form-label">Tên sản phẩm</label>
-                        <input type="text" class="form-control" id="sproductName">
+                        <input type="text" class="form-control" id="stensp">
                     </div>
                     <!-- Product Quantity Field -->
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         <label class="col-form-label" for="sthuonghieu">Thương hiệu</label>
-                        <input type="text" class="form-control" id="sthuonghieu">
-                    </div>
-                    <!-- Product Price Field -->
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label" for="snhomhuong">Nhóm hương</label>
-                        <input type="text" class="form-control" id="snhomhuong">
+                        <select class="form-control" id="sthuonghieu">
+                            <option value=""></option>
+                        </select>
                     </div>
 
-                    <!-- Product Category Field -->
-                    <div class="form-group col-md-2">
-                        <label class="col-form-label" for="snongdo">Nồng độ</label>
-                        <select class="form-control" id="snongdo">
-                            <!-- Các option sẽ được thêm vào đây -->
+                    <!-- Product Price Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="snhomhuong">Nhóm hương</label>
+                        <select class="form-control" id="snhomhuong">
+                            <option value=""></option>
                         </select>
                     </div>
                     <!-- Product Category Field -->
@@ -79,23 +71,70 @@
                         </select>
                     </div>
                     <div class="form-group col-md-2">
-                        <label class="col-form-label" for="sngaytao">Ngày cập nhật</label>
-                        <select class="form-control" id="sngaytao">
+                        <label class="col-form-label" for="strangthai">Trạng thái</label>
+                        <select class="form-control" id="strangthai">
                             <!-- Các option sẽ được thêm vào đây -->
                         </select>
                     </div>
                 </div>
+                <div class="form-group row nopadding col-12 form11" style="display:none">
+
+                    <!-- Product Quantity Field -->
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="skichthuoc">Kích thước</label>
+                        <select class="form-control" id="skichthuoc">
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <!-- Product Price Field -->
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="sgia">Giá</label>
+                        <input type="text" class="form-control" id="sgia">
+                    </div>
+                    <!-- Product Category Field -->
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="sgiagiam">Giá giảm</label>
+                        <input type="text" class="form-control" id="sgiagiam">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="strangthai1">Trạng thái</label>
+                        <select class="form-control" id="strangthai1">
+                            <!-- Các option sẽ được thêm vào đây -->
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="sngaydau">Từ ngày</label>
+                        <input type="date" class="form-control" id="sngaydau">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="col-form-label" for="sngaycuoi">Đến ngày</label>
+                        <input type="date" class="form-control" id="sngaycuoi">
+                    </div>
+
+                </div>
 
                 <div class="form-group row">
-                    <div class="row d-flex justify-content-center col-12">
+                    <div class="row justify-content-center col-12">
                         <button style="background-color: #fdb9a4; color: #a75851" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton">
                             Tìm kiếm
                         </button>
+                        <button style="background-color: #fdb9a4; color: #a75851; display: none" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton1">
+                            Tìm kiếm
+                        </button>
+                        <button style="background-color: #fdb9a4; color: #a75851; display: none" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="backbutton">
+                            Quay lại
+                        </button>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between mb-2">
-                    <button id="alphabetSortBtn" class="btn btn-secondary">Sắp xếp </button>
+                <div class=" justify-content-start mb-2">
+                    <button id="backbt" class="btn btn-secondary">Tải lại</button>
                 </div>
+                <div class="justify-content-start mb-2">
+                    <button style="display: none" id="backbt1" class="btn btn-secondary">Tải lại</button>
+                </div>
+
                 <!-- Add custom sort button here -->
 
 
@@ -107,9 +146,24 @@
                             <th>Tên sản phẩm</th>
                             <th>Nhóm hương</th>
                             <th>Thương hiệu</th>
-                            <th>Nồng độ</th>
                             <th>Giới tính</th>
-                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <table id="listGrid1" class="mt-3" style="width: 100%; display: none">
+
+                    <thead style="height:50px;font-size:17px">
+                        <tr>
+                            <th>Tên sản phẩm</th>
+                            <th>Kích thước</th>
+                            <th>Số lượng</th>
+                            <th>Giá</th>
+                            <th>Giá giảm</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày cập nhật</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -117,29 +171,14 @@
                 </table>
             </div>
 
-            @* @if (Context.Session.GetString("UserRole") != null) *@
-            @* { *@
-            @* string[] roles = Context.Session.GetString("UserRole").Split(","); *@
-            @* @if (roles.Any(role => CConfig.Admin.Contains(role)) || roles.Any(role => CConfig.QuanlySP.Contains(role)) || roles.Any(role => CConfig.Quanly.Contains(role))) *@
-            @* { *@
             <!-- Add/Edit Product Form Tab (Unified for Create/Edit) -->
             <div class="tab-pane fade boxshadow pt-2" id="subjectFormTab" role="tabpanel">
                 <div class="form-group row nopadding">
                     <form id="SubjectForm" class="col-12 ">
                         <input type="hidden" class="form-control" id="">
                         @* <!-- Product Id Field --> *@
-                        <div class="col-md-12 d-inline-block">
-                            @* <div class="form-group row nopadding">  *@
-                            @*    <div class="col-md-3">  *@
-                            @*        <label class="col-form-label" for="tProductID">Mã sản phẩm (*)</label>  *@
-                            @*      </div>  *@
-                            @*      <div class="col-md-4"> *@
-                            @*         <input type="text" class="form-control" id="tProductID" required>  *@
-                            @*     </div>  *@
-                            @*  </div> *@
-
+                        <div class="col-md-12 form1">
                             <!-- Product Name Field -->
-
                             <div class="form-group row nopadding">
                                 <div class="col-md-3">
                                     <label class="col-form-label">Tên sản phẩm (*)</label>
@@ -154,7 +193,7 @@
                                     <label class="col-form-label" for="tnhomhuong">Nhóm hương</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tnhomhuong" required>
+                                    <select class="form-control" id="tnhomhuong" required></select>
                                 </div>
                             </div>
                             <!-- Product Quantity Field -->
@@ -164,25 +203,36 @@
                                     <label class="col-form-label" for="tthuonghieu">Thương hiệu</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tthuonghieu" required>
+                                    <select class="form-control" id="tthuonghieu" required></select>
                                 </div>
                             </div>
-                            <!-- Product Category Field -->
 
-                            <div class="form-group row nopadding">
-                                <div class="col-md-3">
-                                    <label class="col-form-label" for="tnongdo">Nồng độ</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tnongdo" required>
-                                </div>
-                            </div>
+                            <!-- Product Category Field -->
                             <div class="form-group row nopadding">
                                 <div class="col-md-3">
                                     <label class="col-form-label" for="tgioitinh">Giới tính</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tgioitinh" required>
+                                    <select class="form-control" id="tgioitinh" required></select>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="ttrangthai">Trạng thái</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="ttrangthai" required></select>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tanh">Ảnh sản phẩm</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="file" id="images" name="images" />
+                                    <div id="preview" style="margin-top: 10px;"></div>
+                                    <div id="preview-old" style="margin-top: 10px;"></div>
+                                    <div id="preview-new" style="margin-top: 10px;"></div>
                                 </div>
                             </div>
                             <div class="form-group row nopadding">
@@ -196,456 +246,1036 @@
 
                         </div>
 
+                        <div class="col-md-12 form2" style="display: none">
+                            <div class="form-group row nopadding" style="display: none">
+                                <div class="col-md-3">
+                                    <label class="col-form-label">Mã chi tiết sản phẩm</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="xmachitet" readonly>
+                                </div>
+                            </div>
+                            <!-- Product Name Field -->
 
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label">Tên sản phẩm</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="xtensp" readonly>
+                                </div>
+                            </div>
+                            <!-- Product Price Field -->
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="xkichthuoc">Kích thước</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="xkichthuoc" required></select>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="xsoluong">Số lượng</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="xsoluong" required>
+                                </div>
+                            </div>
+                            <!-- Product Quantity Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="xgia">Giá</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="xgia" required>
+                                </div>
+                            </div>
+                            <!-- Product Category Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="xgiagiam">Giá giảm</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="xgiagiam" required>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="xtrangthai">Trạng thái</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="xtrangthai" required></select>
+                                </div>
+                            </div>
+
+                        </div>
                     </form>
                 </div>
 
                 <!-- Button Group -->
                 <div class="form-group row">
-                    <div class="row d-flex justify-content-center col-12">
+                    <div class="form3 row justify-content-center col-12">
                         <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button>
                         <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">
                             Cập nhật
                         </button>
                         <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button>
                     </div>
+                    <div class="form4 row justify-content-center col-12" style="display: none">
+                        <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert1">Thêm mới</button>
+                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update1">
+                            Cập nhật
+                        </button>
+                        <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset1">Làm mới</button>
+                    </div>
                 </div>
             </div>
-            @* } *@
-            @* } *@
         </div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        //         function fetchUserRoles() {
-        //     fetch("/Account/GetRoles")
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             sessionStorage.setItem("UserRoles", data);
-        //         })
-        //         .catch(error => console.error("Lỗi lấy quyền:", error));
-        // }
+                        let selectedFiles = [];
+        let deletedImageIds = [];
+        const MAX_IMAGES = 5;
 
-        // Gọi hàm khi trang load
-        //document.addEventListener("DOMContentLoaded", fetchUserRoles);
+        $('#images').on('change', function () {
+            let newFiles = Array.from(this.files);
 
-
-        $(document).ready(function () {
-            // Load initial data
-                loadGridData();
-            // Function to load data into the grid
-                function loadGridData() {
-                            var url = "https://localhost:7177/SanPham/Danhsach";
-                            $.get(url, {}, function (response) {
-                        var dulieu = response.data || [];
-                        console.log(dulieu);
-                        console.log(response);
-                        // Khởi tạo hoặc cập nhật DataTable
-                               $('#listGrid').DataTable({
-            dom: '<"top"f>rt<"bottom"ip><"clear">',
-            destroy: true,
-            lengthChange: true,
-            autoWidth: false,
-            searching: false,
-            ordering: true,
-            paging: true,
-            data: dulieu,
-            columns: [
-                { "data": "tenSanPham", "width": "25%" },
-                { "data": "maNhomHuong", "width": "15%" },
-                { "data": "maThuongHieu", "width": "15%" },
-                { "data": "maNongDo", "width": "15%" },
-                { "data": "gioiTinh", "width": "10%" },
-                {
-                    "data": "ngayCapNhat",
-                    "width": "15%",
-                    render: function (data) {
-                        if (data) {
-                            var date = new Date(data);
-                            var day = ("0" + date.getDate()).slice(-2);
-                            var month = ("0" + (date.getMonth() + 1)).slice(-2);
-                            var year = date.getFullYear();
-                            return day + "/" + month + "/" + year;
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "data": "maSanPham",
-                    "width": "5%",
-                    render: function (data) {
-                        let editButton = `
-                            <button class='ViewDetails btn btn-link' data-id="${data}">
-                                <i class="bi bi-pencil-fill"></i>
-                            </button>
-                        `;
-
-                        let deleteButton = `
-                            <button class='DeleteSubject btn btn-link' data-id="${data}">
-                                <i class="bi bi-trash-fill"></i>
-                            </button>
-                        `;
-
-                        return editButton;
-                    }
-                }
-            ],
-            language: {
-                search: "Tìm kiếm:",
-                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
-                zeroRecords: "Không tìm thấy kết quả nào."
+            if (selectedFiles.length + newFiles.length > MAX_IMAGES) {
+                alert("Chỉ được chọn tối đa " + MAX_IMAGES + " ảnh.");
+                this.value = "";
+                return;
             }
+
+            selectedFiles = selectedFiles.concat(newFiles);
+            this.value = "";
+
+            renderPreviewNewImages();
         });
 
+        function renderPreviewNewImages() {
+            $('#preview-new').empty();
 
-            // Sự kiện sắp xếp theo alphabet
-                $('#alphabetSortBtn').off('click').on('click', function () {
-                                    let table = $('#listGrid').DataTable();
-                                    let currentOrder = table.order();
-
-                                    if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
-                                        table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
-                                    } else {
-                                        table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
-                                    }
-                                });
-                            })
-                            .fail(function () {
-                                alert("Có lỗi xảy ra khi tải dữ liệu.");
-                            });
-                        }
-            // Reset form
-                $('#Reset').click(function () {
-                            $('#SubjectForm')[0].reset();
-                            $("#tProductID").val('').prop('readonly', false);;
-                            $('#Insert').show();
-                            $('#Update').hide();
-                            $('#formTabTitle').text('Tạo mới');
-                        });
-           // Insert new product
-                       $('#Insert').click(function () {
-            const productData = {
-                tenSanPham: $("#ttensp").val(),
-                maNhomHuong: $("#tnhomhuong").val(),
-                maThuongHieu: $("#tthuonghieu").val(),
-                maNongDo: $("#tnongdo").val(),
-                gioiTinh: $("#tgioitinh").val(),
-                ngayCapNhat: new Date().toISOString(),
-                moTa: $("#tmota").val()
-            };
-            console.log(productData);
-            console.log(productData.ngayCapNhat);
-            $.ajax({
-                url: "https://localhost:7177/SanPham/ThemMoi",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(productData),
-                success: function () {
-                    // Reset các ô input
-                    $("#ttensp").val('');
-                    $("#tnhomhuong").val('');
-                    $("#tthuonghieu").val('');
-                    $("#tnongdo").val('');
-                    $("#tgioitinh").val('');
-                    $("#tmota").val('');
-
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Sản phẩm mới đã được thêm.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-
-                    loadGridData(); // Reload lại dữ liệu bảng
-                },
-                error: function (xhr) {
-                     console.log("Lỗi:", xhr.responseText);
-                    Swal.fire({
-                        title: 'Thất bại!',
-                        text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
+            selectedFiles.forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const imgWrapper = $(`
+                            <div class="img-container-new" style="display:inline-block; position:relative; margin:5px;">
+                                <img src="${e.target.result}" width="100"
+                                     style="border:1px solid #ccc; border-radius:5px; padding:3px;" />
+                                <button type="button" class="remove-img" data-index="${index}"
+                                    style="position:absolute; top:0; right:0; background:red; color:white; border:none; border-radius:50%;
+                                    width:20px; height:20px; line-height:15px; cursor:pointer;">×</button>
+                            </div>
+                        `);
+                        $('#preview-new').append(imgWrapper);
+                    };
+                    reader.readAsDataURL(file);
                 }
             });
+        }
+
+        $('#preview-new').on('click', '.remove-img', function () {
+            const index = $(this).data('index');
+            selectedFiles.splice(index, 1);
+            renderPreviewNewImages(); // render lại toàn bộ sau khi xóa
         });
 
-            // View product details
-                $(document).on('click', '.ViewDetails', function () {
-                          let table = $('#listGrid').DataTable();
-                            let row = $(this).closest('tr');
-                            let rowData = table.row(row).data();
-                            let id = rowData.maSanPham;
-                            console.log(id);
-                            $.ajax({
-                               // url: `https:localhost:44300/Products/GetDetails?productId=${id}`,
-                                url: `https://localhost:7177/SanPham/ChiTiet?masp=${id}`,
-                                type: 'GET',
-                                success: function (respone) {
-                                    if (respone && respone.data ) {
-                                        const data = respone.data;
+        $(document).on('click', '.remove-img1', function () {
+            const container = $(this).closest('.img-container1');
+            const imageId = container.data('id');
+            if (imageId) {
+                deletedImageIds.push(imageId);
+            }
+            container.remove();
+        });
+
+
+
+            // load dropdownlist trangthai
+                    $(document).ready(function () {
+
+                            let trangThaiOptions = [
+                            { value: true, text: "Đang bán" },
+                            { value: false, text: "Ngưng bán" }
+                            ];
+
+                            let select = $("#xtrangthai");
+                            let select1 = $("#ttrangthai");
+                            let select2 = $("#strangthai");
+                            let select3 = $("#strangthai1");
+                            select2.append(`<option value="">---</option>`);
+                            select3.append(`<option value="">---</option>`);
+                            select.empty();
+                            select1.empty();
+                            trangThaiOptions.forEach(function (item) {
+                            select.append(`<option value="${item.value}">${item.text}</option>`);
+                            select1.append(`<option value="${item.value}">${item.text}</option>`);
+                            select2.append(`<option value="${item.value}">${item.text}</option>`);
+                            select3.append(`<option value="${item.value}">${item.text}</option>`);
+                            });
+                            });
+            // select datepicker
+                     $(document).ready(function () {
+
+                             $('#tt').show();
+                             $('#tt1').hide();
+                             $("#sngaycuoi").datepicker({
+                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend
+                             changeMonth: true,
+                             changeYear: true
+
+                             });
+                             $("#sngaydau").datepicker({
+                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend,
+                             changeMonth: true,
+                             changeYear: true
+                             });
+                             $("#sngaycuoi1").datepicker({
+                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend
+                             changeMonth: true,
+                             changeYear: true
+
+                             });
+                             $("#sngaydau1").datepicker({
+                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend,
+                             changeMonth: true,
+                             changeYear: true
+                             });
+                     });
+            //load dropdownlist thuonghieu
+                      $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/ThuongHieu/Danhsach",
+                             method: "GET",
+                             success: function (data) {
+                             let select = $("#sthuonghieu");
+                             select.empty();
+                             select.append(`<option value="">---</option>`);
+
+                         // Truy cập đúng vào mảng "data"
+                             if (data.data && Array.isArray(data.data)) {
+                             data.data.forEach(function (item) {
+                                 select.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
+                             });
+                             }
+
+                               let select1 = $("#tthuonghieu");
+                              select1.empty();
+
+                          // Truy cập đúng vào mảng "data"
+                              if (data.data && Array.isArray(data.data)) {
+                              data.data.forEach(function (item) {
+                                  select1.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
+                              });
+                              }
+                              },
+                             error: function (xhr) {
+                             }
+                             });
+                      });
+            // load dropdownlist kich thước
+                        $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/KichThuoc/Danhsach",
+                             method: "GET",
+                             success: function (data) {
+                             let select = $("#xkichthuoc");
+                             let select1 = $("#skichthuoc");
+                             select.empty();
+                             select1.empty();
+                             select1.append(`<option value="">---</option>`);
+
+                         // Truy cập đúng vào mảng "data"
+                             if (data.data && Array.isArray(data.data)) {
+                             data.data.forEach(function (item) {
+                                 select.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
+                                 select1.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
+                             });
+                             }
+                             },
+                             error: function (xhr) {
+                             }
+                             });
+                      });
+            //load dropdownlist nhomhuong
+                      $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/nhomhuong/Danhsach",
+                             method: "GET",
+                             success: function (data) {
+                             let select = $("#snhomhuong");
+                             select.empty();
+                             select.append(`<option value="">---</option>`);
+
+                         // Truy cập đúng vào mảng "data"
+                             if (data.data && Array.isArray(data.data)) {
+                             data.data.forEach(function (item) {
+                                 select.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
+                             });
+                             }
+
+                               let select1 = $("#tnhomhuong");
+                              select1.empty();
+
+                          // Truy cập đúng vào mảng "data"
+                              if (data.data && Array.isArray(data.data)) {
+                              data.data.forEach(function (item) {
+                                  select1.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
+                              });
+                              }
+                              },
+                             error: function (xhr) {
+                             }
+                             });
+                     });
+             //load dropdownlist gioitinh
+                      $(document).ready(function () {
+                             let gioiTinhOptions = [
+                                 { value: "Nam", text: "Nam" },
+                                 { value: "Nữ", text: "Nữ" },
+                                 { value: "Unisex", text: "Unisex" }
+                             ];
+
+                                 let select = $("#sgioitinh");
+                                 select.append(`<option value="">---</option>`);
+                                 let select1 = $("#tgioitinh");
+
+
+                                 select1.empty();
+
+                                 gioiTinhOptions.forEach(function (item) {
+                                 select.append(`<option value="${item.value}">${item.text}</option>`);
+                                 select1.append(`<option value="${item.value}">${item.text}</option>`);
+                                 });
+                      });
+                     $(document).ready(function () {
+             // Load initial data
+                              loadGridData();
+             // Function to load data into the grid
+                              function loadGridData() {
+                                      var url = "https://localhost:7177/SanPham/Danhsach";
+                                      $.get(url, {}, function (response) {
+                                      var dulieu = response.data || [];
+                             // Khởi tạo hoặc cập nhật DataTable
+                                      $('#listGrid').DataTable({
+                                         dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                         destroy: true,
+                                         lengthChange: true,
+                                         autoWidth: false,
+                                         searching: false,
+                                         ordering: true,
+                                         paging: true,
+                                         data: dulieu,
+                                         columns: [
+                                                         { "data": "tenSanPham", "width": "20%" },
+                                                         { "data": "tenNhomHuong", "width": "20%" },
+                                                         { "data": "tenThuongHieu", "width": "20%" },
+                                                         { "data": "gioiTinh", "width": "15%" },
+                                                         {
+                                                             data: "trangThai",
+                                                             width: "15%",
+                                                             render: function (data, type, row) {
+                                                             return data === false ? "Ngưng bán" : "Đang bán";
+                                                             }
+                                                         },
+                                                         {
+                                                             "data": "maSanPham",
+                                                             "width": "10%",
+                                                             render: function (data) {
+                                                             let editButton = `
+                                                             <button class='ViewDetails btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-pencil-fill"></i>
+                                                             </button>`;
+
+                                                             let DetailsButton = `
+                                                             <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-list"></i>
+                                                             </button>`;
+                                                             return editButton + DetailsButton;
+                                                             }
+                                                             }
+                                         ],
+                                         language: {
+                                                  search: "Tìm kiếm:",
+                                                  info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                                  zeroRecords: "Không tìm thấy kết quả nào."
+                                         }
+                                      });
+
+                                      $('#alphabetSortBtn').off('click').on('click', function () {
+                                         let table = $('#listGrid').DataTable();
+                                         let currentOrder = table.order();
+                                         if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
+                                             table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
+                                         } else {
+                                             table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
+                                         }
+                                      });
+                                      })
+                                      .fail(function () {
+                                      alert("Có lỗi xảy ra khi tải dữ liệu.");
+                                      });
+                              }
+             // quay lại màn hình danh sách sp
+                               $('#backbt').click(function () {
+                                      loadGridData();
+                                      $("#stensp").val('');
+                              });
+             // quay lại màn hình danh sách chi tiết sp
+                               $('#backbt1').click(function () {
+                                      let id = sessionStorage.getItem("masp");
+                                      loadChiTietSanPham(id);
+                                      $("#xtensp").val('');
+                              });
+             // Reset form
+                              $('#Reset').click(function () {
+                                     $('#SubjectForm')[0].reset();
+                                     $("#tProductID").val('').prop('readonly', false);;
+                                     $('#Insert').show();
+                                     $('#Update').hide();
+                                     $('#formTabTitle').text('Tạo mới');
+                                     resetForm();
+                              });
+             // Reset1 form
+                              $('#Reset1').click(function () {
+                                     $("#xsoluong").val('');
+                                     $("#xgia").val('');
+                                     $("#xgiagiam").val('');
+                                     $("#tProductID").val('').prop('readonly', false);
+                                     $('#Insert1').show();
+                                     $('#Update1').hide();
+                                     $('#formTabTitle').text('Tạo mới');
+                                     resetForm();
+                              });
+             // Back main form
+                              $('#backbutton').click(function () {
+                                        $('#listGrid1').hide();
+                                        $('#listGrid1_filter').hide();
+                                        $('#listGrid1_info').hide();
+                                        $('#listGrid1_paginate').hide();
+                                        $('#backbutton').hide();
+                                        $('#listGrid').show();
+                                        $('#listGrid_filter').show();
+                                        $('#listGrid_info').show();
+                                        $('.form1').show();
+                                        $('.form2').hide();
+                                        $('#listGrid_paginate').show();
+                                        $('#tt').show();
+                                        $('#tt1').hide();
+                                        $('#backbt').show();
+                                        $('#backbt1').hide();
+                                        $('#Insert').show();
+                                        $('#Insert1').hide();
+                                        $('.form10').show();
+                                        $('.form11').hide();
+                                        $('#searchButton').show();
+                                        $('#searchButton1').hide();
+                                        sessionStorage.removeItem("TenSanPham");
+                                        sessionStorage.removeItem("masp");
+                              });
+             // Insert new product
+                              $('#Insert').click(function () {
+                                         const productData = {
+                                         tenSanPham: $("#ttensp").val(),
+                                         maNhomHuong: parseInt($("#tnhomhuong").val()),
+                                         maThuongHieu: parseInt($("#tthuonghieu").val()),
+                                         gioiTinh: $("#tgioitinh").val(),
+                                         moTa: $("#tmota").val(),
+                                         trangThai: $("#ttrangthai").val() === "true"
+                                         };
+                                         $.ajax({
+                                         url: "https://localhost:7177/SanPham/ThemMoi",
+                                         method: "POST",
+                                         contentType: "application/json",
+                                         data: JSON.stringify(productData),
+                                         success: function (maSanPham) {
+                                         const files = selectedFiles;
+
+                                         if (files.length > 0) {
+                                         const formData = new FormData();
+                                         formData.append("maSanPham", maSanPham.data);
+
+                                         for (let i = 0; i < files.length; i++) {
+                                         formData.append("images", files[i]);
+                                         }
+
+                                         for (let pair of formData.entries()) {
+                                         console.log(pair[0] + ":", pair[1].name);
+                                         }
+
+                                         $.ajax({
+                                         url: "https://localhost:7177/Anh_SP/ThemAnh",
+                                         type: "POST",
+                                         data: formData,
+                                         contentType: false,
+                                         processData: false,
+                                         success: function (res) {
+                                         Swal.fire({
+                                         title: 'Thành công!',
+                                         text: 'Đã thêm sản phẩm và ảnh thành công.',
+                                         icon: 'success',
+                                         confirmButtonText: 'OK'
+                                         });
+                                         resetForm();
+                                         loadGridData();
+
+                                         },
+                                         error: function () {
+                                         Swal.fire({
+                                         title: 'Lỗi ảnh!',
+                                         text: 'Sản phẩm đã được thêm, nhưng ảnh không tải lên được.',
+                                         icon: 'warning',
+                                         confirmButtonText: 'OK'
+                                         });
+                                         loadGridData();
+                                         }
+                                         });
+                                         } else {
+                                         Swal.fire({
+                                         title: 'Thành công!',
+                                         text: 'Sản phẩm mới đã được thêm (không có ảnh).',
+                                         icon: 'success',
+                                         confirmButtonText: 'OK'
+                                         });
+                                         resetForm();
+                                         loadGridData();
+                                         }
+                                         },
+                                         error: function (xhr) {
+                                         Swal.fire({
+                                         title: 'Thất bại!',
+                                         text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
+                                         icon: 'error',
+                                         confirmButtonText: 'OK'
+                                         });
+                                         }
+                                         });
+                              });
+             // Reset input form
+                              function resetForm() {
+
+                                         $("#ttensp").val('');
+                                         $("#tmota").val('');
+
+                                        // Reset ảnh
+                                         selectedFiles = [];
+                                         deletedImageIds = [];
+                                         $('#images').val('');
+                                         $('#preview').empty();
+                                         $('#preview-new').empty();
+                              }
+
+             // lấy tên sản phẩm
+                              $('a[href="#subjectFormTab"]').on('shown.bs.tab', function () {
+                                         let tenSP1 = sessionStorage.getItem("TenSanPham");
+                                         $("#xtensp").val(tenSP1);
+                              });
+             //insert products details
+                              $('#Insert1').click(function () {
+                                         let txtmaSP = sessionStorage.getItem("masp");
+                                         const productData = {
+                                         maSanPham: txtmaSP,
+                                         maKichThuoc: parseInt($("#xkichthuoc").val()),
+                                         soLuong: parseInt($("#xsoluong").val()),
+                                         gia: parseFloat($("#xgia").val()),
+                                         giaGiam: parseFloat($("#xgiagiam").val()),
+                                         ngayCapNhat: new Date().toISOString(),
+                                         trangThai: $("#xtrangthai").val() === "true",
+                                         };
+                                         $.ajax({
+                                                 url: "https://localhost:7177/SanPham/Themchitiet",
+                                                 method: "POST",
+                                                 contentType: "application/json",
+                                                 data: JSON.stringify(productData),
+                                                 success: function () {
+                         // Reset các ô input
+                                                 $("#xkichthuoc").val('');
+                                                 $("#xtensp").val('');
+                                                 $("#xgia").val('');
+                                                 $("#xsoluong").val('');
+                                                 $("#xgiagiam").val('');
+                                                 $("#xtrangthai").val('');
+                                                 Swal.fire({
+                                                 title: 'Thành công!',
+                                                 text: 'Chi tiết sản phẩm mới đã được thêm.',
+                                                 icon: 'success',
+                                                 confirmButtonText: 'OK'
+                                                 });
+
+                                                 loadChiTietSanPham(txtmaSP); // Reload lại dữ liệu bảng
+                                                 },
+                                                 error: function (xhr) {
+                                                 console.log("Lỗi:", xhr.responseText);
+                                                 Swal.fire({
+                                                 title: 'Thất bại!',
+                                                 text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
+                                                 icon: 'error',
+                                                 confirmButtonText: 'OK'
+                                                 });
+                                                 }
+                                         });
+                              });
+             // View product details
+                              $(document).on('click', '.ViewDetails', function () {
+
+
+                                        const table = $('#listGrid').DataTable();
+                                        const row = $(this).closest('tr');
+                                        const rowData = table.row(row).data();
+                                        const id = rowData.maSanPham;
+
+            // Lấy chi tiết sản phẩm
+                                        $.ajax({
+                                        url: `https://localhost:7177/SanPham/ChiTiet?masp=${id}`,
+                                        type: 'GET',
+                                        success: function (response) {
+                                        if (!response || !response.data) {
+                                        alert('Chi tiết sản phẩm không tìm thấy.');
+                                        return;
+                                        }
+
+                                        const data = response.data;
+
+                    // Gán dữ liệu vào form
                                         $("#ttensp").val(data.tenSanPham);
                                         $("#tmasp").val(data.maSanPham);
                                         $("#tnhomhuong").val(data.maNhomHuong);
                                         $("#tthuonghieu").val(data.maThuongHieu);
                                         $("#tnongdo").val(data.maNongDo);
                                         $("#tgioitinh").val(data.gioiTinh);
+                                        $("#ttrangthai").val(data.trangThai.toString());
                                         $("#tmota").val(data.moTa);
+
+                    // Hiển thị tab form
                                         $('#Insert').hide();
                                         $('#Update').show();
                                         $('#formTabTitle').text('Chi tiết');
                                         $('a[href="#subjectFormTab"]').tab('show');
-                                    } else {
-                                        alert('Chi tiết sản phẩm không tìm thấy.');
-                                    }
-                                },
-                                error: function () {
-                                    alert('Có lỗi xảy ra khi tải chi tiết.');
-                                }
-                            });
-                        });
-        //     // Delete product
-        //         $(document).on('click', '.DeleteSubject', function () {
-        //     if (confirm("Bạn có chắc chắn muốn xóa?")) {
-        //         let table = $('#listGrid').DataTable();
-        //         let row = $(this).closest('tr');
-        //         let rowData = table.row(row).data();
-        //         let id = rowData.producT_ID;
-        //         $.ajax({
-        //             url: '@Url.Action("DeleteProduct", "Products")'  + '?id=' + id,
-        //             type: 'DELETE',
-        //             contentType: 'application/json; charset=utf-8', // Đảm bảo header đúng
-        //             success: function (response) {
-        //                 // Kiểm tra kết quả trả về từ server
-        //                 if (response && response.code === 0) {
-        //                     Swal.fire({
-        //                         title: 'Thành công!',
-        //                         text: 'Sản phẩm đã được xóa.',
-        //                         icon: 'success',
-        //                         confirmButtonText: 'OK'
-        //                     }).then(() => {
-        //                         // Xóa hàng trong DataTable và vẽ lại
-        //                         table.row(row).remove().draw();
-        //                     });
-        //                 } else {
-        //                     Swal.fire({
-        //                         title: 'Thất bại!',
-        //                         text: response.message || 'Không thể xóa sản phẩm.',
-        //                         icon: 'error',
-        //                         confirmButtonText: 'OK'
-        //                     });
-        //                 }
-        //             },
-        //                     error: function (xhr) {
-        //                 Swal.fire({
-        //                     title: 'Thất bại!',
-        //                     text: 'Đã xảy ra lỗi khi xóa sản phẩm.',
-        //                     icon: 'error',
-        //                     confirmButtonText: 'OK'
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
-        //     // Update
-                $('#Update').click(function () {
-                            const productData = {
-                                tenSanPham: $("#ttensp").val(),
-                                maSanPham: $("#tmasp").val(),
-                                maNhomHuong: $("#tnhomhuong").val(),
-                                maThuongHieu: $("#tthuonghieu").val(),
-                                maNongDo: $("#tnongdo").val(),
-                                gioiTinh: $("#tgioitinh").val(),
-                                moTa: $("#tmota").val(),
-                                ngayCapNhat: new Date().toISOString(),
-                            };
 
-                            $.ajax({
-                                url: "https://localhost:7177/SanPham/Sua",
-                                method: "PUT",
-                                contentType: "application/json",
-                                data: JSON.stringify(productData),
-                                success: function () {
-                                    $("#ttensp").val('');
-                                    $("#tnhomhuong").val('');
-                                    $("#tthuonghieu").val('');
-                                    $("#tnongdo").val('');
-                                    $("#tgioitinh").val('');
-                                    $("#tmota").val('');
-                                    $('#Insert').show();
-                                    $('#Update').hide();
-                                    $('#formTabTitle').text('Tạo mới');
-                                    Swal.fire({
-                                        title: 'Thành công!',
-                                        text: 'Sản phẩm đã được cập nhật.',
-                                        icon: 'success',
-                                        confirmButtonText: 'OK'
-                                    });
-                                    loadGridData(); 
-                                },
-                                error: function (xhr) {
-                                    Swal.fire({
-                                        title: 'Thất bại!',
-                                        text: 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
-                                        icon: 'error',
-                                        confirmButtonText: 'OK'
-                                    });
-                                }
-                            });
-                        });
-        //     // Search
-        //         $('#searchButton').on('click', function () {
-        //         // Collect form data
-        //         var sproductName = $('#sproductName').val() || null;
-        //         var sprice = $('#sprice').val() || null;
-        //         var squantity = $('#squantity').val() || null;
-        //         var scategoryId = $('#scategoryId').val() || null;
+                    // Reset ảnh cũ
+                                        selectedFiles = [];
+                                        $('#preview').empty();
 
-        //         // Perform the AJAX request
-        //         $.ajax({
-        //             url: 'https://localhost:44300/Products/Search',
-        //             method: 'GET',
-        //             data: {
-        //                 productName: sproductName,
-        //                 price: sprice,
-        //                 quantity: squantity,
-        //                 categoryId: scategoryId
-        //             },
-        //             success: function (response) {
-        //                 var dulieu = response.data || [];
+                    // Load ảnh sản phẩm
+                                        $.ajax({
+                                        url: `https://localhost:7177/Anh_SP/Chitiet?masp=${id}`,
+                                        method: 'GET',
+                                        success: function (imgResp) {
+                                        imgResp.forEach((item, index) => {
+                                        const fullUrl = `https://localhost:7177${item.duongDan}`;
+                                        const imgElement = `
+                                        <div class="img-container1" data-id="${item.maAnh}" style="display:inline-block; margin:5px; position:relative;" data-index="${index}">
+                                        <img src="${fullUrl}" width="100"
+                                        style="border:1px solid #ccc; border-radius:5px; padding:3px;" />
+                                        <button type="button" class="remove-img1" style="
+                                                position:absolute;
+                                                top:0; right:0;
+                                                background:red;
+                                                color:white;
+                                                border:none;
+                                                border-radius: 50%;
+                                                width:20px; height:20px;
+                                                cursor:pointer;
+                                                font-size:12px;
+                                                ">×</button>
+                                                </div>`;
+                                                $('#preview').append(imgElement);
+                                                });
 
 
-        //                 // Khởi tạo hoặc cập nhật DataTable
-        //                 $('#listGrid').DataTable({
-        //                     dom: '<"top"f>rt<"bottom"ip><"clear">',
-        //                     destroy: true,
-        //                     lengthChange: true,
-        //                     fixedColumns: true,
-        //                     autoWidth: false,
-        //                     searching: false,
-        //                     ordering: true,
-        //                     data: dulieu,
-        //                     paging: true,
-        //                     columns: [
-        //                                 { "data": "producT_ID","width": "5%",
-        //                                     render: function (data, type, row) {
-        //                                         return `<input type="checkbox" data-id="${data}">`;
-        //                                     }
-        //                                 },
-        //                                 { "data": "producT_ID","width": "10%" },
-        //                                 { "data": "producT_NAME","width": "25%" },
-        //                                 { "data": "quantity", "width": "15%" },
-        //                                 { "data": "price","width": "10%" },
-        //                                 { "data": "categorY_ID", "width": "15%",
-        //                             render: function (data, type, row, meta) {
-        //                                 const spanId = `category-${meta.row}`;
-        //                                 const placeholder = `<span id="${spanId}">Loading...</span>`;
+                                                },
+                                                error: function () {
+                                                console.warn('Lỗi khi load ảnh sản phẩm');
+                                                }
+                                                });
+                                                },
+                                                error: function () {
+                                                alert('Lỗi khi lấy thông tin sản phẩm.');
+                                                }
+                                                });
+                              });
 
-        //                                 // Gọi AJAX để lấy tên danh mục
-        //                                 $.ajax({
-        //                                     url: `https://localhost:44300/Categories/GetDetails?id=${data}`,
-        //                                     method: 'GET',
-        //                                     success: function (response) {
-        //                                         $(`#${spanId}`).text(response.data.categorY_NAME || 'Unknown');
-        //                                     },
-        //                                     error: function () {
-        //                                         $(`#${spanId}`).text('Error');
-        //                                     }
-        //                                 });
+                                             // Khai báo toàn cục7
+             // fill data in listGrid1
+                              function loadChiTietSanPham(masp) {
+                                                $.ajax({
+                                                url: `https://localhost:7177/SanPham/ChiTietSP?masp=${masp}`,
+                                                type: 'GET',
+                                                success: function (response) {
+                                                if (response && response.data && response.data.length > 0) {
+                                                let dulieu = response.data;
+                                                $('#listGrid1').DataTable({
+                                                dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                destroy: true,
+                                                lengthChange: true,
+                                                autoWidth: false,
+                                                searching: false,
+                                                ordering: true,
+                                                paging: true,
+                                                data: dulieu,
+                                                columns: [
+                                                    { data: "tenSanPham", width: "23%" },
+                                                    { data: "tenKichThuoc", width: "13%" },
+                                                    { data: "soLuong", width: "10%" },
+                                                    { data: "gia", width: "10%" },
+                                                    { data: "giaGiam", width: "10%" },
+                                                    {
+                                                        data: "trangThai", width: "14%",
+                                                        render: function (data) {
+                                                            return data === false ? "Ngưng bán" : "Đang bán";
+                                                        }
+                                                    },
+                                                    {
+                                                        data: "ngayCapNhat", width: "15%",
+                                                        render: function (data) {
+                                                            if (data) {
+                                                                var date = new Date(data);
+                                                                var day = ("0" + date.getDate()).slice(-2);
+                                                                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                                                                var year = date.getFullYear();
+                                                                return day + "/" + month + "/" + year;
+                                                            }
+                                                            return "";
+                                                        }
+                                                    },
+                                                    {
+                                                        data: "maChiTietSP", width: "5%",
+                                                        render: function (data) {
+                                                            return `<button class='ViewDetails1 btn btn-link' data-id="${data}">
+                                                            <i class="bi bi-pencil-fill"></i>
+                                                        </button>`;
+                                                        }
+                                                    }
+                                                ],
+                                                language: {
+                                                search: "Tìm kiếm:",
+                                                info: "Hiển thị chi tiết từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                                zeroRecords: "Không tìm thấy kết quả nào."
+                                                }
+                                                });
+                                                } else {
+                            // Không có dữ liệu: reset bảng và xoá sessionStorage
+                                                if ($.fn.DataTable.isDataTable('#listGrid1')) {
+                                                $('#listGrid1').DataTable().clear().draw();
+                                                }
+                                                }
+                                                },
+                                                error: function () {
 
-        //                                 return placeholder;
-        //                             }
-        //                         },
-        //                                 {
-        //                                                "data": "producT_ID", "width": "10%",
-        //     render: function (data) {
-        //         // Lấy danh sách quyền từ sessionStorage
-        //         let userRoles = sessionStorage.getItem("UserRoles");
+                                                }
+                                                });
+                              }
 
-        //         // Kiểm tra xem userRoles có giá trị không
-        //         if (!userRoles) {
-        //             userRoles = [];
-        //         } else {
-        //             userRoles = userRoles.split(","); // Chuyển chuỗi thành mảng
-        //         }
+             // Details List products
+                              $(document).on('click', '.DeleteSubject', function () {
+                                                $('#listGrid').hide();
+                                                $('#listGrid_filter').hide();
+                                                $('#listGrid_info').hide();
+                                                $('#listGrid_paginate').hide();
+                                                $('#listGrid1').show();
+                                                $('#backbutton').show();
+                                                $('#listGrid1_filter').show();
+                                                $('#listGrid1_info').show();
+                                                $('#listGrid1_paginate').show();
+                                                $('.form2').show();
+                                                $('.form4').show();
+                                                $('.form1').hide();
+                                                $('.form3').hide();
+                                                $('#tt').hide();
+                                                $('#tt1').show();
+                                                $('#backbt1').show();
+                                                $('#backbt').hide();
+                                                $('.form11').show();
+                                                $('.form10').hide();
+                                                $('#searchButton1').show();
+                                                $('#searchButton').hide();
+                                                let table = $('#listGrid').DataTable();
+                                                let row = $(this).closest('tr');
+                                                let rowData = table.row(row).data();
+                                                let id = rowData.maSanPham;
+                                                let tensp = rowData.tenSanPham;
+                                                sessionStorage.setItem("masp", id);
+                                                sessionStorage.setItem("TenSanPham", tensp);
+                                                loadChiTietSanPham(id);
+                               });
 
-        //         // Kiểm tra quyền chỉnh sửa và xóa
-        //         let canEdit = userRoles.includes("Admin") || userRoles.includes("Quản lý sản phẩm");
-        //         let canDelete = userRoles.includes("Admin");
+             // View product details 2
+                             $(document).on('click', '.ViewDetails1', function () {
+                                                 let table = $('#listGrid1').DataTable();
+                                                 let row = $(this).closest('tr');
+                                                 let rowData = table.row(row).data();
+                                                 let id = rowData.maChiTietSP;
+                                                 $.ajax({
+                                                     url: `https://localhost:7177/SanPham/ChiTietSP1?ct=${id}`,
+                                                     type: 'GET',
+                                                     success: function (respone) {
+                                                     if (respone && respone.data ) {
+                                                     const data = respone.data;
+                                                     $("#xtensp").val(data.tenSanPham);
+                                                     $("#xmachitet").val(data.maChiTietSP);
+                                                     $("#xkichthuoc").val(data.maKichThuoc);
+                                                     $("#xsoluong").val(data.soLuong);
+                                                     $("#xgia").val(data.gia);
+                                                     $("#xtrangthai").val(data.trangThai.toString());
+                                                     $("#xgiagiam").val(data.giaGiam);
+                                                     $('#Insert1').hide();
+                                                     $('#Update1').show();
+                                                     $('.form2').show();
+                                                     $('.form4').show();
+                                                     $('.form1').hide();
+                                                     $('.form3').hide();
+                                                     $('#formTabTitle').text('Chi tiết');
+                                                     $('a[href="#subjectFormTab"]').tab('show');
 
-        //         let editButton = canEdit ? `
-        //             <button class='ViewDetails btn btn-link' data-id="${data}">
-        //                 <i class="bi bi-pencil-fill"></i>
-        //             </button>
-        //         ` : "";
+                                                     } else {
+                                                     alert('Chi tiết sản phẩm không tìm thấy.');
+                                                     }
+                                                     },
+                                                     error: function () {
+                                                     }
+                                                 });
+                             });
+             // Update
+                                    $('#Update').click(function () {
+            var formData = new FormData();
 
-        //         let deleteButton = canDelete ? `
-        //             <button class='DeleteSubject btn btn-link' data-id="${data}">
-        //                 <i class="bi bi-trash-fill"></i>
-        //             </button>
-        //         ` : "";
+            // Thêm dữ liệu sản phẩm
+            formData.append("maSanPham", $("#tmasp").val());
+            formData.append("tenSanPham", $("#ttensp").val());
+            formData.append("maNhomHuong", $("#tnhomhuong").val());
+            formData.append("maThuongHieu", $("#tthuonghieu").val());
+            formData.append("maNongDo", $("#tnongdo").val());
+            formData.append("gioiTinh", $("#tgioitinh").val());
+            formData.append("trangThai", $("#ttrangthai").val() === "true");
+            formData.append("moTa", $("#tmota").val());
+            formData.append("ngayCapNhat", new Date().toISOString());
 
-        //         return editButton + deleteButton;
-        //     }
-        // }
-
-        //                     ],
-        //                     language: {
-        //                         search: "Tìm kiếm:",
-        //                         info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
-        //                         zeroRecords: "Không tìm thấy kết quả nào.",
-
-        //                     }
-        //                 });
-        //             },
-        //             error: function (xhr, textStatus, errorThrown) {
-        //                 Swal.fire({
-        //                     title: 'Lỗi tìm kiếm',
-        //                     text: 'Không thể tải danh sách sản phẩm.',
-        //                     icon: 'error',
-        //                     confirmButtonText: 'OK'
-        //                 });
-        //             }
-        //         });
-        //         });
-        //     // DropDown List
-        //         $(document).ready(function () {
-        //         // Gọi AJAX để lấy dữ liệu loại sản phẩm
-        //         $.ajax({
-        //             url: 'https://localhost:44300/Categories/GetAll', // Đường dẫn API
-        //             method: 'GET',
-        //             success: function (response) {
-        //                 var categories = response.data || []; // Danh sách loại sản phẩm
-        //                 var $select = $('#scategoryId');
-        //                 var $select1 = $('#tProductCategory');
-
-        //                 // Xóa các option cũ (nếu có)
-        //                 $select.empty();
-        //                 $select1.empty();
-
-        //                 // Thêm option mặc định
-        //                 $select.append('<option value="">-- Chọn loại sản phẩm --</option>');
-        //                 $select1.append('<option value="">-- Chọn loại sản phẩm --</option>');
-
-        //                 // Thêm dữ liệu vào combobox
-        //                 categories.forEach(function (category) {
-        //                     $select.append(`<option value="${category.id}">${category.categorY_NAME}</option>`);
-        //                     $select1.append(`<option value="${category.id}">${category.categorY_NAME}</option>`);
-        //                 });
-        //             },
-        //             error: function () {
-        //                 Swal.fire({
-        //                     title: 'Lỗi',
-        //                     text: 'Không thể tải danh sách loại sản phẩm.',
-        //                     icon: 'error',
-        //                     confirmButtonText: 'OK'
-        //                 });
-        //             }
-        //         });
-        //         });
+            // Thêm ảnh mới
+            for (let i = 0; i < selectedFiles.length; i++) {
+            formData.append("newImages", selectedFiles[i]);
+        }
+            // Thêm danh sách ID ảnh bị xóa
+            for (let i = 0; i < deletedImageIds.length; i++) {
+            formData.append("deletedImageIds", deletedImageIds[i]);
+        }
+            $.ajax({
+                url: "https://localhost:7177/SanPham/Sua",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (res) {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: res.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    // Reset form
+                    $('#Insert').show();
+                    $('#Update').hide();
+                    $('#formTabTitle').text('Tạo mới');
+                    resetForm();
+                    loadGridData();
+                },
+                error: function (xhr) {
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: xhr.responseJSON?.message || 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    console.log(xhr);
+                }
+            });
         });
+
+             // Update1
+                             $('#Update1').click(function () {
+                                                 let txtmaSP = sessionStorage.getItem("masp");
+                                                 const productData = {
+                                                 maChiTietSP: $("#xmachitet").val(),
+                                                 maSanPham: txtmaSP,
+                                                 maKichThuoc: $("#xkichthuoc").val(),
+                                                 soLuong: $("#xsoluong").val(),
+                                                 gia: $("#xgia").val(),
+                                                 giagiam: $("#xgiagiam").val(),
+                                                 trangThai: $("#xtrangthai").val() === "true",
+                                                 ngayCapNhat: new Date().toISOString(),
+                                                 };
+                                                 $.ajax({
+                                                 url: "https://localhost:7177/SanPham/Sua1",
+                                                 method: "PUT",
+                                                 contentType: "application/json",
+                                                 data: JSON.stringify(productData),
+                                                 success: function () {
+                                                 $("#xkichthuoc").val('');
+                                                 $("#xsoluong").val('');
+                                                 $("#xgia").val('');
+                                                 $("#xgiagiam").val('');
+                                                 $("#xtrangthai").val('');
+                                                 $("#tmota").val('');
+                                                 $('#Insert1').show();
+                                                 $('#Update1').hide();
+                                                 $('#formTabTitle').text('Tạo mới');
+                                                 Swal.fire({
+                                                 title: 'Thành công!',
+                                                 text: 'Chi tiết sản phẩm đã được cập nhật.',
+                                                 icon: 'success',
+                                                 confirmButtonText: 'OK'
+                                                 });
+                                                 loadChiTietSanPham(txtmaSP);
+                                                 },
+                                                 error: function (xhr) {
+                                                 Swal.fire({
+                                                 title: 'Thất bại!',
+                                                 text: 'Đã xảy ra lỗi khi cập nhật sản phẩm.',
+                                                 icon: 'error',
+                                                 confirmButtonText: 'OK'
+                                                 });
+                                                 }
+                                                 });
+                             });
+             // Search
+                             $('#searchButton').on('click', function () {
+                                                 let searchData = {
+                                                 tenSanPham: $("#stensp").val(),
+                                                 thuongHieuId: parseInt($("#sthuonghieu").val()) || null,
+                                                 nhomHuongId: parseInt($("#snhomhuong").val()) || null,
+                                                 gioiTinh: $("#sgioitinh").val(),
+                                                 trangThai: $("#strangthai").val() === "" ? null : $("#strangthai").val() === "true"
+                                                 };
+                                                 $.ajax({
+                                                 url: "https://localhost:7177/SanPham/TimKiem",
+                                                 type: "POST",
+                                                 contentType: "application/json",
+                                                 data: JSON.stringify(searchData),
+                                                 success: function (res) {
+                                                 $('#listGrid').DataTable({
+                                                 dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                 destroy: true,
+                                                 lengthChange: true,
+                                                 autoWidth: false,
+                                                 searching: false,
+                                                 ordering: true,
+                                                 paging: true,
+                                                 data: res.data,
+                                                 columns: [
+                                                             { data: "tenSanPham", width: "20%" },
+                                                             { data: "tenNhomHuong", width: "20%" },
+                                                             { data: "tenThuongHieu", width: "20%" },
+                                                             { data: "gioiTinh", width: "15%" },
+                                                             { data: "trangThai", width: "15%",
+                                                                         render: function (data) {
+                                                                         return data === false ? "Ngưng bán" : "Đang bán";
+                                                                         }
+                                                             },
+                                                             { data: "maSanPham", width: "10%",
+                                                                         render: function (data) {
+                                                                         return `<button class='ViewDetails btn btn-link' data-id="${data}">
+                                                                                 <i class="bi bi-pencil-fill"></i>
+                                                                                 </button>
+                                                                                 <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                                                 <i class="bi bi-list"></i>
+                                                                                 </button>
+                                                                                 `;
+                                                             }
+                                                             }
+                                                 ],
+                                                 language: {
+                                                 search: "Tìm kiếm:",
+                                                 info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                                 zeroRecords: "Không tìm thấy kết quả nào."
+                                                 }
+                                                 });
+                                                 },
+                                                 error: function (err) {
+                                                 }
+                                                 });
+                             });
+             // Search
+                             $('#searchButton1').on('click', function () {
+                                             let id = sessionStorage.getItem("masp");
+                                             let searchData = {
+                                             kichThuocID: parseInt($("#skichthuoc").val()) || null,
+                                             masanpham: parseInt(id) || null,
+                                             gia: $("#sgia").val() === "" ? null : parseFloat($("#sgia").val()),
+                                             giagiam: $("#sgiagiam").val() === "" ? null : parseFloat($("#sgiagiam").val()),
+                                             trangThai: $("#strangthai1").val() === "" ? null : $("#strangthai1").val() === "true",
+                                             ngaydau: $("#sngaydau").val() || null,
+                                             ngaycuoi : $("#sngaycuoi").val() || null,
+                                             };
+                                             console.log(searchData);
+                                             $.ajax({
+                                             url: "https://localhost:7177/SanPham/TimKiem1",
+                                             type: "POST",
+                                             contentType: "application/json",
+                                             data: JSON.stringify(searchData),
+                                             success: function (res) {
+                                             $('#listGrid1').DataTable({
+                                             dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                             destroy: true,
+                                             lengthChange: true,
+                                             autoWidth: false,
+                                             searching: false,
+                                             ordering: true,
+                                             paging: true,
+                                             data: res.data,
+                                             columns: [
+                                                { data: "tenSanPham", width: "23%" },
+                                                { data: "tenKichThuoc", width: "13%" },
+                                                { data: "soLuong", width: "10%" },
+                                                { data: "gia", width: "10%" },
+                                                { data: "giaGiam", width: "10%" },
+                                                {
+                                                    data: "trangThai", width: "14%",
+                                                    render: function (data) {
+                                                        return data === false ? "Ngưng bán" : "Đang bán";
+                                                    }
+                                                },
+                                                {
+                                                    data: "ngayCapNhat", width: "15%",
+                                                    render: function (data) {
+                                                        if (data) {
+                                                            var date = new Date(data);
+                                                            var day = ("0" + date.getDate()).slice(-2);
+                                                            var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                                                            var year = date.getFullYear();
+                                                            return day + "/" + month + "/" + year;
+                                                        }
+                                                        return "";
+                                                    }
+                                                },
+                                                {
+                                                    data: "maChiTietSP", width: "5%",
+                                                    render: function (data) {
+                                                        return `<button class='ViewDetails1 btn btn-link' data-id="${data}">
+                                                        <i class="bi bi-pencil-fill"></i>
+                                                    </button>`;
+                                                    }
+                                                }
+                                             ],
+                                             language: {
+                                             search: "Tìm kiếm:",
+                                             info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ chi tiết sản phẩm",
+                                             zeroRecords: "Không tìm thấy kết quả nào."
+                                             }
+                                             });
+                                             },
+                                             error: function (err) {
+                                             console.log(err.responseText);
+                                             }
+
+                                             });
+                             });
+             });
     </script>
 }
 
@@ -663,6 +1293,21 @@
         #listGrid thead th.sorting_asc:after,
         #listGrid thead th.sorting_desc:before,
         #listGrid thead th.sorting_desc:after {
+            display: none;
+        }
+
+    #listGrid1 thead th {
+        cursor: default;
+        position: relative;
+    }
+
+        /* Hide the sorting arrows */
+        #listGrid1 thead th.sorting:before,
+        #listGrid1 thead th.sorting:after,
+        #listGrid1 thead th.sorting_asc:before,
+        #listGrid1 thead th.sorting_asc:after,
+        #listGrid1 thead th.sorting_desc:before,
+        #listGrid1 thead th.sorting_desc:after {
             display: none;
         }
     /* Align search bar to the top left */
@@ -700,4 +1345,9 @@
         color: #a75851 !important; /* Màu chữ chữ cho tất cả trạng thái */
     }
 
+    .rotating-icon {
+        transform: rotate(360deg);
+        transform-origin: center center;
+        transition: transform 0.5s ease-in-out;
+    }
 </style>

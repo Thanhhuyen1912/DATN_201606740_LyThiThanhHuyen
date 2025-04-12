@@ -12,9 +12,9 @@ namespace CoreLib.Entity
         [Key]
         public int MaKichThuoc { get; set; }
         [Required(ErrorMessage = "Tên kích thước không được để trống.")]
-        public string TenKichThuoc { get; set; }
-        public string MoTa { get; set; }
-        public bool TrangThai { get; set; }
-        public DateTime NgayCapNhat { get; set; }
+        public string? TenKichThuoc { get; set; }
+        public string? MoTa { get; set; }
+        public bool? TrangThai { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
     }
 }
