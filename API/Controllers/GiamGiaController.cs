@@ -1,5 +1,6 @@
 ﻿using CoreLib.AppDbContext;
 using CoreLib.Entity;
+using Lib_Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -55,6 +56,8 @@ namespace API.Controllers
         [Route("/GiamGia/them")]
         public IActionResult post(MaGiamGia th)
         {
+            if (th.NgayBatDau > th.NgayKetThuc)
+            { return BadRequest(); }
             try
             {
                 _context.MaGiamGia.Add(th);
@@ -65,17 +68,52 @@ namespace API.Controllers
             { return BadRequest(); }
 
         }
-        [HttpGet]
-        [Route("/GiamGia/TrangThai")]
-        public IActionResult getByTrangthai(bool tt)
+        [HttpPost]
+        [Route("/GiamGia/TimKiem")]
+        public IActionResult TimKiem([FromBody] SearchGiamGia dto)
         {
-            var th = _context.MaGiamGia.Where(th => th.TrangThai == tt).ToList();
-            if (th == null)
+            var query = _context.MaGiamGia.AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.MaHienThi))
             {
-                return NotFound();
+                query = query.Where(p => p.MaHienThi.Contains(dto.MaHienThi));
             }
-            else
-                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = th });
+            if (!string.IsNullOrEmpty(dto.LoaiGiamGia))
+            {
+                query = query.Where(p => p.LoaiGiamGia.Contains(dto.LoaiGiamGia));
+            }
+            if (dto.NgayBatDau.HasValue)
+            {
+                query = query.Where(p => p.NgayBatDau >= dto.NgayBatDau.Value);
+            }
+            if (dto.NgayKetThuc.HasValue)
+            {
+                query = query.Where(p => p.NgayKetThuc <= dto.NgayKetThuc.Value);
+            }
+
+            if (dto.TrangThai.HasValue)
+            {
+                query = query.Where(p => p.TrangThai == dto.TrangThai.Value);
+            }
+
+            var result = query.Select(sp => new
+            {
+                sp.MaHienThi,
+                sp.MMaGiamGia,
+                sp.TrangThai,
+                sp.NgayCapNhat,
+                sp.LoaiGiamGia,
+                sp.NgayBatDau,
+                sp.GiaTri,
+                sp.NgayKetThuc,
+            }).ToList();
+
+            return Ok(new
+            {
+                code = 0,
+                message = "Tìm kiếm thành công",
+                data = result
+            });
         }
     }
 }
