@@ -13,8 +13,8 @@ namespace CoreLib.Entity
         public int MMaGiamGia { get; set; }
         [Required(ErrorMessage = "Mã giảm giá không được để trống.")]
         public string MaHienThi { get; set; }
-        public DateTime NgayBatDau { get; set; }
-        public DateTime NgayKetThuc { get; set; }
+        public DateTime? NgayBatDau { get; set; }
+        public DateTime? NgayKetThuc { get; set; }
         public string LoaiGiamGia { get; set; }
         public double GiaTri { get; set; }
         public bool TrangThai { get; set; }

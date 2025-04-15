@@ -21,13 +21,13 @@ namespace CoreLib.Entity
         public string MatKhau { get; set; }
         [Required(ErrorMessage = "Email không được để trống.")]
         [EmailAddress(ErrorMessage = "Email không đúng định dạng.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [Required(ErrorMessage = "Số điện thoại không được để trống.")]
         [RegularExpression(@"^0[0-9]{9}$", ErrorMessage = "Số điện thoại chưa đúng định dạng chuẩn.")]
         public string SoDienThoai { get; set; }
-        public int LoaiTaiKhoan { get; set; }
-        public bool TrangThai { get; set; }
-        public DateTime NgayCapNhat { get; set; }
+        public int? LoaiTaiKhoan { get; set; }
+        public bool? TrangThai { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
 
     }
 }

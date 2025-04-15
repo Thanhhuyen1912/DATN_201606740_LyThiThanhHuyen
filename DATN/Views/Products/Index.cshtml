@@ -464,17 +464,27 @@
                              data.data.forEach(function (item) {
                                  select.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
                              });
+                             }                              
+                              },
+                             error: function (xhr) {
                              }
+                             });
+                      });
+                        //load dropdownlist thuonghieu
+                      $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/ThuongHieu/Danhsach1",
+                             method: "GET",
+                             success: function (data) {
+                             let select = $("#tthuonghieu");
+                             select.empty();
 
-                               let select1 = $("#tthuonghieu");
-                              select1.empty();
-
-                          // Truy cập đúng vào mảng "data"
-                              if (data.data && Array.isArray(data.data)) {
-                              data.data.forEach(function (item) {
-                                  select1.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
-                              });
-                              }
+                         // Truy cập đúng vào mảng "data"
+                             if (data.data && Array.isArray(data.data)) {
+                             data.data.forEach(function (item) {
+                                 select.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
+                             });
+                             }
                               },
                              error: function (xhr) {
                              }
@@ -486,17 +496,36 @@
                              url: "https://localhost:7177/KichThuoc/Danhsach",
                              method: "GET",
                              success: function (data) {
-                             let select = $("#xkichthuoc");
                              let select1 = $("#skichthuoc");
-                             select.empty();
-                             select1.empty();
                              select1.append(`<option value="">---</option>`);
+                             
+
+                         // Truy cập đúng vào mảng "data"
+                             if (data.data && Array.isArray(data.data)) {
+                             data.data.forEach(function (item) {
+                                 select1.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
+                                
+                             });
+                             }
+                             },
+                             error: function (xhr) {
+                             }
+                             });
+                      });
+                        $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/KichThuoc/Danhsach1",
+                             method: "GET",
+                             success: function (data) {
+                             let select = $("#xkichthuoc");
+
+                             select.empty();
+
 
                          // Truy cập đúng vào mảng "data"
                              if (data.data && Array.isArray(data.data)) {
                              data.data.forEach(function (item) {
                                  select.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
-                                 select1.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
                              });
                              }
                              },
@@ -507,7 +536,7 @@
             //load dropdownlist nhomhuong
                       $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/nhomhuong/Danhsach",
+                             url: "https://localhost:7177/nhomhuong/Danhsach1",
                              method: "GET",
                              success: function (data) {
                              let select = $("#snhomhuong");
@@ -521,15 +550,28 @@
                              });
                              }
 
-                               let select1 = $("#tnhomhuong");
-                              select1.empty();
+                              
+                              },
+                             error: function (xhr) {
+                             }
+                             });
+                     });
+                     $(document).ready(function () {
+                             $.ajax({
+                             url: "https://localhost:7177/nhomhuong/Danhsach",
+                             method: "GET",
+                             success: function (data) {
+                                         let select1 = $("#tnhomhuong");
+                                        select1.empty();
 
-                          // Truy cập đúng vào mảng "data"
-                              if (data.data && Array.isArray(data.data)) {
-                              data.data.forEach(function (item) {
-                                  select1.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
-                              });
-                              }
+        // Truy cập đúng vào mảng "data"
+                                             if (data.data && Array.isArray(data.data)) {
+                                            data.data.forEach(function (item) {
+                                            select1.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
+                                        });
+                                }
+
+
                               },
                              error: function (xhr) {
                              }
@@ -1212,7 +1254,6 @@
                                              ngaydau: $("#sngaydau").val() || null,
                                              ngaycuoi : $("#sngaycuoi").val() || null,
                                              };
-                                             console.log(searchData);
                                              $.ajax({
                                              url: "https://localhost:7177/SanPham/TimKiem1",
                                              type: "POST",

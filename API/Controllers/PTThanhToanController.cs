@@ -1,5 +1,6 @@
 ﻿using CoreLib.AppDbContext;
 using CoreLib.Entity;
+using Lib_Core.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,7 +40,7 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy thông tin thành công", code = 0, data = th });
         }
         [HttpPut]
-        [Route("/PhuongThuc/sua")]
+        [Route("/PhuongThuc/Sua")]
         public IActionResult Update(PhuongThucThanhToan th)
         {
             try
@@ -53,7 +54,7 @@ namespace API.Controllers
 
         }
         [HttpPost]
-        [Route("/PhuongThuc/them")]
+        [Route("/PhuongThuc/Them")]
         public IActionResult post(PhuongThucThanhToan th)
         {
             try
@@ -66,17 +67,45 @@ namespace API.Controllers
             { return BadRequest(); }
 
         }
-        [HttpGet]
-        [Route("/PhuongThuc/TrangThai")]
-        public IActionResult getByTrangthai(bool tt)
+        [HttpPost]
+        [Route("/PhuongThuc/TimKiem")]
+        public IActionResult TimKiem([FromBody] SearchPT dto)
         {
-            var th = _context.PhuongThucThanhToan.Where(th => th.TrangThai == tt).ToList();
-            if (th == null)
+            var query = _context.PhuongThucThanhToan.AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.TenPhuongThuc))
             {
-                return NotFound();
+                query = query.Where(p => p.TenPhuongThuc.Contains(dto.TenPhuongThuc));
+            }           
+            if (dto.NgayDau.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat >= dto.NgayDau.Value);
             }
-            else
-                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = th });
+            if (dto.NgayCuoi.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat <= dto.NgayCuoi.Value);
+            }
+
+            if (dto.TrangThai.HasValue)
+            {
+                query = query.Where(p => p.TrangThai == dto.TrangThai.Value);
+            }
+
+            var result = query.Select(sp => new
+            {
+                sp.TenPhuongThuc,
+                sp.MaPhuongThuc,
+                sp.TrangThai,
+                sp.NgayCapNhat,
+                sp.MoTa
+            }).ToList();
+
+            return Ok(new
+            {
+                code = 0,
+                message = "Tìm kiếm thành công",
+                data = result
+            });
         }
     }
 }

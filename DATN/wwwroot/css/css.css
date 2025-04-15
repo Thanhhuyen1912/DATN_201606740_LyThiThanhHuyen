@@ -259,7 +259,14 @@
     background-color: #fff2ec;
     display: flex
 }
-
+/* Khi màn hình vừa trở xuống (md ~ 768px) thì đổi thành hàng dọc */
+@media (max-width: 768px) {
+    .blog1 {
+        flex-direction: column;
+        align-content: center;
+        justify-content: center
+    }
+}
 .anh1 {
     width: 45%;
     padding: 15px;

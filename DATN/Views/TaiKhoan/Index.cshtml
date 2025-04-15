@@ -1,0 +1,942 @@
+﻿@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+
+<div id="loading" class="loading" style="display: none;">Đang tải...</div>
+<div class="container" id="noidung">
+    <div class="gsm-daihoi-info">
+        <div style=" color: #a75851" class="row justify-content-center" id="tt">
+            <span style=" color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách tài khoản</span>
+        </div>
+        <div style=" color: #a75851; display: none" class="row justify-content-center" id="tt1">
+            <span style=" color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách địa chỉ</span>
+        </div>
+    </div>
+    <div class="k-portlet__body mt-3">
+        <ul class="nav nav-pills nav-tabs-btn nav-pills-btn-success row" role="tablist">
+            <li id="tt10" style="background-color: #fdb9a4; color: #a75851; border-radius:10%" class="nav-item col gsm-link-tab">
+                <a style="background-color: #fdb9a4; color: #a75851" class="nav-link active show" data-toggle="tab" href="#subjectListTab" role="tab" aria-selected="true">
+                    <span  style="background-color: #fdb9a4; color: white;" class=" text-uppercase">
+                        Danh sách tài khoản
+                    </span>
+                    <span id="tt11" style="background-color: #fdb9a4; color: white; display: none" class=" text-uppercase">
+                        Danh sách địa chỉ
+                    </span>
+                </a>
+            </li>
+            <li id="tt123" style=" color: #a75851; display: none" class="nav-item col gsm-link-tab">
+                <a style=" color: #a75851" class="nav-link custom-tab-link" data-toggle="tab" href="#subjectFormTab" role="tab" aria-selected="false">
+                    <span class="nav-link-title text-uppercase " id="formTabTitle">Chi tiết</span>
+                </a>
+            </li>
+        </ul>
+
+        <div style="background-color: #fdb9a4; color: #a75851" class="line_top col-md-12"></div>
+
+        <div class="tab-content">
+
+            <!-- Subject List Tab -->
+            <div class="tab-pane fade show active " id="subjectListTab">
+
+                <div class="form-group row nopadding col-12 form10">
+                    <!-- Product Name Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label">Họ tên</label>
+                        <input type="text" class="form-control" id="shoten">
+                    </div>
+                    <!-- Product Quantity Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="ssdt">Số điện thoại</label>
+                        <input type="text" class="form-control" id=ssdt />
+                    </div>
+                    <!-- Product Category Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="sloaitaikhoan">Loại tài khoản</label>
+                        <select class="form-control" id="sloaitaikhoan">
+                            <!-- Các option sẽ được thêm vào đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="strangthai">Trạng thái</label>
+                        <select class="form-control" id="strangthai">
+                            <!-- Các option sẽ được thêm vào đây -->
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row nopadding col-12 form11" style="display:none">
+
+                    <!-- Product Quantity Field -->
+                    <div class="form-group col-md-4">
+                        <label class="col-form-label" for="sthanhpho">Thành phố</label>
+                        <select class="form-control" id="sthanhpho">
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <!-- Product Price Field -->
+                    <div class="form-group col-md-4">
+                        <label class="col-form-label" for="shuyen">Huyện</label>
+                        <select class="form-control" id="shuyen">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <!-- Product Category Field -->
+                    <div class="form-group col-md-4">
+                        <label class="col-form-label" for="sxa">Xã</label>
+                        <select class="form-control" id="sxa">
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="row justify-content-center col-12">
+                        <button style="background-color: #fdb9a4; color: #a75851" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton">
+                            Tìm kiếm
+                        </button>
+                        <button style="background-color: #fdb9a4; color: #a75851; display: none" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton1">
+                            Tìm kiếm
+                        </button>
+                        <button style="background-color: #fdb9a4; color: #a75851; display: none" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="backbutton">
+                            Quay lại
+                        </button>
+                    </div>
+                </div>
+                <div class=" justify-content-start mb-2">
+                    <button id="backbt" class="btn btn-secondary">Tải lại</button>
+                </div>
+                <div class="justify-content-start mb-2">
+                    <button style="display: none" id="backbt1" class="btn btn-secondary">Tải lại</button>
+                </div>
+
+                <!-- Add custom sort button here -->
+
+
+
+                <table id="listGrid" class="display mt-3" style="width: 100%;">
+
+                    <thead style="height:50px;font-size:17px">
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Loại tài khoản</th>
+                            <th>Trạng thái</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <table id="listGrid1" class="mt-3" style="width: 100%; display: none">
+
+                    <thead style="height:50px;font-size:17px">
+                        <tr>
+                            <th>Tên chủ TK</th>
+                            <th>Thành phố</th>
+                            <th>Huyện</th>
+                            <th>Xã</th>
+                            <th>Chi tiết</th>
+                            <th>Tên người nhận</th>
+                            <th>SĐT người nhận</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Add/Edit Product Form Tab (Unified for Create/Edit) -->
+            <div class="tab-pane fade boxshadow pt-2" id="subjectFormTab" role="tabpanel">
+                <div class="form-group row nopadding">
+                    <form id="SubjectForm" class="col-12 ">
+                        <input type="hidden" class="form-control" id="">
+                        @* <!-- Product Id Field --> *@
+                        <div class="col-md-12 form1">
+                            <!-- Product Name Field -->
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label">Họ tên</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="thoten" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding" hidden>
+                                <div class="col-md-3">
+                                    <label class="col-form-label"></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tmataikhoan" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding" hidden>
+                                <div class="col-md-3">
+                                    <label class="col-form-label"></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tloaitaikhoan" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="ttendn" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tpass" readonly>
+                                </div>
+                            </div>
+                            <!-- Product Price Field -->
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="temail">Email</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="temail" readonly />
+                                </div>
+                            </div>
+                            <!-- Product Quantity Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="tsdt">Số điện thoại</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tsdt" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="ttrangthai">Trạng thái</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="ttrangthai" required></select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Button Group -->
+                <div class="form-group row">
+                    <div class="form3 row justify-content-center col-12">
+                        @* <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button> *@
+                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">
+                            Cập nhật
+                        </button>
+                        @* <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button> *@
+                    </div>
+                    <div class="form4 row justify-content-center col-12" style="display: none">
+                        @* <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert1">Thêm mới</button> *@
+                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update1">
+                            Cập nhật
+                        </button>
+                        @* <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset1">Làm mới</button> *@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+          $(document).ready(function () {
+                     $('#tt10').on('click', function () {
+                         $('#tt123').hide();
+        });
+          });
+
+             $(document).ready(function () {
+            // Load tỉnh/thành phố
+            $.get("https://provinces.open-api.vn/api/p/", function (data) {
+                $('#sthanhpho').empty().append('<option value="">---</option>');
+                $('#shuyen').empty().append('<option value="">----</option>');
+                $('#sxa').empty().append('<option value="">----</option>');
+                data.forEach(function (tinh) {
+                    $('#sthanhpho').append(`<option value="${tinh.code}">${tinh.name}</option>`);
+                });
+            });
+
+            // Khi chọn tỉnh → load huyện
+            $('#sthanhpho').change(function () {
+                const tinhId = $(this).val();
+
+                if (!tinhId) return;
+
+                $.get(`https://provinces.open-api.vn/api/p/${tinhId}?depth=2`, function (data) {
+                    data.districts.forEach(function (huyen) {
+                        $('#shuyen').append(`<option value="${huyen.code}">${huyen.name}</option>`);
+                    });
+                });
+            });
+
+            // Khi chọn huyện → load xã
+            $('#shuyen').change(function () {
+                const huyenId = $(this).val();
+
+
+                if (!huyenId) return;
+
+                $.get(`https://provinces.open-api.vn/api/d/${huyenId}?depth=2`, function (data) {
+                    data.wards.forEach(function (xa) {
+                        $('#sxa').append(`<option value="${xa.code}">${xa.name}</option>`);
+                    });
+                });
+            });
+        });
+                     $(document).ready(function () {
+                             let gioiTinhOptions = [
+                                 { value: "1", text: "Quản lý" },
+                                 { value: "2", text: "Khách hàng" },
+                             ];
+
+                                 let select = $("#sloaitaikhoan");
+                                 select.append(`<option value="">---</option>`);
+                                 gioiTinhOptions.forEach(function (item) {
+                                 select.append(`<option value="${item.value}">${item.text}</option>`);
+                                 });
+                      });
+
+            // load dropdownlist trangthai
+                    $(document).ready(function () {
+
+                            let trangThaiOptions = [
+                            { value: true, text: "Hoạt động" },
+                            { value: false, text: "Ngừng hoạt động" }
+                            ];
+
+                            let select = $("#xtrangthai");
+                            let select1 = $("#ttrangthai");
+                            let select2 = $("#strangthai");
+                            let select3 = $("#strangthai1");
+                            select2.append(`<option value="">---</option>`);
+                            select3.append(`<option value="">---</option>`);
+                            select.empty();
+                            select1.empty();
+                            trangThaiOptions.forEach(function (item) {
+                            select.append(`<option value="${item.value}">${item.text}</option>`);
+                            select1.append(`<option value="${item.value}">${item.text}</option>`);
+                            select2.append(`<option value="${item.value}">${item.text}</option>`);
+                            select3.append(`<option value="${item.value}">${item.text}</option>`);
+                            });
+                            });
+            // select datepicker
+                     $(document).ready(function () {
+
+                             $('#tt10').show();
+                             $('#tt11').hide();
+                     });
+                     $(document).ready(function () {
+             // Load initial data
+                              loadGridData();
+             // Function to load data into the grid
+                              function loadGridData() {
+                                      var url = "https://localhost:7177/TaiKhoan/Danhsach";
+                                      $.get(url, {}, function (response) {
+                                      var dulieu = response.data || [];
+                             // Khởi tạo hoặc cập nhật DataTable
+                                      $('#listGrid').DataTable({
+                                         dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                         destroy: true,
+                                         lengthChange: true,
+                                         autoWidth: false,
+                                         searching: false,
+                                         ordering: true,
+                                         paging: true,
+                                         data: dulieu,
+                                         columns: [
+                                                         { "data": "hoTen", "width": "20%" },
+                                                         { "data": "email", "width": "20%" },
+                                                         { "data": "soDienThoai", "width": "20%" },
+                                                          {
+                                                             data: "loaiTaiKhoan",
+                                                             width: "15%",
+                                                             render: function (data, type, row) {
+                                                             return data === 1 ? "Quản lý" : "Khách hàng";
+                                                             }
+                                                         },
+                                                         {
+                                                             data: "trangThai",
+                                                             width: "15%",
+                                                             render: function (data, type, row) {
+                                                             return data === false ? "Ngừng hoạt động" : "Hoạt động";
+                                                             }
+                                                         },
+                                                         {
+                                                             "data": "maTaiKhoan",
+                                                             "width": "10%",
+                                                             render: function (data) {
+                                                             let editButton = `
+                                                             <button class='ViewDetails btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-pencil-fill"></i>
+                                                             </button>`;
+
+                                                             let DetailsButton = `
+                                                             <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-list"></i>
+                                                             </button>`;
+                                                             return editButton + DetailsButton;
+                                                             }
+                                                             }
+                                         ],
+                                         language: {
+                                                  search: "Tìm kiếm:",
+                                                  info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ tài khoản",
+                                                  zeroRecords: "Không tìm thấy kết quả nào."
+                                         }
+                                      });
+
+                                      $('#alphabetSortBtn').off('click').on('click', function () {
+                                         let table = $('#listGrid').DataTable();
+                                         let currentOrder = table.order();
+                                         if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
+                                             table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
+                                         } else {
+                                             table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
+                                         }
+                                      });
+                                      })
+                                      .fail(function () {
+                                      alert("Có lỗi xảy ra khi tải dữ liệu.");
+                                      });
+                              }
+             // quay lại màn hình danh sách sp
+                               $('#backbt').click(function () {
+                                      loadGridData();
+                                      $("#shoten").val('');
+                                      $("#strangthai").val('');
+                                      $("#sloaitaikhoan").val('');
+                                      $("#ssdt").val('');
+                              });
+             // quay lại màn hình danh sách chi tiết sp
+                               $('#backbt1').click(function () {
+                                      let id = sessionStorage.getItem("matk");
+                                      loadChiTietSanPham(id);
+                                      $("#shoten").val('');
+                                      $("#strangthai").val('');
+                                      $("#sloaitaikhoan").val('');
+                                      $("#ssdt").val('');
+                              });
+             // Back main form
+                              $('#backbutton').click(function () {
+                                        $('#listGrid1').hide();
+                                        $('#listGrid1_filter').hide();
+                                        $('#listGrid1_info').hide();
+                                        $('#listGrid1_paginate').hide();
+                                        $('#backbutton').hide();
+                                        $('#listGrid').show();
+                                        $('#listGrid_filter').show();
+                                        $('#listGrid_info').show();
+                                        $('.form1').show();
+                                        $('.form2').hide();
+                                        $('#listGrid_paginate').show();
+                                        $('#tt').show();
+                                        $('#tt1').hide();
+                                        $('#backbt').show();
+                                        $('#backbt1').hide();
+                                        $('#Insert').show();
+                                        $('#Insert1').hide();
+                                        $('.form10').show();
+                                        $('.form11').hide();
+                                        $('#searchButton').show();
+                                        $('#searchButton1').hide();
+                                        sessionStorage.removeItem("matk");
+                              });
+
+                                      let cityList = [];
+
+        $.ajax({
+            url: 'https://provinces.open-api.vn/api/p/',
+            method: 'GET',
+            success: function(data) {
+                cityList = data;  // Lưu danh sách thành phố vào biến cityList
+                // Sau khi lấy được dữ liệu, hiển thị bảng
+                loadData();
+            },
+            error: function(err) {
+                console.log('Lỗi khi gọi API:', err);
+            }
+        });
+         let huyenList = [];
+
+        $.ajax({
+            url: 'https://provinces.open-api.vn/api/p/{id}?depth=2',
+            method: 'GET',
+            success: function(data) {
+                cityList = data;  // Lưu danh sách thành phố vào biến cityList
+                // Sau khi lấy được dữ liệu, hiển thị bảng
+                loadData();
+            },
+            error: function(err) {
+                console.log('Lỗi khi gọi API:', err);
+            }
+        });
+             // View product details
+                                     $(document).on('click', '.ViewDetails', function () {
+            const table = $('#listGrid').DataTable();
+            const row = $(this).closest('tr');
+            const rowData = table.row(row).data();
+            const id = rowData.maTaiKhoan;
+            $('#tt123').show();
+            // Gọi API lấy chi tiết tài khoản
+            $.ajax({
+                url: `https://localhost:7177/TaiKhoan/ChiTiet?matk=${id}`,
+                type: 'GET',
+                success: function (response) {
+                    if (!response || !response.data) {
+                        alert('Chi tiết tài khoản không tìm thấy.');
+                        return;
+                    }
+
+                    const data = response.data;
+                    // Gán dữ liệu vào form
+                    $("#thoten").val(data.hoTen);
+                    $("#temail").val(data.email);
+                    $("#tloaitaikhoan").val(data.loaiTaiKhoan);
+                    $("#tmataikhoan").val(data.maTaiKhoan);
+                    $("#ttendn").val(data.tenDangNhap);
+                    $("#tpass").val(data.matKhau);
+                    $("#ttrangthai").val(data.trangThai.toString());
+                    $("#tsdt").val(data.soDienThoai);
+
+                    // Hiển thị tab form
+                    $('#Insert').hide();
+                    $('#Update').show();
+                    $('#formTabTitle').text('Chi tiết');
+                    $('a[href="#subjectFormTab"]').tab('show');
+                },
+                error: function () {
+                    alert('Lỗi khi lấy chi tiết tài khoản.');
+                }
+            });
+        });
+
+
+
+             // fill data in listGrid1
+                              function loadChiTietSanPham(matk) {
+                                                $.ajax({
+                                                url: `https://localhost:7177/DiaChi/DanhSach?mtk=${matk}`,
+                                                type: 'GET',
+                                                success: function (response) {
+                                                if (response && response.data && response.data.length > 0) {
+                                                let dulieu = response.data;
+                                                $('#listGrid1').DataTable({
+                                                dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                destroy: true,
+                                                lengthChange: true,
+                                                autoWidth: false,
+                                                searching: false,
+                                                ordering: true,
+                                                paging: true,
+                                                data: dulieu,
+                                                columns: [
+                                                    { data: "hoTen", width: "12%" },
+                                                    {
+                        data: 'thanhPho',
+                        width: '15%',
+                        render: function(data, type, row) {
+                            // Tìm tên thành phố từ mã thành phố
+                            var cityName = cityList.find(city => city.code == data)?.name || 'Không tìm thấy';
+                            return cityName;
+                        }
+                    },
+                                                    {
+                        data: 'huyen',
+                        width: '13%',
+                        render: function(data, type, row) {
+                            // Gọi API để lấy danh sách huyện của thành phố
+                            var districtUrl = 'https://provinces.open-api.vn/api/p/' + row.thanhPho + '?depth=2';
+                            var districtName = '';
+                            $.ajax({
+                                url: districtUrl,
+                                method: 'GET',
+                                async: false,  // Đồng bộ để đảm bảo danh sách huyện được lấy trước khi hiển thị
+                                success: function(cityData) {
+                                    // Tìm huyện trong danh sách huyện của thành phố
+                                    var district = cityData.districts.find(d => d.code == data);
+                                    districtName = district ? district.name : 'Không tìm thấy';
+                                },
+                                error: function(err) {
+                                    districtName = 'Không tìm thấy';
+                                }
+                            });
+                            return districtName;  // Trả về tên huyện
+                        }
+                    },
+                                                        {
+            data: 'xa',
+            width: '15%',
+            render: function(data, type, row) {
+                // Gọi API để lấy danh sách xã của huyện
+                var communeUrl = 'https://provinces.open-api.vn/api/d/' + parseInt(row.huyen) + '?depth=2';
+                var communeName = '';
+
+                $.ajax({
+                    url: communeUrl,
+                    method: 'GET',
+                    async: false,  // Đồng bộ để đảm bảo danh sách xã được lấy trước khi hiển thị
+                    success: function(districtData) {
+                        // Tìm xã trong danh sách xã của huyện
+                        var commune = districtData.wards.find(c => c.code == data);
+                        communeName = commune ? commune.name : 'Không tìm thấy';
+                    },
+                    error: function(err) {
+                        communeName = 'Không tìm thấy';
+                    }
+                });
+
+                return communeName;  // Trả về tên xã
+            }
+        },
+
+                                                    { data: "chiTiet", width: "15%" },
+                                                    { data: "hoTenNguoiNhan", width: "15%" },
+                                                    { data: "soDienThoaiNguoiNhan", width: "15%" },
+                                                ],
+                                                language: {
+                                                search: "Tìm kiếm:",
+                                                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ địa chỉ",
+                                                zeroRecords: "Không tìm thấy kết quả nào."
+                                                }
+                                                });
+                                                } else {
+                            // Không có dữ liệu: reset bảng và xoá sessionStorage
+                                                if ($.fn.DataTable.isDataTable('#listGrid1')) {
+                                                $('#listGrid1').DataTable().clear().draw();
+                                                }
+                                                }
+                                                },
+                                                error: function () {
+
+                                                }
+                                                });
+                              }
+
+             // Details List products
+                              $(document).on('click', '.DeleteSubject', function () {
+                                                $('#listGrid').hide();
+                                                $('#listGrid_filter').hide();
+                                                $('#listGrid_info').hide();
+                                                $('#listGrid_paginate').hide();
+                                                $('#listGrid1').show();
+                                                $('#backbutton').show();
+                                                $('#listGrid1_filter').show();
+                                                $('#listGrid1_info').show();
+                                                $('#listGrid1_paginate').show();
+                                                $('.form2').show();
+                                                $('.form4').show();
+                                                $('.form1').hide();
+                                                $('.form3').hide();
+                                                $('#tt').hide();
+                                                $('#tt10').hide();
+                                                $('#tt11').show();
+                                                $('#tt1').show();
+                                                $('#backbt1').show();
+                                                $('#backbt').hide();
+                                                $('.form11').show();
+                                                $('.form10').hide();
+                                                $('#searchButton1').show();
+                                                $('#searchButton').hide();
+                                                let table = $('#listGrid').DataTable();
+                                                let row = $(this).closest('tr');
+                                                let rowData = table.row(row).data();
+                                                let id = rowData.maTaiKhoan;
+                                                sessionStorage.setItem("matk", id);
+                                                loadChiTietSanPham(id);
+                               });
+             // Update
+                                    $('#Update').click(function () {
+                    const data1 = {
+            maTaiKhoan: parseInt($("#tmataikhoan").val()),
+            hoTen: $("#thoten").val(),
+            soDienThoai: $("#tsdt").val(),
+            tenDangNhap: $("#ttendn").val(),
+            email: $("#temail").val(),
+            matKhau: $("#tpass").val(),
+            trangThai: $("#ttrangthai").val() === "true",
+            loaiTaiKhoan: parseInt($("#tloaitaikhoan").val()),
+            ngayCapNhat: new Date().toISOString(),
+
+        };
+            $.ajax({
+                url: "https://localhost:7177/TaiKhoan/Sua",
+                type: "PUT",
+                processData: false,
+                contentType: "application/json",
+                data: JSON.stringify(data1),
+                success: function (res) {
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: res.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    loadGridData();
+                },
+                        error: function (xhr) {
+            console.error("Trạng thái:", xhr.status);
+            console.error("Nội dung lỗi:", xhr.responseText);
+            console.log("Toàn bộ đối tượng lỗi:", xhr);
+
+            Swal.fire({
+                title: 'Thất bại!',
+                text: xhr.responseJSON?.message || 'Đã xảy ra lỗi khi cập nhật tài khoản.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+
+            });
+        });
+
+
+             // Search
+                             $('#searchButton').on('click', function () {
+                                                 let searchData = {
+                                                 tenTaiKhoan: $("#shoten").val(),
+                                                 soDienThoai: $("#ssdt").val() || null,
+                                                 loaiTaiKhoan: parseInt($("#sloaitaikhoan").val()) || null,
+                                                 trangThai: $("#strangthai").val() === "" ? null : $("#strangthai").val() === "true"
+                                                 };
+                                                 $.ajax({
+                                                 url: "https://localhost:7177/TaiKhoan/TimKiem",
+                                                 type: "POST",
+                                                 contentType: "application/json",
+                                                 data: JSON.stringify(searchData),
+                                                 success: function (res) {
+                                                 $('#listGrid').DataTable({
+                                                 dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                 destroy: true,
+                                                 lengthChange: true,
+                                                 autoWidth: false,
+                                                 searching: false,
+                                                 ordering: true,
+                                                 paging: true,
+                                                 data: res.data,
+                                                 columns: [
+                                                         { "data": "hoTen", "width": "20%" },
+                                                         { "data": "email", "width": "20%" },
+                                                         { "data": "soDienThoai", "width": "20%" },
+                                                          {
+                                                             data: "loaiTaiKhoan",
+                                                             width: "15%",
+                                                             render: function (data, type, row) {
+                                                             return data === 1 ? "Quản lý" : "Khách hàng";
+                                                             }
+                                                         },
+                                                         {
+                                                             data: "trangThai",
+                                                             width: "15%",
+                                                             render: function (data, type, row) {
+                                                             return data === false ? "Ngừng hoạt động" : "Hoạt động";
+                                                             }
+                                                         },
+                                                         {
+                                                             "data": "maTaiKhoan",
+                                                             "width": "10%",
+                                                             render: function (data) {
+                                                             let editButton = `
+                                                             <button class='ViewDetails btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-pencil-fill"></i>
+                                                             </button>`;
+
+                                                             let DetailsButton = `
+                                                             <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                             <i class="bi bi-list"></i>
+                                                             </button>`;
+                                                             return editButton + DetailsButton;
+                                                             }
+                                                             }
+                                         ],
+                                                 language: {
+                                                 search: "Tìm kiếm:",
+                                                 info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ tài khoản",
+                                                 zeroRecords: "Không tìm thấy kết quả nào."
+                                                 }
+                                                 });
+                                                 },
+                                                 error: function (err) {
+                                                 }
+                                                 });
+                             });
+             // Search
+                             $('#searchButton1').on('click', function () {
+                                             let id = sessionStorage.getItem("masp");
+                                             let searchData = {
+                                             ThanhPho: $("#sthanhpho").val() || null,
+                                             Huyen: $("#shuyen").val() || null,
+                                             Xa: $("#sxa").val() || null,                                            
+                                             };
+                                             $.ajax({
+                                             url: "https://localhost:7177/DiaChi/TimKiem",
+                                             type: "POST",
+                                             contentType: "application/json",
+                                             data: JSON.stringify(searchData),
+                                             success: function (res) {
+                                             $('#listGrid1').DataTable({
+                                             dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                             destroy: true,
+                                             lengthChange: true,
+                                             autoWidth: false,
+                                             searching: false,
+                                             ordering: true,
+                                             paging: true,
+                                             data: res.data,
+                                           columns: [
+                                                    { data: "hoTen", width: "12%" },
+                                                    {
+                        data: 'thanhPho',
+                        width: '15%',
+                        render: function(data, type, row) {
+                            // Tìm tên thành phố từ mã thành phố
+                            var cityName = cityList.find(city => city.code == data)?.name || 'Không tìm thấy';
+                            return cityName;
+                        }
+                    },
+                                                    {
+                        data: 'huyen',
+                        width: '13%',
+                        render: function(data, type, row) {
+                            // Gọi API để lấy danh sách huyện của thành phố
+                            var districtUrl = 'https://provinces.open-api.vn/api/p/' + row.thanhPho + '?depth=2';
+                            var districtName = '';
+                            $.ajax({
+                                url: districtUrl,
+                                method: 'GET',
+                                async: false,  // Đồng bộ để đảm bảo danh sách huyện được lấy trước khi hiển thị
+                                success: function(cityData) {
+                                    // Tìm huyện trong danh sách huyện của thành phố
+                                    var district = cityData.districts.find(d => d.code == data);
+                                    districtName = district ? district.name : 'Không tìm thấy';
+                                },
+                                error: function(err) {
+                                    districtName = 'Không tìm thấy';
+                                }
+                            });
+                            return districtName;  // Trả về tên huyện
+                        }
+                    },
+                                                        {
+            data: 'xa',
+            width: '15%',
+            render: function(data, type, row) {
+                // Gọi API để lấy danh sách xã của huyện
+                var communeUrl = 'https://provinces.open-api.vn/api/d/' + parseInt(row.huyen) + '?depth=2';
+                var communeName = '';
+
+                $.ajax({
+                    url: communeUrl,
+                    method: 'GET',
+                    async: false,  // Đồng bộ để đảm bảo danh sách xã được lấy trước khi hiển thị
+                    success: function(districtData) {
+                        // Tìm xã trong danh sách xã của huyện
+                        var commune = districtData.wards.find(c => c.code == data);
+                        communeName = commune ? commune.name : 'Không tìm thấy';
+                    },
+                    error: function(err) {
+                        communeName = 'Không tìm thấy';
+                    }
+                });
+
+                return communeName;  // Trả về tên xã
+            }
+        },
+
+                                                    { data: "chiTiet", width: "15%" },
+                                                    { data: "hoTenNguoiNhan", width: "15%" },
+                                                    { data: "soDienThoaiNguoiNhan", width: "15%" },
+                                                ],
+                                             language: {
+                                             search: "Tìm kiếm:",
+                                             info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ địa chỉ",
+                                             zeroRecords: "Không tìm thấy kết quả nào."
+                                             }
+                                             });
+                                             },
+                                             error: function (err) {
+                                             console.log(err.responseText);
+                                             }
+
+                                             });
+                             });
+             });
+    </script>
+}
+
+<style>
+    /* Hide default sorting arrows */
+    #listGrid thead th {
+        cursor: default;
+        position: relative;
+    }
+
+        /* Hide the sorting arrows */
+        #listGrid thead th.sorting:before,
+        #listGrid thead th.sorting:after,
+        #listGrid thead th.sorting_asc:before,
+        #listGrid thead th.sorting_asc:after,
+        #listGrid thead th.sorting_desc:before,
+        #listGrid thead th.sorting_desc:after {
+            display: none;
+        }
+
+    #listGrid1 thead th {
+        cursor: default;
+        position: relative;
+    }
+
+        /* Hide the sorting arrows */
+        #listGrid1 thead th.sorting:before,
+        #listGrid1 thead th.sorting:after,
+        #listGrid1 thead th.sorting_asc:before,
+        #listGrid1 thead th.sorting_asc:after,
+        #listGrid1 thead th.sorting_desc:before,
+        #listGrid1 thead th.sorting_desc:after {
+            display: none;
+        }
+    /* Align search bar to the top left */
+    .dataTables_filter {
+        text-align: center;
+    }
+
+    /* Center the pagination controls at the bottom */
+    .dataTables_length, .dataTables_filter, .dataTables_paginate {
+        text-align: center;
+    }
+    /* Align custom sort button with search and pagination */
+    .dataTables_wrapper .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Ưu tiên cao hơn để ghi đè màu mặc định */
+    /* Đổi màu khi được chọn (tab active) */
+    /* Khi tab được chọn (active), đổi màu nền và màu chữ */
+    li.gsm-link-tab > a.custom-tab-link.active {
+        background-color: #fdb9a4 !important; /* Màu nền hồng */
+        color: #a75851 !important; /* Màu chữ tùy chỉnh */
+        border-color: transparent !important;
+    }
+
+        /* Đảm bảo không bị ghi đè bởi các quy tắc khác cho màu chữ trong span */
+        li.gsm-link-tab > a.custom-tab-link.active span {
+            color: #a75851 !important; /* Màu chữ trong span */
+        }
+
+    /* Nếu vẫn không được, ghi đè lại trong các tình huống khác */
+    li.gsm-link-tab > a.custom-tab-link.active {
+        color: #a75851 !important; /* Màu chữ chữ cho tất cả trạng thái */
+    }
+
+    .rotating-icon {
+        transform: rotate(360deg);
+        transform-origin: center center;
+        transition: transform 0.5s ease-in-out;
+    }
+</style>

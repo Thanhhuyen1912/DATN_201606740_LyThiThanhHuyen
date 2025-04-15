@@ -1,5 +1,6 @@
 ﻿using CoreLib.AppDbContext;
 using CoreLib.Entity;
+using Lib_Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -26,6 +27,18 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy danh sách thành công", code = 0, data = list });
         }
         [HttpGet]
+        [Route("/ThuongHieu/Danhsach1")]
+        public IActionResult getAll1()
+        {
+            var list = _context.ThuongHieu.Where(p => p.TrangThai == true).ToList();
+            if (list == null)
+            {
+                return NotFound();
+            }
+            else
+                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = list });
+        }
+        [HttpGet]
         [Route("/ThuongHieu/ChiTiet")]
         public IActionResult getDetails(int math)
         {
@@ -38,6 +51,7 @@ namespace API.Controllers
                 return Ok(new { message = "Lấy thông tin thành công", code = 0, data = th });
         }
         [HttpPut]
+        [Route("/ThuongHieu/sua")]
         public IActionResult Update(ThuongHieu th)
         {
             try
@@ -51,6 +65,7 @@ namespace API.Controllers
 
         }
         [HttpPost]
+        [Route("/ThuongHieu/them")]
         public IActionResult post(ThuongHieu th)
         {
             try
@@ -74,6 +89,51 @@ namespace API.Controllers
             }
             else
                 return Ok(new { message = "Lấy danh sách thành công", code = 0, data = th });
+        }
+        [HttpPost]
+        [Route("/ThuongHieu/TimKiem")]
+        public IActionResult TimKiem([FromBody] SearchThuongHieu dto)
+        {
+            var query = _context.ThuongHieu.AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.TenThuongHieu))
+            {
+                query = query.Where(p => p.TenThuongHieu.Contains(dto.TenThuongHieu));
+            }
+            if (!string.IsNullOrEmpty(dto.QuocGia))
+            {
+                query = query.Where(p => p.QuocGia.Contains(dto.QuocGia));
+            }
+            if (dto.NgayDau.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat >= dto.NgayDau.Value);
+            }
+            if (dto.NgayCuoi.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat <= dto.NgayCuoi.Value);
+            }
+
+            if (dto.TrangThai.HasValue)
+            {
+                query = query.Where(p => p.TrangThai == dto.TrangThai.Value);
+            }
+
+            var result = query.Select(sp => new
+            {
+                sp.TenThuongHieu,
+                sp.MaThuongHieu,
+                sp.TrangThai,
+                sp.NgayCapNhat,
+                sp.QuocGia,
+                sp.MoTa
+            }).ToList();
+
+            return Ok(new
+            {
+                code = 0,
+                message = "Tìm kiếm thành công",
+                data = result
+            });
         }
     }
 }

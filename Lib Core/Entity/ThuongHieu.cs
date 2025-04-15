@@ -13,9 +13,9 @@ namespace CoreLib.Entity
         public int MaThuongHieu { get; set; }
         [Required(ErrorMessage = "Tên thương hiệu không được để trống.")]
         public string TenThuongHieu { get; set; }
-        public string QuocGia { get; set; }
-        public string MoTa { get; set; }
-        public DateTime NgayCapNhat { get; set; }
+        public string? QuocGia { get; set; }
+        public string? MoTa { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
         public bool TrangThai { get; set; }
     }
 }

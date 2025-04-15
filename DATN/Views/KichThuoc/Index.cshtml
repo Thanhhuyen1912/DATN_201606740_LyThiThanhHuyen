@@ -1,0 +1,525 @@
+﻿@{
+    ViewData["Title"] = "Danh sách kích thước";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+
+<div id="loading" class="loading" style="display: none;">Đang tải...</div>
+<div class="container" id="noidung">
+    <div class="gsm-daihoi-info">
+        <div class="row d-flex justify-content-center">
+            <span style=" color: #a75851" class="col-12 text-center p-1 titlediv">Danh sách kích thước</span>
+        </div>
+    </div>
+    <div class="k-portlet__body">
+        <ul class="nav nav-pills nav-tabs-btn nav-pills-btn-success row" role="tablist">
+            <li class="nav-item col gsm-link-tab">
+                <a class="nav-link active show" data-toggle="tab" href="#subjectListTab" role="tab" aria-selected="true">
+                    <span class="nav-link-title text-uppercase">Danh sách kích thước</span>
+                </a>
+            </li>
+
+            <li class="nav-item col gsm-link-tab">
+                <a class="nav-link" data-toggle="tab" href="#subjectFormTab" role="tab" aria-selected="false">
+                    <span id="formTabTitle" class="nav-link-title text-uppercase">Tạo mới</span>
+                </a>
+            </li>
+        </ul>
+
+        <div style="background-color: #fdb9a4;" class="line_top col-md-12"></div>
+
+        <div class="tab-content">
+
+            <!-- Subject List Tab -->
+            <div class="tab-pane fade show active" id="subjectListTab">
+
+                <div class="form-group row nopadding col-12">
+                    <!-- Product Name Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label">Tên kích thước</label>
+                        <input type="text" class="form-control" id="stenkichthuoc">
+                    </div>
+                    <!-- Product Quantity Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="strangthai">Trạng thái</label>
+                        <select class="form-control" id="strangthai">
+                            <!-- Các option sẽ được thêm vào đây -->
+                        </select>
+                    </div>
+                    <!-- Product Price Field -->
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="sngaydau">Từ ngày</label>
+                        <input type="date" class="form-control" id="sngaydau">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="col-form-label" for="sngaycuoi">Đến ngày</label>
+                        <input type="date" class="form-control" id="sngaycuoi">
+                    </div>
+
+                </div>
+
+                <div class="form-group row">
+                    <div class="row d-flex justify-content-center col-12">
+                        <button style="background-color: #fdb9a4; color: #a75851" type="submit" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="searchButton">
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <button id="backbt" class="btn btn-secondary">Tải lại </button>
+                </div>
+                <!-- Add custom sort button here -->
+
+
+
+                <table id="listGrid" class="display mt-3" style="width: 100%;">
+
+                    <thead style="height:50px;font-size:17px">
+                        <tr>
+                            <th>Tên kích thước</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày cập nhật</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Add/Edit Product Form Tab (Unified for Create/Edit) -->
+            <div class="tab-pane fade boxshadow pt-2" id="subjectFormTab" role="tabpanel">
+                <div class="form-group row nopadding">
+                    <form id="SubjectForm" class="col-12 ">
+                        <input type="hidden" class="form-control" id="">
+                        <!-- Product Id Field -->
+                        <div class="col-md-12 d-inline-block">
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="makichthuoc"></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="makichthuoc" required hidden>
+                                </div>
+                            </div>
+
+                            <!-- Product Name Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label">Tên kích thước (*)</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tenkichthuoc">
+                                </div>
+                            </div>
+                            <!-- Product Price Field -->
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="trangthai">Trạng thái</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="trangthai" required></select>
+                                </div>
+                            </div>
+                            <!-- Product Quantity Field -->
+
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="mota">Mô tả</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <textarea class="form-control" id="mota" required></textarea>
+                                </div>
+                            </div>                          
+                        </div>
+
+
+                    </form>
+                </div>
+
+                <!-- Button Group -->
+                <div class="form-group row">
+                    <div class="row d-flex justify-content-center col-12">
+                        <button style="background-color: #fdb9a4;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button>
+                        <button style="display:none;background-color: #fdb9a4;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">Cập nhật</button>
+                        <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+                    
+         // load dropdownlist trangthai
+                    $(document).ready(function () {
+
+                            let trangThaiOptions = [
+                            { value: true, text: "Đang bán" },
+                            { value: false, text: "Ngưng bán" }
+                            ];
+
+                            let select = $("#trangthai");
+                            let select1 = $("#strangthai");
+                            select1.append(`<option value="">---</option>`);
+                            trangThaiOptions.forEach(function (item) {
+                            select.append(`<option value="${item.value}">${item.text}</option>`);
+                            select1.append(`<option value="${item.value}">${item.text}</option>`);
+                            });
+                            });
+        $(document).ready(function () {
+            // Load initial data
+                loadGridData();
+            // Function to load data into the grid
+                function loadGridData() {
+                            var url = "https://localhost:7177/KichThuoc/DanhSach";
+                            $.get(url, {}, function (response) {
+                        var dulieu = response.data || [];
+
+                        // Khởi tạo hoặc cập nhật DataTable
+                        $('#listGrid').DataTable({
+                            dom: '<"top"f>rt<"bottom"ip><"clear">',
+                            destroy: true,
+                            lengthChange: true,
+                            fixedColumns: true,
+                            autoWidth: false,
+                            searching: false,
+                            ordering: true,
+                            data: dulieu,
+                            paging: true,
+                            columns: [
+                                        { "data": "tenKichThuoc","width": "30%" },
+                                         {
+                                                             data: "trangThai",
+                                                             width: "30%",
+                                                             render: function (data, type, row) {
+                                                             return data === false ? "Ngưng bán" : "Đang bán";
+                                                             }
+                                                         },
+                                         {
+                                                        data: "ngayCapNhat", width: "30%",
+                                                        render: function (data) {
+                                                            if (data) {
+                                                                var date = new Date(data);
+                                                                var day = ("0" + date.getDate()).slice(-2);
+                                                                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                                                                var year = date.getFullYear();
+                                                                return day + "/" + month + "/" + year;
+                                                            }
+                                                            return "";
+                                                        }
+                                                    },
+                                        { "data": "maKichThuoc", "width": "10%",
+
+        render: function (data) {
+                let editButton =  `
+                    <button class='ViewDetails btn btn-link' data-id="${data}">
+                        <i class="bi bi-pencil-fill"></i>
+                    </button>
+                ` ;
+
+
+                return editButton;
+            }
+        }
+
+
+                                    ],
+                            language: {
+                                search: "Tìm kiếm:",
+                                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ kích thước",
+                                zeroRecords: "Không tìm thấy kết quả nào.",
+
+                            }
+                                });
+
+            // Sự kiện sắp xếp theo alphabet
+                $('#alphabetSortBtn').off('click').on('click', function () {
+                                    let table = $('#listGrid').DataTable();
+                                    let currentOrder = table.order();
+
+                                    if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
+                                        table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
+                                    } else {
+                                        table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
+                                    }
+                                });
+                            })
+                            .fail(function () {
+                                alert("Có lỗi xảy ra khi tải dữ liệu.");
+                            });
+                        }
+                         // quay lại màn hình danh sách sp
+                                $('#backbt').click(function () {
+                                      loadGridData();
+                                      $("#stenkichthuoc").val('');
+                                      $('#sngaydau').val('');
+                                      $('#sngaycuoi').val('');
+                                      $('#strangthai').val('');
+
+                              });
+            // Reset form
+                $('#Reset').click(function () {
+                            $('#SubjectForm')[0].reset();
+                            $("#tProductID").val('').prop('readonly', false);;
+                            $('#Insert').show();
+                            $('#Update').hide();
+                            $('#formTabTitle').text('Tạo mới');
+                        });
+            // Insert new product
+                $('#Insert').click(function () {
+                            const productData = {
+                                tenKichThuoc: $("#tenkichthuoc").val(),
+                                moTa: $("#mota").val(),
+                                trangThai: $("#trangthai").val() === "true",
+                                ngayCapNhat: new Date().toISOString()
+                            };
+
+                            $.ajax({
+                                url: "https://localhost:7177/KichThuoc/Them",
+                                method: "POST",
+                                contentType: "application/json",
+                                data: JSON.stringify(productData),
+                                success: function () {
+                                    $("#tenkichthuoc").val('');
+                                    $("#mota").val('');
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Kích thước mới đã được thêm.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    loadGridData(); // Reload dữ liệu
+                                },
+                                error: function (xhr) {
+                                    Swal.fire({
+                                        title: 'Thất bại!',
+                                        text: 'Đã xảy ra lỗi khi thêm kích thước.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            });
+                        });
+            // View product details
+                $(document).on('click', '.ViewDetails', function () {
+                          let table = $('#listGrid').DataTable();
+                            let row = $(this).closest('tr');
+                            let rowData = table.row(row).data();
+                            let id = rowData.maKichThuoc;
+
+                            $.ajax({
+                                url: `https://localhost:7177/KichThuoc/Chitiet?math=${id}`,
+                                type: 'GET',
+                                success: function (respone) {
+                                    if (respone && respone.data ) {
+                                        const data = respone.data;
+                                        $("#tenkichthuoc").val(data.tenKichThuoc);
+                                        $("#makichthuoc").val(data.maKichThuoc);
+                                        $("#mota").val(data.moTa);
+                                        $("#trangthai").val(data.trangThai.toString());
+                                        $('#Insert').hide();
+                                        $('#Update').show();
+                                        $('#formTabTitle').text('Chi tiết');
+                                        $('a[href="#subjectFormTab"]').tab('show');
+                                    } else {
+                                        alert('Chi tiết kích thước không tìm thấy.');
+                                    }
+                                },
+                                error: function () {
+                                    alert('Có lỗi xảy ra khi tải chi tiết.');
+                                }
+                            });
+                        });
+            // Delete product
+                $(document).on('click', '.DeleteSubject', function () {
+            if (confirm("Bạn có chắc chắn muốn xóa?")) {
+                let table = $('#listGrid').DataTable();
+                let row = $(this).closest('tr');
+                let rowData = table.row(row).data();
+                let id = rowData.producT_ID;
+                $.ajax({
+                    url: '@Url.Action("DeleteProduct", "Products")'  + '?id=' + id,
+                    type: 'DELETE',
+                    contentType: 'application/json; charset=utf-8', // Đảm bảo header đúng
+                    success: function (response) {
+                        // Kiểm tra kết quả trả về từ server
+                        if (response && response.code === 0) {
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Sản phẩm đã được xóa.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                // Xóa hàng trong DataTable và vẽ lại
+                                table.row(row).remove().draw();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Thất bại!',
+                                text: response.message || 'Không thể xóa sản phẩm.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                            error: function (xhr) {
+                        Swal.fire({
+                            title: 'Thất bại!',
+                            text: 'Đã xảy ra lỗi khi xóa sản phẩm.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+            // Update
+                $('#Update').click(function () {
+                            const productData = {
+                                maKichThuoc: $("#makichthuoc").val(),
+                                tenKichThuoc: $("#tenkichthuoc").val(),
+                                moTa: $("#mota").val(),
+                                trangThai: $("#trangthai").val() === "true",
+                                ngayCapNhat: new Date().toISOString()
+                            };
+
+                            $.ajax({
+                                url: "https://localhost:7177/KichThuoc/Sua",
+                                method: "PUT",
+                                contentType: "application/json",
+                                data: JSON.stringify(productData),
+                                success: function () {
+                                    $("#tenkichthuoc").val('');
+                                    $("#mota").val('');                                
+                                    $('#Insert').show();
+                                    $('#Update').hide();
+                                    $('#formTabTitle').text('Tạo mới');
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Kích thước đã được cập nhật.',
+                                        icon: 'success',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    loadGridData(); // Reload dữ liệu
+                                },
+                                error: function (xhr) {
+                                    Swal.fire({
+                                        title: 'Thất bại!',
+                                        text: 'Đã xảy ra lỗi khi cập nhật kích thước.',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            });
+                        });
+            // Search
+                $('#searchButton').on('click', function () {
+                                             let searchData = {
+                                             tenKichThuoc: $("#stenkichthuoc").val() || null,                                            
+                                             trangThai: $("#strangthai").val() === "" ? null : $("#strangthai").val() === "true",
+                                             ngaydau: $("#sngaydau").val() || null,
+                                             ngaycuoi : $("#sngaycuoi").val() || null,
+                                             };
+                                             console.log(searchData);
+                                             $.ajax({
+                                             url: "https://localhost:7177/KichThuoc/TimKiem",
+                                             type: "POST",
+                                             contentType: "application/json",
+                                             data: JSON.stringify(searchData),
+                                             success: function (res) {
+                                             $('#listGrid').DataTable({
+                                             dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                             destroy: true,
+                                             lengthChange: true,
+                                             autoWidth: false,
+                                             searching: false,
+                                             ordering: true,
+                                             paging: true,
+                                             data: res.data,
+                                             columns: [
+                                                { data: "tenKichThuoc", width: "30%" },
+                                                                                               {
+                                                    data: "trangThai", width: "30%",
+                                                    render: function (data) {
+                                                        return data === false ? "Ngưng bán" : "Đang bán";
+                                                    }
+                                                },
+                                                {
+                                                    data: "ngayCapNhat", width: "30%",
+                                                    render: function (data) {
+                                                        if (data) {
+                                                            var date = new Date(data);
+                                                            var day = ("0" + date.getDate()).slice(-2);
+                                                            var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                                                            var year = date.getFullYear();
+                                                            return day + "/" + month + "/" + year;
+                                                        }
+                                                        return "";
+                                                    }
+                                                },
+                                                {
+                                                    data: "maKichThuoc", width: "10%",
+                                                    render: function (data) {
+                                                        return `<button class='ViewDetails btn btn-link' data-id="${data}">
+                                                        <i class="bi bi-pencil-fill"></i>
+                                                    </button>`;
+                                                    }
+                                                }
+                                             ],
+                                             language: {
+                                             search: "Tìm kiếm:",
+                                             info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ kích thước",
+                                             zeroRecords: "Không tìm thấy kết quả nào."
+                                             }
+                                             });
+                                             },
+                                             error: function (err) {
+                                             console.log(err.responseText);
+                                             }
+
+                                             });
+                             });
+                
+        });
+    </script>
+}
+
+<style>
+    /* Hide default sorting arrows */
+    #listGrid thead th {
+        cursor: default;
+        position: relative;
+    }
+
+        /* Hide the sorting arrows */
+        #listGrid thead th.sorting:before,
+        #listGrid thead th.sorting:after,
+        #listGrid thead th.sorting_asc:before,
+        #listGrid thead th.sorting_asc:after,
+        #listGrid thead th.sorting_desc:before,
+        #listGrid thead th.sorting_desc:after {
+            display: none;
+        }
+    /* Align search bar to the top left */
+    .dataTables_filter {
+        text-align: center;
+    }
+
+    /* Center the pagination controls at the bottom */
+    .dataTables_length, .dataTables_filter, .dataTables_paginate {
+        text-align: center;
+    }
+    /* Align custom sort button with search and pagination */
+    .dataTables_wrapper .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+</style>

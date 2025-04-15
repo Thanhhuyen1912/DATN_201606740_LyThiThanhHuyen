@@ -1,5 +1,6 @@
 ﻿using CoreLib.AppDbContext;
 using CoreLib.Entity;
+using Lib_Core.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,18 @@ namespace API.Controllers
         public IActionResult getAll()
         {
             var list = _context.KichThuoc.ToList();
+            if (list == null)
+            {
+                return NotFound();
+            }
+            else
+                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = list });
+        }
+        [HttpGet]
+        [Route("/KichThuoc/Danhsach1")]
+        public IActionResult getAll1()
+        {
+            var list = _context.KichThuoc.Where(p=>p.TrangThai == true).ToList();
             if (list == null)
             {
                 return NotFound();
@@ -66,17 +79,46 @@ namespace API.Controllers
             { return BadRequest(); }
 
         }
-        [HttpGet]
-        [Route("/KichThuoc/TrangThai")]
-        public IActionResult getByTrangthai(bool tt)
+        [HttpPost]
+        [Route("/KichThuoc/TimKiem")]
+        public IActionResult TimKiem([FromBody] SearchKichThuoc dto)
         {
-            var th = _context.KichThuoc.Where(th => th.TrangThai == tt).ToList();
-            if (th == null)
+            var query = _context.KichThuoc.AsQueryable();
+
+            if (!string.IsNullOrEmpty(dto.TenKichThuoc))
             {
-                return NotFound();
+                query = query.Where(p => p.TenKichThuoc.Contains(dto.TenKichThuoc));
             }
-            else
-                return Ok(new { message = "Lấy danh sách thành công", code = 0, data = th });
+            if (dto.NgayDau.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat >= dto.NgayDau.Value);
+            }
+            if (dto.NgayCuoi.HasValue)
+            {
+                query = query.Where(p => p.NgayCapNhat <= dto.NgayCuoi.Value);
+            }
+
+            if (dto.TrangThai.HasValue)
+            {
+                query = query.Where(p => p.TrangThai == dto.TrangThai.Value);
+            }
+
+            var result = query.Select(sp => new
+            {
+                sp.TenKichThuoc,
+                sp.MaKichThuoc,
+                sp.TrangThai,
+                sp.NgayCapNhat,
+                sp.MoTa
+            }).ToList();
+
+            return Ok(new
+            {
+                code = 0,
+                message = "Tìm kiếm thành công",
+                data = result
+            });
         }
+
     }
 }

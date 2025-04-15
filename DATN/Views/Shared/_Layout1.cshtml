@@ -150,12 +150,17 @@
                                             </a>
                                         </li>
 
-                                        <!-- Danh mục tin -->
-                                        <li class="k-menu__item k-menu__item--submenu k-menu__item--rel ttdh bdlinh" data-kmenu-submenu-toggle="click" aria-haspopup="true" style="padding-left: 0!important">
-                                            <a class="k-menu__link k-menu__toggle">
-                                                <span class="k-menu__link-text" id="menu_ttdh">Danh mục tin</span>
+                                        <li class="k-menu__item k-menu__item--submenu k-menu__item--rel ttdh" data-kmenu-submenu-toggle="click" aria-haspopup="true" style="padding-left: 0!important">
+                                            <a class="k-menu__link" href="@Url.Action("Index", "Home")">
+                                                <span class="k-menu__link-text" id="menu_ttdh">Thống kê</span>
                                             </a>
+                                        </li>
 
+                                        <!-- Sản phẩm -->
+                                        <li class="k-menu__item k-menu__item--submenu k-menu__item--rel ttdh" data-kmenu-submenu-toggle="click" aria-haspopup="true" style="padding-left: 0!important">
+                                            <a class="k-menu__link">
+                                                <span class="k-menu__link-text" id="menu_ttdh">Sản phẩm <i class="bi bi-chevron-bar-down" style="margin-left: 5px"></i></span>
+                                            </a>
                                             <!-- Submenu -->
                                             <div class="k-menu__submenu k-menu__submenu--classic k-menu__submenu--left ttdh__submenu">
                                                 <div class="triangle"></div>
@@ -163,22 +168,101 @@
                                                     <div class="k-menu__subnav-half" style="float:left;">
                                                     <li class="k-menu__item" aria-haspopup="true">
                                                         <a class="k-menu__link" href="@Url.Action("Index","Products")">
-                                                            <span class="k-menu__link-text">Danh mục sản phẩm </span>
+                                                            <span class="k-menu__link-text">Quản lý sản phẩm </span>
                                                         </a>
                                                     </li>
-                                                </ul>
+                                                    <li class="k-menu__item" aria-haspopup="true">
+                                                        <a class="k-menu__link" href="@Url.Action("Index","KichThuoc")">
+                                                            <span class="k-menu__link-text">Quản lý kích thước </span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="k-menu__item" aria-haspopup="true">
+                                                        <a class="k-menu__link" href="@Url.Action("Index","ThuongHieu")">
+                                                            <span class="k-menu__link-text">Quản lý thương hiệu </span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="k-menu__item" aria-haspopup="true">
+                                                        <a class="k-menu__link" href="@Url.Action("Index","NhomHuong")">
+                                                            <span class="k-menu__link-text">Quản lý nhóm hương</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="k-menu__item" aria-haspopup="true">
+                                                        <a class="k-menu__link" href="@Url.Action("Index","MaGiamGia")">
+                                                            <span class="k-menu__link-text">Quản lý mã giảm giá</span>
+                                                        </a>
+                                                    </li>
                                             </div>
                                     </ul>
                                 </div>
+                                </li>
+
+                                <li class="k-menu__item k-menu__item--submenu k-menu__item--rel ttdh" data-kmenu-submenu-toggle="click" aria-haspopup="true" style="padding-left: 0!important">
+                                    <a class="k-menu__link k-menu__toggle" href="@Url.Action("Index","TaiKhoan")">
+                                        <span class="k-menu__link-text" id="menu_ttdh">Khách hàng </span>
+                                    </a>
+
+                                    <!-- Submenu -->
+                                   @*  <div class="k-menu__submenu k-menu__submenu--classic k-menu__submenu--left ttdh__submenu">
+                                        <div class="triangle"></div>
+                                        <ul class="k-menu__subnav">
+                                            <div class="k-menu__subnav-half" style="float:left;">
+                                            <li class="k-menu__item" aria-haspopup="true">
+                                                <a class="k-menu__link" href="@Url.Action("Index","KhachHang")">
+                                                    <span class="k-menu__link-text">Quản lý khách hàng </span>
+                                                </a>
+                                            </li>
+                                            <li class="k-menu__item" aria-haspopup="true">
+                                                <a class="k-menu__link" href="@Url.Action("Index","DiaChi")">
+                                                    <span class="k-menu__link-text">Quản lý địa chỉ </span>
+                                                </a>
+                                            </li>
+ 
+                                    </div>
+                                    </ul>
+                            </div> *@
+                            </li>
+                            <li class="k-menu__item k-menu__item--submenu k-menu__item--rel ttdh" data-kmenu-submenu-toggle="click" aria-haspopup="true" style="padding-left: 0!important">
+                                <a class="k-menu__link k-menu__toggle">
+                                    <span class="k-menu__link-text" id="menu_ttdh">Đơn hàng <i class="bi bi-chevron-bar-down" style="margin-left: 5px"></i></span>
+                                </a>
+
+                                <!-- Submenu -->
+                                <div class="k-menu__submenu k-menu__submenu--classic k-menu__submenu--left ttdh__submenu">
+                                    <div class="triangle"></div>
+                                    <ul class="k-menu__subnav">
+                                        <div class="k-menu__subnav-half" style="float:left;">
+                                        <li class="k-menu__item" aria-haspopup="true">
+                                            <a class="k-menu__link" href="@Url.Action("Index","DonHang")">
+                                                <span class="k-menu__link-text">Quản lý đơn hàng </span>
+                                            </a>
+                                        </li>
+                                        <li class="k-menu__item" aria-haspopup="true">
+                                            <a class="k-menu__link" href="@Url.Action("Index","PTThanhToan")">
+                                                <span class="k-menu__link-text">Quản lý phương thức thanh toán </span>
+                                            </a>
+                                        </li>
+                                        <li class="k-menu__item" aria-haspopup="true">
+                                            <a class="k-menu__link" href="@Url.Action("Index","ThanhToan")">
+                                                <span class="k-menu__link-text">Quản lý thanh toán </span>
+                                            </a>
+                                        </li>
+
+                                </div>
+                                </ul>
+                        </div>
+                        </li>
+
+                                </ul>
                             </div>
                         </div>
-                        <div class="k-header-toolbar"></div>
                     </div>
+                    <div class="k-header-toolbar"></div>
                 </div>
-
-                <!-- end: Header Menu -->
             </div>
+
+            <!-- end: Header Menu -->
         </div>
+    </div>
     </div>
     <!-- end:: Header -->
     <div class="k-grid__item k-grid__item--fluid k-grid k-grid--ver k-grid--stretch" style="background-color: white;">
