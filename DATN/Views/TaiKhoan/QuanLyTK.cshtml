@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Quản lý tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.DTO.ThongTinTaiKhoanViewModel
+<div class="container mt-4">
+    <div class="row">
+        <!-- Phần Trái: Thông tin tài khoản -->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header text-white">
+                    <h2 style="color: black">Thông tin tài khoản</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model?.TaiKhoan != null)
+                    {
+                        <p><strong>Họ tên:</strong> @Model.TaiKhoan.HoTen</p>
+                        <p><strong>Email:</strong> @Model.TaiKhoan.Email</p>
+                        <p><strong>Số điện thoại:</strong> @Model.TaiKhoan.SoDienThoai</p>
+
+                        <div class="container1">
+                            <a href="@Url.Action("ChiTietTK", "TaiKhoan", new { id = Model.TaiKhoan.MaTaiKhoan })" class=" btncapnhat">Cập nhật tài khoản</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Phần Phải: Danh sách địa chỉ -->
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header text-white">
+                    <h2 style="color: black">Danh sách địa chỉ</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model?.DiaChis != null && Model.DiaChis.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var diaChi in Model.DiaChis)
+                            {
+                                <li class="list-group-item">
+                                    <strong>Tỉnh/Thành:</strong> @diaChi.ThanhPho<br />
+                                    <strong>Quận/Huyện:</strong> @diaChi.Huyen <br />
+                                    <strong>Phường/Xã:</strong> @diaChi.Xa <br />
+                                    <strong>Địa chỉ:</strong> @diaChi.ChiTiet<br />
+                                    <strong>Số điện thoại nhận:</strong> @diaChi.SoDienThoaiNguoiNhan<br />
+                                    <strong>Tên người nhận:</strong> @diaChi.HoTenNguoiNhan<br />
+                                    <div class="container1">
+                                        <a href="@Url.Action("ChiTietDC", "TaiKhoan", new { id = @diaChi.MaDiaChi })" class="btncapnhat">Cập nhật địa chỉ</a>
+                                    </div>
+
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                    else
+                    {
+                        <p>Không có địa chỉ nào được lưu.</p>
+                    }
+                    <div class="container1">
+                        <a  href="@Url.Action("ThemDiaChi", "TaiKhoan")" class="btncapnhat">Thêm địa chỉ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        margin: 10px auto;
+        display: block;
+        text-align: center;
+    }
+
+    .container1 {
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        /* Chiếm toàn bộ chiều cao màn hình */
+    }
+
+</style>

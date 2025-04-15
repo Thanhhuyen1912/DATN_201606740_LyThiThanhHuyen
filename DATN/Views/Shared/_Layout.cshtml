@@ -17,7 +17,7 @@
 
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+        font-family: 'Roboto', sans-serif;
         }
     </style>
 </head>
@@ -41,7 +41,7 @@
       absolute md:relative top-8 left-0 md:top-auto md:left-auto
       bg-white md:bg-transparent w-full md:w-auto shadow-md md:shadow-none
       p-4 md:p-0 z-50">
-                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">TRANG CHỦ</a>
+                <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="@Url.Action("Index", "Home")">TRANG CHỦ</a>
                 <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">GIỚI THIỆU</a>
                 <a class="block md:inline text-gray-800 hover:text-gray-600 py-2 flex items-center" href="#">
                     SẢN PHẨM <i class="fas fa-chevron-down text-gray-500 ml-2"></i>
@@ -50,8 +50,45 @@
                 <a class="block md:inline text-gray-800 hover:text-gray-600 py-2" href="#">TIN TỨC</a>
             </nav>
             <div class=" d-none d-md-flex space-x-4">
+                <div>
+                    @ViewBag.User
+                </div>
                 <i class="fas fa-search text-gray-800"></i>
-                <i class="fas fa-user text-gray-800"></i>
+                <!-- Icon người dùng + menu thả xuống -->
+                <div class="relative" id="user-container">
+                    <i class="fas fa-user text-gray-800 cursor-pointer" id="user-icon"></i>
+
+                    <!-- Menu thả xuống -->
+                    @{
+                        var role = Context.Session.GetString("Role");
+                        var matkhoan = Context.Session.GetString("MaTaiKhoan");
+                    }
+                    <div id="user-dropdown" class="absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50 hidden">
+                        @if (string.IsNullOrEmpty(role))
+                        {
+                            <!-- Nếu chưa đăng nhập -->
+                            <a href="@Url.Action("DangNhap", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng nhập</a>
+                            <a href="@Url.Action("DangKy", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng ký</a>
+                        }
+                        else
+                        {
+                            if (role.Contains("1") || role.Contains("0"))
+                            {
+                                <a href="@Url.Action("Index", "ThongKe")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Quản lý</a>
+                                <a href="@Url.Action("DangXuat", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng xuất</a>
+                            }
+                            else
+                            {
+                                <!-- Nếu đã đăng nhập -->
+                                <a href="@Url.Action("QuanLyTK", "TaiKhoan", new { id = matkhoan })" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Quản lý tài khoản</a>
+                                <a href="@Url.Action("DangXuat", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng xuất</a>
+                            }
+                        }
+                    </div>
+
+
+                </div>
+
                 <div class="relative">
                     <i class="fas fa-shopping-bag text-gray-800"></i>
                     <span class="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-[10px] rounded-full px-[3px] py-[1px] leading-none">
@@ -59,6 +96,9 @@
                     </span>
 
                 </div>
+                
+
+
             </div>
         </div>
     </header>
@@ -69,6 +109,22 @@
           let menu = document.getElementById("nav-menu");
           menu.classList.toggle("hidden");
           menu.classList.toggle("flex");
+        });
+            document.addEventListener("DOMContentLoaded", function () {
+            const userIcon = document.getElementById("user-icon");
+            const dropdown = document.getElementById("user-dropdown");
+
+            userIcon.addEventListener("click", function (e) {
+                e.stopPropagation();
+                dropdown.classList.toggle("hidden");
+            });
+
+            // Ẩn menu nếu click ra ngoài
+            document.addEventListener("click", function (e) {
+                if (!document.getElementById("user-container").contains(e.target)) {
+                    dropdown.classList.add("hidden");
+                }
+            });
         });
     </script>
 

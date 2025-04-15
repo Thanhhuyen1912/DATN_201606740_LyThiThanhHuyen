@@ -10,7 +10,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Đăng ký DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
-
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -37,6 +38,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 app.UseCors("AllowAll");
 app.UseAuthorization();
 

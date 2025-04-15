@@ -21,12 +21,13 @@ namespace DATN.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.User = HttpContext.Session.GetString("User");
             ViewBag.tieude1 = "";
             ViewBag.tieude2 = "";
 
             var result = _context.ChiTietSanPham
-       .Include(x => x.SanPham) // Nếu cần include các bảng liên quan
-       .ToList();  // Truyền danh sách ChiTietSanPham thực tế
+       .Include(x => x.SanPham)
+       .ToList();
 
             return View(result);
         }

@@ -13,9 +13,6 @@ namespace CoreLib.Entity
         public int MaTaiKhoan { get; set; }
         [Required(ErrorMessage = "Họ tên không được để trống.")]
         public string HoTen { get; set; }
-        [Required(ErrorMessage = "Tên đăng nhập không được để trống.")]
-        [RegularExpression(@"^(?=.*[A-Z])(?=.*[\W_]).{8,}$", ErrorMessage = "Tên đăng nhập phải có ít nhất 8 ký tự, bao gồm ít nhất 1 chữ viết hoa và 1 ký tự đặc biệt.")]
-        public string TenDangNhap { get; set; }
         [Required(ErrorMessage = "Mật khẩu không được để trống.")]
         [RegularExpression(@"^[a-zA-Z0-9]{6,}$", ErrorMessage = "Mật khẩu phải có ít nhất 6 ký tự và không chứa ký tự đặc biệt.")]
         public string MatKhau { get; set; }

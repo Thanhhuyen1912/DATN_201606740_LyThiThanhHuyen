@@ -1,4 +1,5 @@
 ﻿using CoreLib.AppDbContext;
+using DATN;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +9,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Đăng ký DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddHttpClient<ILocationService, LocationService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSession();
 var app = builder.Build();
 
 
@@ -26,7 +28,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+@model CoreLib.Entity.TaiKhoan
+<h2 class="text-center mb-4">Cập nhật thông tin tài khoản</h2>
+
+<form asp-action="CapNhatTaiKhoan" asp-controller="TaiKhoan" method="post" class="w-50 mx-auto border p-4 rounded shadow-sm">
+    <input type="hidden" asp-for="MaTaiKhoan" />
+
+    <div class="form-group mb-3">
+        <label asp-for="HoTen" class="form-label">Họ tên</label>
+        <input asp-for="HoTen" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" type="email" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="SoDienThoai" class="form-label">Số điện thoại</label>
+        <input asp-for="SoDienThoai" class="form-control" />
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
+        <div class="input-group">
+            <input asp-for="MatKhau" type="password" class="form-control" id="matKhauInput" />
+            <button type="button" class="btn" id="toggleMatKhau">
+                <i class="bi bi-eye" id="iconMatKhau"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <button type="submit" class="btncapnhat"  d-block mx-auto px-4">Lưu thay đổi</button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggleMatKhau");
+        const passwordInput = document.getElementById("matKhauInput");
+        const icon = document.getElementById("iconMatKhau");
+
+        toggleButton.addEventListener("click", function () {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            icon.className = isPassword ? "bi bi-eye-slash" : "bi bi-eye";
+        });
+    });
+</script>
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        margin: 10px auto;
+        display: block;
+        text-align: center;
+    }
+</style>

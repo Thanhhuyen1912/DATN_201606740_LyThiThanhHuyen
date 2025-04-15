@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using SANPHAM.Authorize;
 
 namespace DATN.Controllers
 {
-    public class GiamGiaController : Controller
+    public class ThongKeController : Controller
     {
         [RequiredLogin]
         public IActionResult Index()
