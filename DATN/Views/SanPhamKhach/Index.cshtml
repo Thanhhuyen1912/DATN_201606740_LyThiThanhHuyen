@@ -1,0 +1,262 @@
+﻿@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container my-4">
+    <!-- Bộ lọc nằm ngang -->
+    <div class="row mb-4 align-items-end">
+        <div class="form-group row nopadding col-12 form10">
+            <!-- Product Name Field -->
+            <div class="form-group col-md-2">
+                <label class="col-form-label">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="stensanpham">
+            </div>
+            <!-- Product Quantity Field -->
+            <div class="form-group col-md-2">
+                <label class="col-form-label" for="sthuonghieu">Thương hiệu</label>
+                <select class="form-control" id="sthuonghieu">
+                    <option value=""></option>
+                </select>
+            </div>
+
+            <!-- Product Price Field -->
+            <div class="form-group col-md-2">
+                <label class="col-form-label" for="snhomhuong">Nhóm hương</label>
+                <select class="form-control" id="snhomhuong">
+                    <option value=""></option>
+                </select>
+            </div>
+            <!-- Product Category Field -->
+            <div class="form-group col-md-2">
+                <label class="col-form-label" for="sgioitinh">Giới tính</label>
+                <select class="form-control" id="sgioitinh">
+                    <!-- Các option sẽ được thêm vào đây -->
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label class="col-form-label">Giá từ:</label>
+                <input type="text" class="form-control" id="sgiamin">
+            </div>
+            <div class="form-group col-md-2">
+                <label class="col-form-label">Đến</label>
+                <input type="text" class="form-control" id="sgiamax">
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="row justify-content-center col-12">
+                <button style="background-color: #fdb9a4; color: #a75851" class="btncapnhat col-2 me-3 mt-2" id="searchButton">
+                    Tìm kiếm
+                </button>
+                <button style="background-color: #fdb9a4; color: #a75851" class="btncapnhat col-2 mt-2" id="reload">
+                    Tải lại
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Danh sách sản phẩm -->
+    <div class="row" id="productList">
+        <!-- Các sản phẩm được render tại đây -->
+    </div>
+
+    <!-- Phân trang -->
+    <div class="d-flex justify-content-center mt-4">
+        <ul class="pagination" id="pagination">
+            <!-- Các nút phân trang -->
+        </ul>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+        let currentPage = 1;  
+    const itemsPerPage = 16;  
+    //load dropdownlist thuonghieu
+          $(document).ready(function () {
+                 $.ajax({
+                 url: "https://localhost:7177/ThuongHieu/Danhsach",
+                 method: "GET",
+                 success: function (data) {
+                 let select = $("#sthuonghieu");
+                 select.empty();
+                 select.append(`<option value="">Chọn thương hiệu</option>`);
+
+             // Truy cập đúng vào mảng "data"
+                 if (data.data && Array.isArray(data.data)) {
+                 data.data.forEach(function (item) {
+                     select.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
+                 });
+                 }
+                  },
+                 error: function (xhr) {
+                 }
+                 });
+          });
+
+                           $(document).ready(function () {
+                         $.ajax({
+                         url: "https://localhost:7177/nhomhuong/Danhsach",
+                         method: "GET",
+                         success: function (data) {
+                                     let select1 = $("#snhomhuong");                 select1.empty();
+                                     select1.append(`<option value="">Chọn nhóm hương</option>`);
+                                         if (data.data && Array.isArray(data.data)) {
+                                        data.data.forEach(function (item) {
+                                        select1.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
+                                    });
+                            }
+
+
+                          },
+                         error: function (xhr) {
+                         }
+                         });
+                 });
+                     $(document).ready(function () {
+           let gioiTinhOptions = [
+               { value: "Nam", text: "Nam" },
+               { value: "Nữ", text: "Nữ" },
+               { value: "Unisex", text: "Unisex" }
+           ];
+
+               let select = $("#sgioitinh");
+               select.append(`<option value="">Chọn giới tính</option>`);
+               gioiTinhOptions.forEach(function (item) {
+               select.append(`<option value="${item.value}">${item.text}</option>`);
+               });
+    });
+        $(document).ready(function () {
+        loadAllProducts();
+
+        $('#searchButton').click(function () {
+            loadProducts();
+        });
+        $('#reload').click(function () {
+            loadAllProducts();
+            $("#stensanpham").val('');
+            $("#snhomhuong").val('');
+            $("#sthuonghieu").val('');
+            $("#sgioitinh").val('');
+            $("#sgiamin").val('');
+            $("#sgiamax").val('');
+        });
+    });
+
+    function loadAllProducts() {
+        $.ajax({
+            url: 'https://localhost:7177/SanPham/DanhsachSPKhach1', 
+            method: 'GET',
+            success: function (data) {
+                products = data.data;  
+                renderProducts(products); 
+            },
+            error: function (error) {
+                console.error('Lỗi khi gọi API:', error);
+                alert('Lỗi khi gọi API');
+            }
+        });
+    }
+
+    function loadProducts() {
+        const requestData = {
+        TenSanPham: $('#stensanpham').val() || null,
+        GioiTinh: $('#sgioitinh').val() || null,
+        MaThuongHieu: parseInt($('#sthuonghieu').val()) || null,
+        MaNhomHuong: parseInt($('#snhomhuong').val()) || null,
+        GiaMin: parseFloat($('#sgiamin').val()) || 0,
+        GiaMax: parseFloat($('#sgiamax').val()) || 9999999999
+    };
+    console.log(requestData);
+        $.ajax({
+            url: 'https://localhost:7177/SanPham/DanhsachSPKhach',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(requestData),
+            success: function (data) {
+                products = data.data;  
+                renderProducts(products);  
+            },
+            error: function (error) {
+                console.error('Lỗi khi gọi API:', error);
+                alert('Lỗi khi gọi API');
+            }
+        });
+    }
+
+    function renderProducts(list) {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pagedProducts = list.slice(start, end);
+
+        let html = '';
+        pagedProducts.forEach(product => {
+            html += `
+                <div class="product-item col-3 px-2 mb-4">
+                    <div class="product-card p-2 h-100 d-flex flex-column">
+                        <div class="product-image mb-2">
+                            <img class="anhsp img-fluid" src="https://localhost:7177${product.anhDauTien}" alt="${product.tenSanPham}">
+                            <div class="overlay">
+                                <a href="#" class="text-decoration-none buy ">Mua ngay</a>
+                                <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-info mt-auto">
+                            <p class="fw-bold text-center">${product.tenSanPham}</p>
+                            <div class="divgia d-flex justify-content-center ">
+                                <p class="gia">${product.giaDauTien} ₫</p>
+                                <p class="giagiam" id="giagiam">-${product.giaGiamDauTien} ₫</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById('productList').innerHTML = html;
+        renderPagination(list.length);
+    }
+
+    function renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        let html = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="btncapnhat m-1" href="#" onclick="goToPage(${i})">${i}</a>
+                </li>
+            `;
+        }
+
+        document.getElementById('pagination').innerHTML = html;
+    }
+
+    function goToPage(page) {
+        currentPage = page;
+        renderProducts(products);
+    }
+
+
+</script>
+
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+   
+        display: block;
+        text-align: center;
+
+    }
+
+    #sgioitinh, #sthuonghieu, #snhomhuong, #stensanpham, sgiamax, sgiamin {
+        font-size: 14px; 
+    }
+
+</style>

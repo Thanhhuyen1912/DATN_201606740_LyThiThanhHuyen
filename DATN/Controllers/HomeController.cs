@@ -84,14 +84,18 @@ namespace DATN.Controllers
 
 
             var top10SanPhamBanChay = _context.ChiTietDonHang
-    .GroupBy(ctdh => ctdh.MaChiTietSP)  // Nhóm theo MaSanPham để tính tổng số lượng bán
+    .Join(_context.ChiTietSanPham,
+        ctdh => ctdh.MaChiTietSP,
+        ctsp => ctsp.MaChiTietSP,
+        (ctdh, ctsp) => new { ctsp.MaSanPham, ctdh.SoLuong })
+    .GroupBy(x => x.MaSanPham)
     .Select(group => new
     {
         MaSanPham = group.Key,
-        TongSoLuong = group.Sum(ctdh => ctdh.SoLuong)  // Tính tổng số lượng bán cho mỗi sản phẩm
+        TongSoLuong = group.Sum(x => x.SoLuong)
     })
-    .OrderByDescending(x => x.TongSoLuong)  // Sắp xếp theo tổng số lượng bán giảm dần
-    .Take(10)  // Lấy 10 sản phẩm có lượt bán cao nhất
+    .OrderByDescending(x => x.TongSoLuong)
+    .Take(10)
     .Join(_context.SanPham,
         x => x.MaSanPham,
         sp => sp.MaSanPham,
@@ -104,19 +108,18 @@ namespace DATN.Controllers
                           where asp.MaSanPham == sp.MaSanPham
                           orderby asp.MaAnh
                           select a.URL).FirstOrDefault(),
-            GiaDauTien = _context.ChiTietSanPham.Where(ct => ct.MaSanPham == sp.MaSanPham)
+            GiaDauTien = _context.ChiTietSanPham
+                            .Where(ct => ct.MaSanPham == sp.MaSanPham)
                             .OrderBy(ct => ct.MaChiTietSP)
                             .Select(ct => ct.Gia)
                             .FirstOrDefault(),
-            GiaGiamDauTien = _context.ChiTietSanPham.Where(ct => ct.MaSanPham == sp.MaSanPham)
+            GiaGiamDauTien = _context.ChiTietSanPham
+                            .Where(ct => ct.MaSanPham == sp.MaSanPham)
                             .OrderBy(ct => ct.MaChiTietSP)
                             .Select(ct => ct.GiaGiam)
-                            .FirstOrDefault() 
+                            .FirstOrDefault()
         })
-    .ToList();  // Kết quả là danh sách kiểu SanPhamDTO
-
-
-            // Tạo đối tượng để truyền vào View
+    .ToList();
             var danhsach = new DanhSachSanPhamTrangChu
             {
                 SanPhamBanChay = top10SanPhamBanChay,

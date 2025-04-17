@@ -1,4 +1,5 @@
 ﻿using CoreLib.AppDbContext;
+using CoreLib.DTO;
 using CoreLib.Entity;
 using Lib_Core.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,90 @@ namespace API.Controllers
             }).ToList();
 
             return Json(new { data = sanPhams });
+        }
+        [HttpPost]
+        [Route("/SanPham/DanhsachSPKhach")]
+        public IActionResult DanhsachKhach([FromBody] SearchSanPham1 request)
+        {
+            var anh = new Anh();
+            var danhsachhienthi = new List<SanPhamDTO>();
+            var query = _context.SanPham
+            .Where(sp =>
+            (string.IsNullOrEmpty(request.TenSanPham) || sp.TenSanPham.ToLower().Contains(request.TenSanPham.ToLower())) &&
+            (string.IsNullOrEmpty(request.GioiTinh) || sp.GioiTinh == request.GioiTinh) &&
+            (!request.MaThuongHieu.HasValue || sp.MaThuongHieu == request.MaThuongHieu) &&
+            (!request.MaNhomHuong.HasValue || sp.MaNhomHuong == request.MaNhomHuong)
+            ).ToList();
+
+            foreach (var sp in query)
+            {
+                var CTSP = _context.ChiTietSanPham
+                    .Where(p => p.MaSanPham == sp.MaSanPham && p.Gia >= request.GiaMin && p.Gia <= request.GiaMax)
+                    .OrderBy(p => p.MaChiTietSP)
+                    .FirstOrDefault();
+                var anhSP = _context.AnhSanPham.Where(p => p.MaSanPham == sp.MaSanPham).FirstOrDefault();
+                if (anhSP != null)
+                {
+                    anh = _context.Anh.Where(anh => anh.MaAnh == anhSP.MaAnh).FirstOrDefault();
+                }
+                if (CTSP != null)
+                {
+                    var giaDauTien = CTSP.Gia;
+                    var giaGiamDauTien = CTSP.GiaGiam;
+                    var spht = new SanPhamDTO
+                    {
+                        MaSanPham = sp.MaSanPham,
+                        TenSanPham = sp.TenSanPham,
+                        AnhDauTien = anh.URL,
+                        GiaDauTien = CTSP.Gia,
+                        GiaGiamDauTien = CTSP.GiaGiam
+                    };
+
+                    danhsachhienthi.Add(spht);
+                }
+
+            }           
+
+            return Json(new { data = danhsachhienthi });
+        }
+
+        [HttpGet]
+        [Route("/SanPham/DanhsachSPKhach1")]
+        public IActionResult DanhsachKhach1()
+        {
+            var anh = new Anh();
+            var danhsachhienthi = new List<SanPhamDTO>();
+            var query = _context.SanPham.ToList();
+            foreach (var sp in query)
+            {
+                var CTSP = _context.ChiTietSanPham
+                    .Where(p => p.MaSanPham == sp.MaSanPham)
+                    .OrderBy(p => p.MaChiTietSP)
+                    .FirstOrDefault();
+                var anhSP = _context.AnhSanPham.Where(p => p.MaSanPham == sp.MaSanPham).FirstOrDefault();
+                if (anhSP != null)
+                {
+                    anh = _context.Anh.Where(anh => anh.MaAnh == anhSP.MaAnh).FirstOrDefault();
+                }
+                if (CTSP != null)
+                {
+                    var giaDauTien = CTSP.Gia;
+                    var giaGiamDauTien = CTSP.GiaGiam;
+                    var spht = new SanPhamDTO
+                    {
+                        MaSanPham = sp.MaSanPham,
+                        TenSanPham = sp.TenSanPham,
+                        AnhDauTien = anh.URL,
+                        GiaDauTien = CTSP.Gia,
+                        GiaGiamDauTien = CTSP.GiaGiam
+                    };
+
+                    danhsachhienthi.Add(spht);
+                }
+
+            }
+
+            return Json(new { data = danhsachhienthi });
         }
 
         [HttpPost]
@@ -100,7 +185,7 @@ namespace API.Controllers
                 {
                     if (file != null && file.Length > 0)
                     {
-                        var fileName = "SP_" + tk.MaSanPham + "_"  + Path.GetExtension(file.FileName);
+                        var fileName = "SP_" + tk.MaSanPham + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                         var savePath = Path.Combine("wwwroot", "images", "Products", fileName);
 
                         // Tạo thư mục nếu chưa có
@@ -123,7 +208,7 @@ namespace API.Controllers
                         };
 
                         _context.Anh.Add(newAnh);
-                        await _context.SaveChangesAsync(); 
+                        await _context.SaveChangesAsync();
 
                         var newAnhSP = new AnhSanPham
                         {
@@ -319,7 +404,7 @@ namespace API.Controllers
             {
                 query = query.Where(p => p.MaKichThuoc == dto.KichThuocID);
             }
-                query = query.Where(p => p.MaSanPham == dto.MaSanPham);            
+            query = query.Where(p => p.MaSanPham == dto.MaSanPham);
 
             if (dto.Gia.HasValue)
             {
