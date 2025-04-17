@@ -7,9 +7,12 @@
 <script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
 @model CoreLib.Entity.TaiKhoan
-<h2 class="text-center mb-4">Cập nhật thông tin tài khoản</h2>
 
-<form asp-action="CapNhatTaiKhoan" asp-controller="TaiKhoan" method="post" class="w-50 mx-auto border p-4 rounded shadow-sm">
+
+<form id="formCapNhatTK" class="w-50 mx-auto border p-4 rounded shadow-sm">
+
+    <h1 class="text-center mb-4">Cập nhật thông tin tài khoản</h1>
+    <br/>
     <input type="hidden" asp-for="MaTaiKhoan" />
 
     <div class="form-group mb-3">
@@ -29,7 +32,7 @@
     <div class="form-group mb-3">
         <label asp-for="MatKhau" class="form-label">Mật khẩu</label>
         <div class="input-group">
-            <input asp-for="MatKhau" type="password" class="form-control" id="matKhauInput" />
+            <input asp-for="MatKhau" type="password" class="form-control" id="MatKhau" />
             <button type="button" class="btn" id="toggleMatKhau">
                 <i class="bi bi-eye" id="iconMatKhau"></i>
             </button>
@@ -39,11 +42,43 @@
 
     <button type="submit" class="btncapnhat"  d-block mx-auto px-4">Lưu thay đổi</button>
 </form>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("formCapNhatTK");
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault(); // Ngăn gửi form mặc định
+
+            const formData = new FormData(form);
+
+            const response = await fetch('/TaiKhoan/CapNhatTaiKhoan', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: result.message
+                }).then(() => {
+                    window.location.href = result.redirectUrl;
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: result.message
+                });
+            }
+        });
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
         const toggleButton = document.getElementById("toggleMatKhau");
-        const passwordInput = document.getElementById("matKhauInput");
+        const passwordInput = document.getElementById("MatKhau");
         const icon = document.getElementById("iconMatKhau");
 
         toggleButton.addEventListener("click", function () {
@@ -51,6 +86,13 @@
             passwordInput.type = isPassword ? "text" : "password";
             icon.className = isPassword ? "bi bi-eye-slash" : "bi bi-eye";
         });
+
+        // Set lại giá trị mật khẩu nếu có
+        var matKhauValue = "@ViewBag.MatKhau";
+        var mkInput = document.getElementById("MatKhau");       
+        if (mkInput && matKhauValue !== '') {
+            mkInput.value = matKhauValue;
+        }
     });
 </script>
 <style>

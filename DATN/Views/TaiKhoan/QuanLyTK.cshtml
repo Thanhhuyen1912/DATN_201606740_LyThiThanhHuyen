@@ -14,9 +14,9 @@
                 <div class="card-body">
                     @if (Model?.TaiKhoan != null)
                     {
-                        <p><strong>Họ tên:</strong> @Model.TaiKhoan.HoTen</p>
-                        <p><strong>Email:</strong> @Model.TaiKhoan.Email</p>
-                        <p><strong>Số điện thoại:</strong> @Model.TaiKhoan.SoDienThoai</p>
+                        <p><strong class="mt-2">Họ tên:</strong> @Model.TaiKhoan.HoTen</p>
+                        <p><strong class="mt-2">Email:</strong> @Model.TaiKhoan.Email</p>
+                        <p><strong class="mt-2">Số điện thoại:</strong> @Model.TaiKhoan.SoDienThoai</p>
 
                         <div class="container1">
                             <a href="@Url.Action("ChiTietTK", "TaiKhoan", new { id = Model.TaiKhoan.MaTaiKhoan })" class=" btncapnhat">Cập nhật tài khoản</a>
@@ -39,14 +39,15 @@
                             @foreach (var diaChi in Model.DiaChis)
                             {
                                 <li class="list-group-item">
-                                    <strong>Tỉnh/Thành:</strong> @diaChi.ThanhPho<br />
-                                    <strong>Quận/Huyện:</strong> @diaChi.Huyen <br />
-                                    <strong>Phường/Xã:</strong> @diaChi.Xa <br />
-                                    <strong>Địa chỉ:</strong> @diaChi.ChiTiet<br />
-                                    <strong>Số điện thoại nhận:</strong> @diaChi.SoDienThoaiNguoiNhan<br />
-                                    <strong>Tên người nhận:</strong> @diaChi.HoTenNguoiNhan<br />
+                                    <strong class="mt-2">Tỉnh/Thành:</strong> @diaChi.ThanhPho<br />
+                                    <strong class="mt-2">Quận/Huyện:</strong> @diaChi.Huyen <br />
+                                    <strong class="mt-2">Phường/Xã:</strong> @diaChi.Xa <br />
+                                    <strong class="mt-2">Địa chỉ:</strong> @diaChi.ChiTiet<br />
+                                    <strong class="mt-2">Số điện thoại nhận:</strong> @diaChi.SoDienThoaiNguoiNhan<br />
+                                    <strong class="mt-2">Tên người nhận:</strong> @diaChi.HoTenNguoiNhan<br />
                                     <div class="container1">
-                                        <a href="@Url.Action("ChiTietDC", "TaiKhoan", new { id = @diaChi.MaDiaChi })" class="btncapnhat">Cập nhật địa chỉ</a>
+                                        <a href="@Url.Action("CapNhatDiaChi", "TaiKhoan", new { id = @diaChi.MaDiaChi })" class="btncapnhat">Cập nhật địa chỉ</a>
+                                        <a href="@Url.Action("XoaDiaChi", "TaiKhoan", new { id = @diaChi.MaDiaChi })" class="btnxoa">Xóa địa chỉ</a>
                                     </div>
 
                                 </li>
@@ -71,14 +72,22 @@
         background-color: #fdb9a4;
         color: #a75851;
         padding: 7px;
+        border-radius: 4px;       
+        display: block;
+        text-align: center;
+    } .btnxoa {
+        background-color: lightgray;
+        color: black;
+        padding: 7px;
         border-radius: 4px;
-        margin: 10px auto;
+        margin-left: 8px;
         display: block;
         text-align: center;
     }
 
     .container1 {
         display: flex;
+        margin: 10px auto;
         justify-content: center; /* Căn giữa theo chiều ngang */
         align-items: center; /* Căn giữa theo chiều dọc */
         /* Chiếm toàn bộ chiều cao màn hình */

@@ -39,13 +39,115 @@ namespace DATN.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public IActionResult ThemDiaChi()
+        {
+            string? ma = HttpContext.Session.GetString("MaTaiKhoan");
+            if (ma != null)
+            {
+                var taikhoan = _context.TaiKhoan.FirstOrDefault(p => p.MaTaiKhoan == int.Parse(ma));
+                return View(taikhoan);
+            }
+            else
+            {
+                return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
+            }
 
+
+        }
+        [HttpPost]
+        public IActionResult ThemDiaChi(string HoTenNguoiNhan, string SoDienThoaiNguoiNhan, string Huyen, string Xa, string ChiTiet, string ThanhPho)
+        {
+            string? ma = HttpContext.Session.GetString("MaTaiKhoan");
+            if (ma != null)
+            {
+                var taikhoan = _context.TaiKhoan.FirstOrDefault(p => p.MaTaiKhoan == int.Parse(ma));
+                var dc = new DiaChi();
+                dc.MaTaiKhoan = int.Parse(ma);
+                dc.ThanhPho = ThanhPho;
+                dc.Xa = Xa;
+                dc.HoTenNguoiNhan = HoTenNguoiNhan;
+                dc.SoDienThoaiNguoiNhan = SoDienThoaiNguoiNhan;
+                dc.Huyen = Huyen;
+                dc.ChiTiet = ChiTiet;
+                dc.NgayCapNhat = DateTime.Now;
+
+                _context.DiaChi.Add(dc);
+                _context.SaveChanges();
+
+                TempData["Message"] = "Thêm địa chỉ thành công!";
+                TempData["matk"] = ma;
+            }
+
+            return View();
+
+        }
+        [HttpGet]
+        public IActionResult CapNhatDiaChi(int id)
+        {
+            string? ma = HttpContext.Session.GetString("MaTaiKhoan");
+            if (ma != null)
+            {
+                var nd = new NoidungCapnhat
+                {
+                    taikhoan = _context.TaiKhoan.FirstOrDefault(p => p.MaTaiKhoan == int.Parse(ma)),
+                    diachi = _context.DiaChi.FirstOrDefault(p=> p.MaDiaChi == id)
+                };
+                
+                return View(nd);
+            }
+            else
+            {
+                return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
+            }
+        }
+        [HttpPost]
+        public IActionResult CapNhatDiaChi(int MaDiaChi, string ChiTiet, string Xa, string Huyen, string ThanhPho , string SoDienThoaiNguoiNhan , string HoTenNguoiNhan)
+        {
+            string? ma = HttpContext.Session.GetString("MaTaiKhoan");
+            var diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == MaDiaChi);
+            if (diachi != null)
+            {
+                diachi.ThanhPho = ThanhPho;
+                diachi.Huyen = Huyen;
+                diachi.Xa = Xa;
+                diachi.ChiTiet = ChiTiet;
+                diachi.SoDienThoaiNguoiNhan = SoDienThoaiNguoiNhan;
+                diachi.HoTenNguoiNhan = HoTenNguoiNhan;
+
+                _context.SaveChanges();
+                return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
+            }
+            else
+            {
+                return View();
+            } 
+                
+        }
+
+        [HttpGet]
+        public IActionResult XoaDiaChi(int id)
+        {
+            string? ma = HttpContext.Session.GetString("MaTaiKhoan");
+            var diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == id);
+            if (diachi != null)
+            {
+               _context.DiaChi.Remove(diachi);
+                _context.SaveChanges();
+                return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
+            }
+            else
+            {
+                return View();
+            }
+
+        }
         [HttpPost]
         public IActionResult DangNhap(string user, string matkhau)
         {
             var tk = _context.TaiKhoan.FirstOrDefault(u => u.Email == user && u.MatKhau == matkhau);
 
-            if (tk != null)
+            if (tk != null && tk.TrangThai == true)
             {
                 HttpContext.Session.SetString("Role", tk.LoaiTaiKhoan.ToString() ?? "");
                 HttpContext.Session.SetString("MaTaiKhoan", tk.MaTaiKhoan.ToString());
@@ -59,6 +161,7 @@ namespace DATN.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
+
 
             ViewBag.ThongBao = "Email hoặc mật khẩu không đúng!";
             return View();
@@ -91,7 +194,7 @@ namespace DATN.Controllers
             catch (Exception ex)
             {
 
-                ViewBag.ThongBao = "Thông tin tài khoản chưa hợp lệ" + ex;
+                ViewBag.ThongBao = "Thông tin tài khoản chưa hợp lệ";
                 return View();
             }
         }
@@ -143,6 +246,8 @@ namespace DATN.Controllers
                 return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = id });
             }
             var taikhoan = _context.TaiKhoan.FirstOrDefault(p => p.MaTaiKhoan == maTaiKhoan);
+            if (taikhoan != null)
+                ViewBag.MatKhau = taikhoan.MatKhau;
             return View(taikhoan);
         }
         [HttpPost]
@@ -160,21 +265,23 @@ namespace DATN.Controllers
                         tk.Email = Email;
                         tk.SoDienThoai = SoDienThoai;
                         tk.MatKhau = MatKhau;
-
                         _context.SaveChanges();
-                    }
-                    return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = int.Parse(ma) });
 
+                        return Json(new
+                        {
+                            success = true,
+                            message = "Cập nhật thông tin thành công!",
+                            redirectUrl = Url.Action("QuanLyTK", "TaiKhoan", new { id = tk.MaTaiKhoan })
+                        });
+                    }
+                    return Json(new { success = false, message = "Tài khoản không tồn tại!" });
                 }
                 catch
                 {
-                    return RedirectToAction("ChiTietTK", "TaiKhoan", new { id = int.Parse(ma) });
-
+                    return Json(new { success = false, message = "Lỗi khi cập nhật tài khoản!" });
                 }
             }
-            else return RedirectToAction("Index", "Home");
-
+            return Json(new { success = false, message = "Không tìm thấy phiên đăng nhập!" });
         }
-
     }
 }

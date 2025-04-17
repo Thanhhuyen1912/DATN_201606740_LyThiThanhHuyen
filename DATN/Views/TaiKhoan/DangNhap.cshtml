@@ -120,18 +120,20 @@
     @if (TempData["LoginMessage"] != null)
     {
         <text>
-                          alert(@Html.Raw(Json.Serialize(TempData["LoginMessage"])));
+                    alert('@Html.Raw(Json.Serialize(TempData["LoginMessage"]))');
         </text>
-    }  @if (TempData["LoginMessage1"] != null)
+    }
+    @if (TempData["LoginMessage1"] != null)
     {
         <text>
-                          alert(@Html.Raw(Json.Serialize(TempData["LoginMessage1"])));
+                    alert('@Html.Raw(Json.Serialize(TempData["LoginMessage1"]))');
         </text>
     }
     @if (ViewBag.ThongBao != null)
     {
         <text>
-                                          alert(@Html.Raw(Json.Serialize(ViewBag.ThongBao));
+                    alert('@Html.Raw(Json.Serialize(ViewBag.ThongBao))');
         </text>
     }
+
 </script>

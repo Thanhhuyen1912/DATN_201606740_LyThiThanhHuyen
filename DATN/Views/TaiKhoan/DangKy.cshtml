@@ -93,7 +93,6 @@
     }
 </style>
 <div class="login-container">
-    @ViewBag.ThongBao
     <h2>ĐĂNG KÝ</h2>
     <p>Nếu bạn đã có tài khoản, <a href="/TaiKhoan/DangNhap">đăng nhập tại đây</a></p>
     <form id="login-form" action="/TaiKhoan/DangKy" method="POST">
@@ -119,18 +118,25 @@
 </div>
 
 <script>
-
-    @if (TempData["LoginMessage"] != null)
+    document.addEventListener("DOMContentLoaded", function () {
+        // Kiểm tra TempData
+    @if (TempData["LoginMessage1"] != null)
     {
         <text>
-                          alert(@Html.Raw(Json.Serialize(TempData["LoginMessage"])));
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: '@Html.Raw(Json.Serialize(TempData["LoginMessage1"]))'
+                    });
         </text>
     }
+
+        // Kiểm tra ViewBag
     @if (ViewBag.ThongBao != null)
     {
         <text>
-                                  alert(@Html.Raw(Json.Serialize(ViewBag.ThongBao));
+                    alert('@Html.Raw(Json.Serialize(ViewBag.ThongBao))');
         </text>
     }
-
+    });
 </script>

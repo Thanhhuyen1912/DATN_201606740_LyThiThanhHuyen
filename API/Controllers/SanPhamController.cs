@@ -100,7 +100,7 @@ namespace API.Controllers
                 {
                     if (file != null && file.Length > 0)
                     {
-                        var fileName = "SP_" + tk.MaSanPham + "_" + Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        var fileName = "SP_" + tk.MaSanPham + "_"  + Path.GetExtension(file.FileName);
                         var savePath = Path.Combine("wwwroot", "images", "Products", fileName);
 
                         // Tạo thư mục nếu chưa có

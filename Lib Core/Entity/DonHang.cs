@@ -15,8 +15,8 @@ namespace CoreLib.Entity
         public DateTime NgayTao { get; set; }
         public DateTime NgayCapNhat { get; set; }
         public string TrangThaiVanChuyen { get; set; }
-        public int MaGiamGia { get; set; }
-        public double TongTien { get; set; }
+        public int? MMaGiamGia { get; set; }
+        public decimal TongTien { get; set; }
         public int MaPhuongThucThanhToan { get; set; }
         public bool TrangThaiThanhToan { get; set; }
         public int MaDiaChi { get; set; }

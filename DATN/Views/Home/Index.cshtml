@@ -2,8 +2,8 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-@model List<CoreLib.Entity.ChiTietSanPham>
-<div class="text-center mt-3" >
+@model CoreLib.DTO.DanhSachSanPhamTrangChu
+<div class="text-center mt-3">
     <div class="anhdau">
         <img class="anhsp1" style="width:98%; height:auto" src="@Url.Content("~/images/pc1_trangchu.png")">
     </div>
@@ -13,20 +13,25 @@
     <div class="product-container mt-3">
         <button class="scroll-left" onclick="scrollProducts(-1)">&#10094;</button>
         <div class="product-list">
-            @foreach (var product in Model)
+            @foreach (var product in Model.SanPhamKhuyenMai)
             {
                 <div class="product-item col-3">
                     <div class="product-image">
-                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
+                        <img class="anhsp" src="https://localhost:7177/@product.AnhDauTien">
                         <div class="overlay">
                             <a href="#" class="text-decoration-none buy ">Mua ngay</a>
                             <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
                         </div>
                     </div>
-                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <br />
+                    <p style="font-weight: bold; padding: 5px">@product.TenSanPham</p>
                     <div class="divgia">
-                        <p class="gia">@product.Gia  ₫</p>
-                        <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p>
+                        <p class="gia">
+                            @((int)product.GiaDauTien) ₫
+                        </p>
+                        <p class="giagiam" id="giagiam">
+                            -@((int)product.GiaGiamDauTien) ₫
+                        </p>
                     </div>
                 </div>
             }
@@ -40,20 +45,24 @@
     <div class="product-container mt-3">
         <button class="scroll-left1" onclick="scrollProducts1(-1)">&#10094;</button>
         <div class="product-list1">
-            @foreach (var product in Model)
+            @foreach (var product in Model.SanPhamMoi)
             {
-                <div class="product-item col-3">
+                <div class="product-item1 col-3">
                     <div class="product-image">
-                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
-                        <div class="overlay">
+                        <img class="anhsp" src="https://localhost:7177/@product.AnhDauTien" /><div class="overlay">
                             <a href="#" class="text-decoration-none buy ">Mua ngay</a>
                             <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
                         </div>
                     </div>
-                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <br />
+                    <p style="font-weight: bold; padding: 5px">@product.TenSanPham</p>
                     <div class="divgia">
-                        <p class="gia">@product.Gia  ₫</p>
-                        @* <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p> *@
+                        <p class="gia">
+                            @((int)product.GiaDauTien) ₫
+                        </p>
+                        <p class="giagiam" id="giagiam">
+                            -@((int)product.GiaGiamDauTien) ₫
+                        </p>
                     </div>
                 </div>
             }
@@ -66,20 +75,25 @@
     <div class="product-container mt-3">
         <button class="scroll-left2" onclick="scrollProducts2(-1)">&#10094;</button>
         <div class="product-list2">
-            @foreach (var product in Model)
+            @foreach (var product in Model.SanPhamBanChay)
             {
-                <div class="product-item col-3">
+                <div class="product-item2 col-3">
                     <div class="product-image">
-                        <img class="anhsp" src="@Url.Content("~/images/anhspmau.jpg")">
+                        <img class="anhsp" src="https://localhost:7177/@product.AnhDauTien">
                         <div class="overlay">
                             <a href="#" class="text-decoration-none buy ">Mua ngay</a>
                             <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
                         </div>
                     </div>
-                    <p style="font-weight: bold; padding: 5px">@product.SanPham.TenSanPham</p>
+                    <br />
+                    <p style="font-weight: bold; padding: 5px">@product.TenSanPham</p>
                     <div class="divgia">
-                        <p class="gia">@product.Gia  ₫</p>
-                        @* <p class="giagiam" id="giagiam"> -@product.GiaGiam  ₫</p> *@
+                        <p class="gia">
+                            @((int)product.GiaDauTien) ₫
+                        </p>
+                        <p class="giagiam" id="giagiam">
+                            -@((int)product.GiaGiamDauTien) ₫
+                        </p>
                     </div>
                 </div>
             }
@@ -107,14 +121,14 @@
 
 </style>
 <script>
-                   function smoothScrollBy(element, distance, duration) {
+    function smoothScrollBy(element, distance, duration) {
         let start = element.scrollLeft;
         let startTime = performance.now();
 
         function scrollStep(currentTime) {
             let elapsedTime = currentTime - startTime;
             let progress = Math.min(elapsedTime / duration, 1);
-            let ease = progress * (2 - progress); // Hiệu ứng easing
+            let ease = progress * (2 - progress);
 
             element.scrollLeft = start + distance * ease;
 
@@ -126,31 +140,24 @@
         requestAnimationFrame(scrollStep);
     }
 
+    // Hàm cuộn cho danh sách sản phẩm chính
     function scrollProducts(direction) {
         const productList = document.querySelector('.product-list');
         const productWidth = document.querySelector('.product-item').offsetWidth + 10;
-
-        smoothScrollBy(productList, direction * productWidth, 500); // Cuộn trong 500ms
+        smoothScrollBy(productList, direction * productWidth, 500);
     }
 
-     function scrollProducts1(direction) {
+    // Hàm cuộn cho danh sách sản phẩm 1
+    function scrollProducts1(direction) {
         const productList1 = document.querySelector('.product-list1');
         const productWidth1 = document.querySelector('.product-item1').offsetWidth + 10;
-        productList1.scrollBy({
-            left: direction * productWidth1,
-            behavior: 'smooth'
-        });
+        smoothScrollBy(productList1, direction * productWidth1, 500);
     }
 
-     function scrollProducts2(direction) {
+    // Hàm cuộn cho danh sách sản phẩm 2
+    function scrollProducts2(direction) {
         const productList2 = document.querySelector('.product-list2');
         const productWidth2 = document.querySelector('.product-item2').offsetWidth + 10;
-        productList2.scrollBy({
-            left: direction * productWidth2,
-            behavior: 'smooth'
-        });
+        smoothScrollBy(productList2, direction * productWidth2, 500);
     }
-
-
-
 </script>

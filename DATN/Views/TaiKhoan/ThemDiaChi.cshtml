@@ -1,0 +1,160 @@
+﻿@{
+    ViewData["Title"] = "Thêm địa chỉ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+@model CoreLib.Entity.TaiKhoan
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Phần Trái: Thông tin tài khoản -->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header text-white">
+                    <h2 style="color: black">Thông tin tài khoản</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+                        <p><strong class="mt-2">Họ tên:</strong> @Model.HoTen</p>
+                        <p><strong class="mt-2">Email:</strong> @Model.Email</p>
+                        <p><strong class="mt-2">Số điện thoại:</strong> @Model.SoDienThoai</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Phần Phải: Danh sách địa chỉ -->
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header text-white">
+                    <h2 style="color: black">Thêm địa chỉ</h2>
+                </div>
+                <div class="card-body" style="font-size: 15px">
+                    <form method="post" action="/TaiKhoan/ThemDiaChi">
+                        <div class="mb-2">
+                            Tên người nhận
+                            <input type="text" class="form-control" id="HoTenNguoiNhan" name="HoTenNguoiNhan" required>
+                        </div>
+                        <div class="mb-2">
+                            Số điện thoại
+                            <input type="text" class="form-control" id="SoDienThoaiNguoiNhan" name="SoDienThoaiNguoiNhan" required>
+                        </div>
+                        <div class="mb-2">
+                            Thành phố
+                            <select class="form-control" name="ThanhPho" id="ThanhPho">
+                            </select>
+                        </div> <div class="mb-2">
+                            Huyện
+                            <select class="form-control" name="Huyen" id="Huyen">
+                            </select>
+                        </div> <div class="mb-2">
+                            Xã
+                            <select class="form-control" name="Xa" id="Xa">
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            Chi tiết
+                            <textarea class="form-control" id="ChiTiet" name="ChiTiet" rows="2"></textarea>
+                        </div>
+                        <div class="container1">
+                            <button type="submit" class="btncapnhat">Thêm địa chỉ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        margin: 10px auto;
+        display: block;
+        text-align: center;
+    }
+
+    .container1 {
+        display: flex;
+        justify-content: center; /* Căn giữa theo chiều ngang */
+        align-items: center; /* Căn giữa theo chiều dọc */
+        /* Chiếm toàn bộ chiều cao màn hình */
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        // Load tỉnh/thành phố
+        $.get("https://provinces.open-api.vn/api/p/", function (data) {
+            $('#ThanhPho').empty().append('<option value="">--Chọn thành phố--</option>');
+            data.forEach(function (tinh) {
+                $('#ThanhPho').append(`<option value="${tinh.code}">${tinh.name}</option>`);
+            });
+        });
+
+        // Khi chọn tỉnh → load huyện
+        $('#ThanhPho').change(function () {
+            const tinhId = $(this).val();
+            $('#Huyen').empty().append('<option value="">--Chọn huyện--</option>');
+            $('#Xa').empty().append('<option value="">--Chọn xã--</option>');
+
+            if (!tinhId) return;
+
+            $.get(`https://provinces.open-api.vn/api/p/${tinhId}?depth=2`, function (data) {
+                data.districts.forEach(function (huyen) {
+                    $('#Huyen').append(`<option value="${huyen.code}">${huyen.name}</option>`);
+                });
+            });
+        });
+
+        // Khi chọn huyện → load xã
+        $('#Huyen').change(function () {
+            const huyenId = $(this).val();
+            $('#Xa').empty().append('<option value="">--Chọn xã--</option>');
+
+            if (!huyenId) return;
+
+            $.get(`https://provinces.open-api.vn/api/d/${huyenId}?depth=2`, function (data) {
+                data.wards.forEach(function (xa) {
+                    $('#Xa').append(`<option value="${xa.code}">${xa.name}</option>`);
+                });
+            });
+        });
+
+        // Hiển thị SweetAlert nếu có TempData["Message"]
+    @if (TempData["Message"] != null)
+    {
+        <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: '@Html.Raw(Json.Serialize(TempData["Message"]))'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Truyền TempData["matk"] trực tiếp trong URL mà không dùng Json.Serialize
+                        window.location.href = '@Url.Action("QuanLyTK", "TaiKhoan", new { id = TempData["matk"] })';
+                    }
+                });
+        </text>
+    }
+
+        // Hiển thị alert nếu có ViewBag.ThongBao
+    @if (ViewBag.ThongBao != null)
+    {
+        <text>
+                    alert('@ViewBag.ThongBao');
+        </text>
+    }
+    });
+</script>
