@@ -200,15 +200,15 @@
                         <div class="product-image mb-2">
                             <img class="anhsp img-fluid" src="https://localhost:7177${product.anhDauTien}" alt="${product.tenSanPham}">
                             <div class="overlay">
-                                <a href="#" class="text-decoration-none buy ">Mua ngay</a>
-                                <a href="#" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                                <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=${product.maSanPham}" class="text-decoration-none buy ">Mua ngay</a>
+                                <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=${product.maSanPham}" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
                             </div>
                         </div>
                         <div class="product-info mt-auto">
                             <p class="fw-bold text-center">${product.tenSanPham}</p>
                             <div class="divgia d-flex justify-content-center ">
-                                <p class="gia">${product.giaDauTien} ₫</p>
-                                <p class="giagiam" id="giagiam">-${product.giaGiamDauTien} ₫</p>
+                            <p class="gia">${product.giaDauTien.toLocaleString('vi-VN')}₫</p>
+                                <p class="giagiam" id="giagiam">-${product.giaGiamDauTien.toLocaleString('vi-VN')}₫</p>
                             </div>
                         </div>
                     </div>

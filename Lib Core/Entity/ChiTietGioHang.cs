@@ -14,7 +14,7 @@ namespace CoreLib.Entity
         public int MaGioHang { get; set; }
         public int MaChiTietSanPham { get; set; }
         public int SoLuong { get; set; }
-        public double TongTien { get; set; }
+        public decimal TongTien { get; set; }
         public DateTime NgayCapNhat { get; set; }
     }
 }

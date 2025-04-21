@@ -91,9 +91,9 @@ namespace DATN.Controllers
                 var nd = new NoidungCapnhat
                 {
                     taikhoan = _context.TaiKhoan.FirstOrDefault(p => p.MaTaiKhoan == int.Parse(ma)),
-                    diachi = _context.DiaChi.FirstOrDefault(p=> p.MaDiaChi == id)
+                    diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == id)
                 };
-                
+
                 return View(nd);
             }
             else
@@ -102,7 +102,7 @@ namespace DATN.Controllers
             }
         }
         [HttpPost]
-        public IActionResult CapNhatDiaChi(int MaDiaChi, string ChiTiet, string Xa, string Huyen, string ThanhPho , string SoDienThoaiNguoiNhan , string HoTenNguoiNhan)
+        public IActionResult CapNhatDiaChi(int MaDiaChi, string ChiTiet, string Xa, string Huyen, string ThanhPho, string SoDienThoaiNguoiNhan, string HoTenNguoiNhan)
         {
             string? ma = HttpContext.Session.GetString("MaTaiKhoan");
             var diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == MaDiaChi);
@@ -121,8 +121,8 @@ namespace DATN.Controllers
             else
             {
                 return View();
-            } 
-                
+            }
+
         }
 
         [HttpGet]
@@ -132,7 +132,7 @@ namespace DATN.Controllers
             var diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == id);
             if (diachi != null)
             {
-               _context.DiaChi.Remove(diachi);
+                _context.DiaChi.Remove(diachi);
                 _context.SaveChanges();
                 return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
             }
@@ -149,6 +149,18 @@ namespace DATN.Controllers
 
             if (tk != null && tk.TrangThai == true)
             {
+                var giohang = _context.GioHang.Where(gh => gh.MaTaiKhoan == tk.MaTaiKhoan).FirstOrDefault();
+                if (giohang == null)
+                {
+                    var giohangmoi = new GioHang();
+                    giohangmoi.MaTaiKhoan = tk.MaTaiKhoan;
+                    giohangmoi.NgayCapNhat = DateTime.Now;
+
+                    _context.GioHang.Add(giohangmoi);
+                    _context.SaveChanges();
+                    HttpContext.Session.SetString("MaGioHang", giohangmoi.MaGioHang.ToString());
+                }
+                else { HttpContext.Session.SetString("MaGioHang", giohang.MaGioHang.ToString()); }
                 HttpContext.Session.SetString("Role", tk.LoaiTaiKhoan.ToString() ?? "");
                 HttpContext.Session.SetString("MaTaiKhoan", tk.MaTaiKhoan.ToString());
                 HttpContext.Session.SetString("User", tk.HoTen.ToString() ?? "");

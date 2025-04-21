@@ -8,5 +8,9 @@ namespace DATN.Controllers
         {
             return View();
         }
+        public IActionResult DatHang()
+        {
+            return View();
+        }
     }
 }

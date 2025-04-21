@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<CoreLib.DTO.Hienthigiohang>
+<table class="table text-center align-middle">
+
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th></th>
+            <th>Đơn giá</th>
+            <th>Giá giảm</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="cart-table-body">
+        @foreach (var product in Model)
+        {
+            <tr class="cart-item" data-product-id="1" data-unit-price="99000">
+                <td class="product-name">@product.tensanpham</td>
+                <td>
+                    <img src="https://localhost:7177/@product.anh.URL" width="80">
+                </td>
+                <td class="product-price">@product.chitietsanpham.Gia.ToString("N0")đ</td>
+                <td class="product-price">@product.chitietsanpham.GiaGiam.ToString("N0")đ</td>
+                <td class="product-quantity align-middle">
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                        <button class="btn btn-sm" onclick="updateQty(-1)">−</button>
+                        <input type="text" id="qty" value="@product.chitietgiohang.SoLuong"
+                               class="form-control form-control-sm text-center mx-2"
+                               style="width: 40px; height: 100%;">
+                        <button class="btn btn-sm" onclick="updateQty(1)">+</button>
+                    </div>
+                </td>
+                <td class="product-total ">@product.chitietgiohang.TongTien.ToString("N0")đ</td>
+                <td>
+                    <a class="btn update" data-id="@product.chitietgiohang.MaChiTietGio"><i class="bi bi-check2-all"></i></a>
+                    <a class="btn delete" data-id="@product.chitietgiohang.MaChiTietGio"><i class="bi bi-x"></i></a>
+                </td>
+            </tr>
+        }
+        <!-- Có thể có thêm nhiều dòng cart-item tương tự -->
+    </tbody>
+</table>
+
+<!-- Nút thanh toán -->
+<button id="btnThanhToan" class="btn">Thanh toán</button>
+<script>
+        function updateQty(change) {
+      let qty = document.getElementById("qty");
+      let value = parseInt(qty.value);
+      if (value + change >= 1) {
+        qty.value = value + change;
+      }
+    }
+    $(document).ready(function () {
+        $(".delete").click(function () {
+            const mactgh = $(this).data("id");
+
+            if (confirm("Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng không?")) {
+                $.ajax({
+                    url: '/GioHang/XoaSPGioHang',
+                    type: 'POST',
+                    data: { mactgh: mactgh },
+                    success: function (response) {
+                        if (response.code === 0) {
+                            alert(response.message);
+                            location.reload(); 
+                        } else {
+                            alert("Xóa không thành công!");
+                        }
+                    },
+                    error: function () {
+                        alert("Đã xảy ra lỗi khi gửi yêu cầu xóa.");
+                    }
+                });
+            }
+        });
+    });
+    $(document).ready(function () {
+        $(".update").click(function () {
+            const mactgh = $(this).data("id");
+            const row = $(this).closest("tr");
+            const soluong = row.find("#qty").val();
+
+            $.ajax({
+                url: '/GioHang/SuaSPGioHang',
+                type: 'POST',
+                data: {
+                    mactgh: mactgh,
+                    soluong: soluong
+                },
+                success: function (res) {
+                    if (res.code === 0) {
+                        alert(res.message);
+                        location.reload(); 
+                    } else {
+                        alert(res.message);
+                    }
+                },
+                error: function () {
+                    alert("Lỗi khi cập nhật số lượng.");
+                }
+            });
+        });
+    });
+
+</script>

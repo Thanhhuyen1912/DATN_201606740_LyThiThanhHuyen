@@ -1,0 +1,266 @@
+﻿@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.DTO.ChiTiet
+<style>
+    .product-image {
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .price {
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+    }
+
+    .buy-btn {
+        background-color: #ffa58d;
+        border: none;
+    }
+
+        .buy-btn:hover {
+            background-color: #ff9375;
+        }
+
+    .add-to-cart {
+        border: 1px solid #000;
+    }
+
+    .quantity-box {
+        width: 120px;
+    }
+
+    .icon-text {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 8px;
+    }
+
+    .chonkichthuoc button{
+        background-color: #ffa58d;
+        color: white;
+        padding:4px
+    }
+       
+
+        /* Active: hiệu ứng khi đã click */
+        .chonkichthuoc button.btn-active {
+            background-color: #a75851 !important;
+            color: white !important;
+        }
+
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <!-- Hình ảnh -->
+        <div class="col-md-6">
+            <!-- Ảnh chính -->
+            <div class="text-center">
+                <img id="mainImage"
+                     src="https://localhost:7177/@Model.anhdau.URL"
+                     style="width:250px; height:auto; display:block; margin: 0 auto; transition: opacity 0.3s ease;"
+                     class="product-image mb-3"
+                     alt="Sản phẩm chính" />
+
+            </div>
+
+            <!-- Danh sách ảnh thu nhỏ có scroll -->
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <!-- Nút cuộn trái -->
+                <button type="button" class=" btn btn-sm" onclick="scrollThumbnails(-1)">
+                    &#10094;
+                </button>
+
+                <!-- Container chứa ảnh nhỏ có scroll -->
+                <div id="thumbnailContainer" class="d-flex overflow-hidden"
+                     style="max-width: 290px; scroll-behavior: smooth;">
+                    @foreach (var anh in Model.anhs)
+                    {
+                        <img src="https://localhost:7177/@anh.URL"
+                             class="thumbnail me-2"
+                             style="width:90px; height: 90px; object-fit: cover; cursor: pointer;"
+                             onclick="changeMainImage(this)" />
+                    }
+                </div>
+
+                <!-- Nút cuộn phải -->
+                <button type="button" class=" btn btn-sm" onclick="scrollThumbnails(1)">
+                    &#10095;
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Script để thay đổi ảnh chính -->
+        <!-- Thông tin sản phẩm -->
+        <div class="col-md-6">
+            <h1 style="font-size: 28px; font-weight: bold;">
+                @Model.sanpham.TenSanPham
+            </h1>
+            <div class="d-flex">
+                <div class="price mb-3" id="gia">
+                    @Model.GiaThapNhat.ToString("N0")đ
+                </div>
+                <div class=" ms-2 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;"                    " id="giagiam">
+                </div>
+            </div>
+            <div class="icon-text"><span><i class="bi bi-truck-flatbed"></i></span> Giao hàng toàn quốc</div>
+            <div class="icon-text"><span><i class="bi bi-arrow-clockwise"></i></span> Cam kết đổi/trả hàng miễn phí</div>
+            <div class="mt-2 d-flex me-1"><b>Số lượng</b>:  <p style="padding-left: 4px" id="soluong"> Còn hàng</p></div>
+            <div class="mt-2">
+                <b>Nhóm hương</b>: @Model.nhomhuong
+            </div>
+            <div class="d-flex mt-2">
+                <div>
+                    <b>Thương hiệu</b>: @Model.thuonghieu
+                </div>
+                <div class="ms-5">
+                    <b>Xuất xứ</b>: @Model.xuatxu
+                </div>
+            </div>
+            <div id="mactsp" hidden ></div>
+            <div class="mt-2">
+                <strong>Kích thước:</strong>
+                <div class="d-flex flex-wrap">
+                    @for (int i = 0; i < Model.chitietsanpham.Count; i++)
+                    {
+                        try
+                        {
+                            var ct = Model.chitietsanpham[i];
+                            <div class="chonkichthuoc m-1">
+                                <button type="button"
+                                        class="m-1"
+                                        onclick="chonKichThuoc(@i)" >
+                                    @ct.KichThuoc.TenKichThuoc
+                                </button>
+                                
+                            </div>
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
+                </div>
+            </div>
+            <!-- Số lượng -->
+            <div class="d-flex align-items-center mb-3">
+                <button class="btn  btn-sm" onclick="updateQty(-1)">−</button>
+                <input type="text" id="qty" value="1" class="form-control form-control-sm text-center mx-2" style="width: 70px;">
+                <button class="btn  btn-sm" onclick="updateQty(1)">+</button>
+            </div>
+
+            <!-- Nút -->
+            <div class="d-flex gap-2">
+                <button class="btn add-to-cart">Thêm vào giỏ hàng</button>
+                <button class="btn buy-btn text-white">Mua ngay</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateQty(change) {
+      let qty = document.getElementById("qty");
+      let value = parseInt(qty.value);
+      if (value + change >= 1) {
+        qty.value = value + change;
+      }
+    }
+    function changeMainImage(img) {
+      var mainImage = document.getElementById("mainImage");
+      mainImage.src = img.src;
+    }
+    function scrollThumbnails(direction) {
+        const container = document.getElementById("thumbnailContainer");
+        const scrollAmount = 95; // bằng chiều rộng ảnh + margin
+
+        container.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+    // Lấy danh sách chi tiết sản phẩm từ Razor
+    var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.chitietsanpham));
+
+    // Định dạng giá kiểu VN
+    function formatVN(num) {
+        return num.toLocaleString('vi-VN');
+    }
+
+      function chonKichThuoc(i) {
+        var ct = dsChiTiet[i];
+        if (!ct) return alert("Không tìm thấy chi tiết sản phẩm!");
+
+        // Tính giá đã giảm
+        var giaDaGiam = ct.Gia - ct.GiaGiam;
+
+        // Cập nhật giá mới và giá gốc
+        document.getElementById("gia").innerText = giaDaGiam.toLocaleString() + "đ";
+        document.getElementById("giagiam").innerText = ct.Gia.toLocaleString() + "đ";
+        document.getElementById("soluong").innerText = ct.SoLuong != null ? ct.SoLuong : "Hết hàng";
+        document.getElementById("mactsp").innerText = ct.MaChiTietSP;
+
+        // Xóa btn-active khỏi tất cả button
+        document.querySelectorAll('.chonkichthuoc button').forEach(function(btn) {
+            btn.classList.remove('btn-active');
+        });
+
+        // Gán lại btn-active cho nút được chọn
+        var selectedButton = document.querySelectorAll('.chonkichthuoc button')[i];
+        selectedButton.classList.add('btn-active');
+    }
+
+
+         $(document).ready(function() {
+        $(".add-to-cart").click(function(e) {
+            e.preventDefault();
+
+            var mactsp = parseInt($("#mactsp").text(), 10);  // Mã chi tiết sản phẩm
+            var soluong = parseInt($("#qty").val(), 10);     // Số lượng sản phẩm
+
+            if (isNaN(mactsp) || isNaN(soluong)) {
+                alert("Dữ liệu không hợp lệ");
+                return;
+            }
+
+            $.ajax({
+                url: '/GioHang/Themgiohang',  // Đảm bảo đường dẫn đúng
+                type: 'POST',
+                data: {
+                    mactsp: mactsp,
+                    soluong: soluong
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.code == 1) {
+                        alert(response.message);  // Thông báo khi chưa đăng nhập hoặc chưa có giỏ hàng
+                    } else if (response.code ==0) {
+                        alert(response.message);  // Thông báo khi thành công
+                    } else {
+                        alert("Có lỗi xảy ra khi cập nhật giỏ hàng.");
+                    }
+                },
+                error: function() {
+                    alert("Có lỗi xảy ra khi gửi yêu cầu.");
+                }
+            });
+        });
+    });
+
+
+       
+
+</script>
