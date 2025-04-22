@@ -1,16 +1,12 @@
-﻿using CoreLib.AppDbContext;
+﻿using API.Service;
+using CoreLib.AppDbContext;
 using CoreLib.Entity;
 using Lib_Core.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Data;
-using System.Text.RegularExpressions;
-using System.Text;
-using System.Xml;
-
 namespace API.Controllers
 {
     [Route("api/[controller]")]
@@ -18,6 +14,7 @@ namespace API.Controllers
     public class TaiKhoanController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILocationService _locationService;
 
         public TaiKhoanController(AppDbContext context)
         {
@@ -199,11 +196,10 @@ namespace API.Controllers
                 message = "Tìm kiếm thành công",
                 data = result
             });
+        }            
+
+
+
         }
-
-
-
-
     }
-}
 

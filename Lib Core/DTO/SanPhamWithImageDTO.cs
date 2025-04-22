@@ -13,6 +13,7 @@ namespace Lib_Core.DTO
         public decimal Gia { get; set; }  // Giá sản phẩm
         public decimal GiaGiam { get; set; }  // Giá giảm (nếu có)
         public string ImageUrl { get; set; }  // URL của ảnh sản phẩm
+        public int? soluong { get; set; }
     }
 
 }

@@ -1,7 +1,5 @@
-﻿using DATN.Controllers;
-using DATN;
-using Newtonsoft.Json;
-
+﻿using Newtonsoft.Json;
+namespace API.Service;
 public class LocationService : ILocationService
 {
     private readonly HttpClient _httpClient;

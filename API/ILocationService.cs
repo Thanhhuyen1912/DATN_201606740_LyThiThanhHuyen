@@ -1,4 +1,4 @@
-﻿namespace DATN
+﻿namespace API.Service
 {
     public interface ILocationService
     {

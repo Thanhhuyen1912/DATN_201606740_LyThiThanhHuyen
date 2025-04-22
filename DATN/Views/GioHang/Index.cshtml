@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model List<CoreLib.DTO.Hienthigiohang>
-<table class="table text-center align-middle">
+<table class="table align-middle mt-2">
 
     <thead>
         <tr>
@@ -11,7 +11,7 @@
             <th></th>
             <th>Đơn giá</th>
             <th>Giá giảm</th>
-            <th>Số lượng</th>
+            <th style="text-align:center">Số lượng</th>
             <th>Thành tiền</th>
             <th></th>
         </tr>
@@ -19,20 +19,19 @@
     <tbody id="cart-table-body">
         @foreach (var product in Model)
         {
-            <tr class="cart-item" data-product-id="1" data-unit-price="99000">
-                <td class="product-name">@product.tensanpham</td>
-                <td>
-                    <img src="https://localhost:7177/@product.anh.URL" width="80">
-                </td>
-                <td class="product-price">@product.chitietsanpham.Gia.ToString("N0")đ</td>
-                <td class="product-price">@product.chitietsanpham.GiaGiam.ToString("N0")đ</td>
-                <td class="product-quantity align-middle">
-                    <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
-                        <button class="btn btn-sm" onclick="updateQty(-1)">−</button>
-                        <input type="text" id="qty" value="@product.chitietgiohang.SoLuong"
-                               class="form-control form-control-sm text-center mx-2"
-                               style="width: 40px; height: 100%;">
-                        <button class="btn btn-sm" onclick="updateQty(1)">+</button>
+            <tr class="cart-item"
+                data-mactsp="@product.chitietgiohang.MaChiTietSanPham"
+                data-gia="@product.chitietsanpham.Gia"
+                data-giagiam="@product.chitietsanpham.GiaGiam">
+                <td>@product.tensanpham</td>
+                <td><img src="https://localhost:7177/@product.anh.URL" width="80" /></td>
+                <td>@product.chitietsanpham.Gia.ToString("N0")đ</td>
+                <td>@product.chitietsanpham.GiaGiam.ToString("N0")đ</td>
+                <td class="product-quantity">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <button class="btn btn-sm" onclick="updateQty(this, -1)">−</button>
+                        <input type="text" class="form-control form-control-sm text-center mx-2 qty-input" value="@product.chitietgiohang.SoLuong" style="width: 40px;" />
+                        <button class="btn btn-sm" onclick="updateQty(this, 1)">+</button>
                     </div>
                 </td>
                 <td class="product-total ">@product.chitietgiohang.TongTien.ToString("N0")đ</td>
@@ -42,19 +41,35 @@
                 </td>
             </tr>
         }
+        <tr class="cart-item" data-product-id="1" data-unit-price="99000">
+            <td><b>Tổng tiền</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="product-total">
+                <b>
+                    @ViewBag.Tongtien.ToString("N0")đ
+                </b>
+            </td>
+            <td></td>
+        </tr>
         <!-- Có thể có thêm nhiều dòng cart-item tương tự -->
     </tbody>
 </table>
 
 <!-- Nút thanh toán -->
-<button id="btnThanhToan" class="btn">Thanh toán</button>
+<div style="text-align:right">
+    <button  id="btnThanhToan" class="btn">Đặt hàng</button>
+</div>
 <script>
-        function updateQty(change) {
-      let qty = document.getElementById("qty");
-      let value = parseInt(qty.value);
-      if (value + change >= 1) {
-        qty.value = value + change;
-      }
+            function updateQty(button, change) {
+        // Tìm input gần nhất với button đang được nhấn
+        let input = button.parentElement.querySelector(".qty-input");
+        let value = parseInt(input.value);
+        if (value + change >= 1) {
+            input.value = value + change;
+        }
     }
     $(document).ready(function () {
         $(".delete").click(function () {
@@ -68,7 +83,7 @@
                     success: function (response) {
                         if (response.code === 0) {
                             alert(response.message);
-                            location.reload(); 
+                            location.reload();
                         } else {
                             alert("Xóa không thành công!");
                         }
@@ -84,7 +99,7 @@
         $(".update").click(function () {
             const mactgh = $(this).data("id");
             const row = $(this).closest("tr");
-            const soluong = row.find("#qty").val();
+            const soluong = row.find(".qty-input").val();
 
             $.ajax({
                 url: '/GioHang/SuaSPGioHang',
@@ -96,7 +111,7 @@
                 success: function (res) {
                     if (res.code === 0) {
                         alert(res.message);
-                        location.reload(); 
+                        location.reload();
                     } else {
                         alert(res.message);
                     }
@@ -107,5 +122,69 @@
             });
         });
     });
+        $("#btnThanhToan").click(function () {
+            // Lấy mã giỏ hàng và mã tài khoản từ session
+            var maGioHang = parseInt("@ViewContext.HttpContext.Session.GetString("MaGioHang")") || 0;
+            var mataikhoan = parseInt("@ViewContext.HttpContext.Session.GetString("MaTaiKhoan")") || 0;
+
+            const chitietgiohangs = [];
+
+            // Lặp qua từng dòng sản phẩm trong giỏ hàng
+            $(".cart-item").each(function () {
+                const row = $(this); // Dòng sản phẩm hiện tại
+                const mactsp = row.data("mactsp"); // Lấy mã sản phẩm từ dữ liệu
+                const gia = parseFloat(row.data("gia")); // Lấy giá sản phẩm từ dữ liệu
+                const soluong = parseInt(row.find(".qty-input").val()); // Lấy số lượng từ input và đảm bảo là số nguyên
+
+                // Kiểm tra số lượng hợp lệ
+                if (isNaN(soluong) || soluong <= 0) {
+                    console.error("Số lượng không hợp lệ:", soluong);
+                    return; // Bỏ qua dòng này nếu số lượng không hợp lệ
+                }
+
+                // Thêm thông tin chi tiết giỏ hàng vào mảng
+                chitietgiohangs.push({
+                    MaGioHang: maGioHang,
+                    MaChiTietSanPham: mactsp,
+                    SoLuong: soluong,
+                    TongTien: gia * soluong
+                });
+            });
+
+            // Dữ liệu cần gửi lên server
+            const data = {
+                mataikhoan: mataikhoan,
+                chitietgiohangs: chitietgiohangs
+            };
+
+            console.log(data); // Kiểm tra dữ liệu trước khi gửi
+
+            // Gửi dữ liệu tới server
+             $.ajax({
+            url: '/DonHang/DatHang',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                // Trường hợp trả về View, ta cần thay toàn bộ trang:
+                document.open();
+                document.write(result);
+                document.close();
+            },
+            error: function (xhr) {
+                alert("Lỗi khi gửi đơn hàng: " + xhr.responseText);
+            }
+        });
+        });
+
 
 </script>
+
+<style>
+    #btnThanhToan {
+        background-color: #ffa58d;
+        color: white;
+        text-align: right;
+        margin-right: 147px;
+    }
+</style>

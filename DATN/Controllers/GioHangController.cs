@@ -3,6 +3,7 @@ using CoreLib.Entity;
 using CoreLib.DTO;
 using Microsoft.AspNetCore.Mvc;
 using SANPHAM.Authorize;
+using API.Service;
 
 namespace DATN.Controllers
 {
@@ -43,7 +44,9 @@ namespace DATN.Controllers
                     tensanpham = sp.TenSanPham,
                     anh = anh
                 });
-            }    
+            }
+
+            ViewBag.Tongtien = _context.ChiTietGioHang.Where(ctg=>ctg.MaGioHang == giohang.MaGioHang).Sum(ctg => ctg.TongTien);
             return View(list);
         }
         [RequiredLogin]

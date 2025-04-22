@@ -1,4 +1,5 @@
-﻿using CoreLib.AppDbContext;
+﻿using API.Service;
+using CoreLib.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -10,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Đăng ký DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+builder.Services.AddHttpClient<ILocationService, LocationService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 // Add services to the container.

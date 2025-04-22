@@ -113,7 +113,7 @@
                 <div class="price mb-3" id="gia">
                     @Model.GiaThapNhat.ToString("N0")đ
                 </div>
-                <div class=" ms-2 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;"                    " id="giagiam">
+                <div class=" ms-2 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;" id="giagiam">
                 </div>
             </div>
             <div class="icon-text"><span><i class="bi bi-truck-flatbed"></i></span> Giao hàng toàn quốc</div>
@@ -165,7 +165,7 @@
             <!-- Nút -->
             <div class="d-flex gap-2">
                 <button class="btn add-to-cart">Thêm vào giỏ hàng</button>
-                <button class="btn buy-btn text-white">Mua ngay</button>
+                <button class="btn buy-btn text-white btnDatHang">Mua ngay</button>
             </div>
         </div>
     </div>
@@ -185,7 +185,7 @@
     }
     function scrollThumbnails(direction) {
         const container = document.getElementById("thumbnailContainer");
-        const scrollAmount = 95; // bằng chiều rộng ảnh + margin
+        const scrollAmount = 95; 
 
         container.scrollBy({
             left: direction * scrollAmount,
@@ -195,10 +195,12 @@
     // Lấy danh sách chi tiết sản phẩm từ Razor
     var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.chitietsanpham));
 
-    // Định dạng giá kiểu VN
-    function formatVN(num) {
-        return num.toLocaleString('vi-VN');
+       function formatVN(num) {
+        return num.toLocaleString('vi-VN', {
+            maximumFractionDigits: 0
+        });
     }
+
 
       function chonKichThuoc(i) {
         var ct = dsChiTiet[i];
@@ -259,8 +261,59 @@
             });
         });
     });
+    
 
+     // Hàm parseDecimal xử lý chuỗi số có dấu phẩy hoặc khoảng trắng
+     function parseDecimal(value) {
+         if (!value) return 0;
+         return parseFloat(value.toString().replace(/[^0-9.-]+/g, ""));
+     }
 
-       
+        $(".btnDatHang").click(function () {
+            // Lấy mã tài khoản từ session
+     var maTaiKhoan = parseInt("@ViewContext.HttpContext.Session.GetString("MaTaiKhoan")") || 0;
+     var maGioHang = parseInt("@ViewContext.HttpContext.Session.GetString("MaGioHang")") || 0;
+
+     // Lấy dữ liệu từ view
+     var mactsp = parseInt($("#mactsp").text(), 10);        // Mã chi tiết sản phẩm
+     var soluong = parseInt($("#qty").val(), 10);           // Số lượng
+     var gia = parseDecimal($("#gia").text());              // Giá gốc
+     var giagiam = parseDecimal($("#giagiam").text());      // Giá giảm
+
+     // Tính tổng tiền sau giảm giá
+     var tongtien = (gia) * soluong;
+
+     console.log("Mã tài khoản:", maTaiKhoan);
+     console.log("Chi tiết SP:", mactsp);
+     console.log("Số lượng:", soluong);
+     console.log("Tổng tiền:", tongtien);
+        var data = {
+            mataikhoan: maTaiKhoan, 
+           chitietgiohangs: [
+        {
+            MaGioHang: maGioHang,                // hoặc null nếu tự sinh trong CSDL
+            MaChiTietSanPham: mactsp,
+            SoLuong: soluong,
+            TongTien: tongtien
+        }
+            ]
+        };
+        console.log(data);
+        $.ajax({
+            url: '/DonHang/DatHang',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (result) {
+                // Trường hợp trả về View, ta cần thay toàn bộ trang:
+                document.open();
+                document.write(result);
+                document.close();
+            },
+            error: function (xhr) {
+                alert("Lỗi khi gửi đơn hàng: " + xhr.responseText);
+            }
+        });
+    });
 
 </script>
