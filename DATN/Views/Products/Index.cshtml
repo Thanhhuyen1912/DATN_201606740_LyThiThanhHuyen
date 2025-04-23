@@ -452,7 +452,7 @@
             //load dropdownlist thuonghieu
                       $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/ThuongHieu/Danhsach",
+                             url: "http://localhost:7177/ThuongHieu/Danhsach",
                              method: "GET",
                              success: function (data) {
                              let select = $("#sthuonghieu");
@@ -473,7 +473,7 @@
                         //load dropdownlist thuonghieu
                       $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/ThuongHieu/Danhsach1",
+                             url: "http://localhost:7177/ThuongHieu/Danhsach1",
                              method: "GET",
                              success: function (data) {
                              let select = $("#tthuonghieu");
@@ -493,7 +493,7 @@
             // load dropdownlist kich thước
                         $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/KichThuoc/Danhsach",
+                             url: "http://localhost:7177/KichThuoc/Danhsach",
                              method: "GET",
                              success: function (data) {
                              let select1 = $("#skichthuoc");
@@ -514,7 +514,7 @@
                       });
                         $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/KichThuoc/Danhsach1",
+                             url: "http://localhost:7177/KichThuoc/Danhsach1",
                              method: "GET",
                              success: function (data) {
                              let select = $("#xkichthuoc");
@@ -536,7 +536,7 @@
             //load dropdownlist nhomhuong
                       $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/nhomhuong/Danhsach1",
+                             url: "http://localhost:7177/nhomhuong/Danhsach1",
                              method: "GET",
                              success: function (data) {
                              let select = $("#snhomhuong");
@@ -558,7 +558,7 @@
                      });
                      $(document).ready(function () {
                              $.ajax({
-                             url: "https://localhost:7177/nhomhuong/Danhsach",
+                             url: "http://localhost:7177/nhomhuong/Danhsach",
                              method: "GET",
                              success: function (data) {
                                          let select1 = $("#tnhomhuong");
@@ -602,7 +602,7 @@
                               loadGridData();
              // Function to load data into the grid
                               function loadGridData() {
-                                      var url = "https://localhost:7177/SanPham/Danhsach";
+                                      var url = "http://localhost:7177/SanPham/Danhsach";
                                       $.get(url, {}, function (response) {
                                       var dulieu = response.data || [];
                              // Khởi tạo hoặc cập nhật DataTable
@@ -735,7 +735,7 @@
                                          trangThai: $("#ttrangthai").val() === "true"
                                          };
                                          $.ajax({
-                                         url: "https://localhost:7177/SanPham/ThemMoi",
+                                         url: "http://localhost:7177/SanPham/ThemMoi",
                                          method: "POST",
                                          contentType: "application/json",
                                          data: JSON.stringify(productData),
@@ -755,7 +755,7 @@
                                          }
 
                                          $.ajax({
-                                         url: "https://localhost:7177/Anh_SP/ThemAnh",
+                                         url: "http://localhost:7177/Anh_SP/ThemAnh",
                                          type: "POST",
                                          data: formData,
                                          contentType: false,
@@ -834,7 +834,7 @@
                                          trangThai: $("#xtrangthai").val() === "true",
                                          };
                                          $.ajax({
-                                                 url: "https://localhost:7177/SanPham/Themchitiet",
+                                                 url: "http://localhost:7177/SanPham/Themchitiet",
                                                  method: "POST",
                                                  contentType: "application/json",
                                                  data: JSON.stringify(productData),
@@ -877,7 +877,7 @@
 
             // Lấy chi tiết sản phẩm
                                         $.ajax({
-                                        url: `https://localhost:7177/SanPham/ChiTiet?masp=${id}`,
+                                        url: `http://localhost:7177/SanPham/ChiTiet?masp=${id}`,
                                         type: 'GET',
                                         success: function (response) {
                                         if (!response || !response.data) {
@@ -909,11 +909,11 @@
 
                     // Load ảnh sản phẩm
                                         $.ajax({
-                                        url: `https://localhost:7177/Anh_SP/Chitiet?masp=${id}`,
+                                        url: `http://localhost:7177/Anh_SP/Chitiet?masp=${id}`,
                                         method: 'GET',
                                         success: function (imgResp) {
                                         imgResp.forEach((item, index) => {
-                                        const fullUrl = `https://localhost:7177${item.duongDan}`;
+                                        const fullUrl = `http://localhost:7177${item.duongDan}`;
                                         const imgElement = `
                                         <div class="img-container1" data-id="${item.maAnh}" style="display:inline-block; margin:5px; position:relative;" data-index="${index}">
                                         <img src="${fullUrl}" width="100"
@@ -950,7 +950,7 @@
              // fill data in listGrid1
                               function loadChiTietSanPham(masp) {
                                                 $.ajax({
-                                                url: `https://localhost:7177/SanPham/ChiTietSP?masp=${masp}`,
+                                                url: `http://localhost:7177/SanPham/ChiTietSP?masp=${masp}`,
                                                 type: 'GET',
                                                 success: function (response) {
                                                 if (response && response.data && response.data.length > 0) {
@@ -1057,7 +1057,7 @@
                                                  let rowData = table.row(row).data();
                                                  let id = rowData.maChiTietSP;
                                                  $.ajax({
-                                                     url: `https://localhost:7177/SanPham/ChiTietSP1?ct=${id}`,
+                                                     url: `http://localhost:7177/SanPham/ChiTietSP1?ct=${id}`,
                                                      type: 'GET',
                                                      success: function (respone) {
                                                      if (respone && respone.data ) {
@@ -1110,7 +1110,7 @@
             formData.append("deletedImageIds", deletedImageIds[i]);
         }
             $.ajax({
-                url: "https://localhost:7177/SanPham/Sua",
+                url: "http://localhost:7177/SanPham/Sua",
                 type: "POST",
                 processData: false,
                 contentType: false,
@@ -1155,7 +1155,7 @@
                                                  ngayCapNhat: new Date().toISOString(),
                                                  };
                                                  $.ajax({
-                                                 url: "https://localhost:7177/SanPham/Sua1",
+                                                 url: "http://localhost:7177/SanPham/Sua1",
                                                  method: "PUT",
                                                  contentType: "application/json",
                                                  data: JSON.stringify(productData),
@@ -1197,7 +1197,7 @@
                                                  trangThai: $("#strangthai").val() === "" ? null : $("#strangthai").val() === "true"
                                                  };
                                                  $.ajax({
-                                                 url: "https://localhost:7177/SanPham/TimKiem",
+                                                 url: "http://localhost:7177/SanPham/TimKiem",
                                                  type: "POST",
                                                  contentType: "application/json",
                                                  data: JSON.stringify(searchData),
@@ -1257,7 +1257,7 @@
                                              ngaycuoi : $("#sngaycuoi").val() || null,
                                              };
                                              $.ajax({
-                                             url: "https://localhost:7177/SanPham/TimKiem1",
+                                             url: "http://localhost:7177/SanPham/TimKiem1",
                                              type: "POST",
                                              contentType: "application/json",
                                              data: JSON.stringify(searchData),

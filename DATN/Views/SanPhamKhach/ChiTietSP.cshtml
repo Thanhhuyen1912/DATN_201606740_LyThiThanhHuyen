@@ -69,7 +69,7 @@
             <!-- Ảnh chính -->
             <div class="text-center">
                 <img id="mainImage"
-                     src="https://localhost:7177/@Model.anhdau.URL"
+                     src="http://localhost:7177/@Model.anhdau.URL"
                      style="width:250px; height:auto; display:block; margin: 0 auto; transition: opacity 0.3s ease;"
                      class="product-image mb-3"
                      alt="Sản phẩm chính" />
@@ -88,7 +88,7 @@
                      style="max-width: 290px; scroll-behavior: smooth;">
                     @foreach (var anh in Model.anhs)
                     {
-                        <img src="https://localhost:7177/@anh.URL"
+                        <img src="http://localhost:7177/@anh.URL"
                              class="thumbnail me-2"
                              style="width:90px; height: 90px; object-fit: cover; cursor: pointer;"
                              onclick="changeMainImage(this)" />
@@ -282,11 +282,6 @@
 
      // Tính tổng tiền sau giảm giá
      var tongtien = (gia) * soluong;
-
-     console.log("Mã tài khoản:", maTaiKhoan);
-     console.log("Chi tiết SP:", mactsp);
-     console.log("Số lượng:", soluong);
-     console.log("Tổng tiền:", tongtien);
         var data = {
             mataikhoan: maTaiKhoan, 
            chitietgiohangs: [
@@ -299,21 +294,30 @@
             ]
         };
         console.log(data);
-        $.ajax({
-            url: '/DonHang/DatHang',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function (result) {
-                // Trường hợp trả về View, ta cần thay toàn bộ trang:
+           $.ajax({
+        url: '/DonHang/DatHang',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (result, status, xhr) {
+            // Kiểm tra Content-Type header từ response
+            const contentType = xhr.getResponseHeader("Content-Type");
+
+            if (contentType && contentType.includes("application/json")) {
+                // Trả về JSON: hiện alert
+                alert(result.message || "Đã xảy ra lỗi");
+            } else {
+                // Trả về View HTML: ghi đè nội dung trang
                 document.open();
                 document.write(result);
                 document.close();
-            },
-            error: function (xhr) {
-                alert("Lỗi khi gửi đơn hàng: " + xhr.responseText);
             }
-        });
+        },
+        error: function (xhr) {
+            alert("Lỗi khi gửi đơn hàng: " + xhr.responseText);
+        }
+    });
+
     });
 
 </script>

@@ -61,6 +61,11 @@ namespace DATN.Controllers
                 }
 
                 var ctsp = _context.ChiTietSanPham.Where(gh => gh.MaChiTietSP == mactsp).FirstOrDefault();
+                if(ctsp.SoLuong < soluong)
+                {
+                    return Json(new { code = 2, message = "Số lượng còn lại không đủ"});
+
+                }
                 decimal gia = Convert.ToDecimal(ctsp.Gia);
                 decimal giaGiam = Convert.ToDecimal(ctsp.GiaGiam);
 

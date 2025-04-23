@@ -78,7 +78,7 @@
     //load dropdownlist thuonghieu
           $(document).ready(function () {
                  $.ajax({
-                 url: "https://localhost:7177/ThuongHieu/Danhsach",
+                 url: "http://localhost:7177/ThuongHieu/Danhsach",
                  method: "GET",
                  success: function (data) {
                  let select = $("#sthuonghieu");
@@ -99,7 +99,7 @@
 
                            $(document).ready(function () {
                          $.ajax({
-                         url: "https://localhost:7177/nhomhuong/Danhsach",
+                         url: "http://localhost:7177/nhomhuong/Danhsach",
                          method: "GET",
                          success: function (data) {
                                      let select1 = $("#snhomhuong");                 select1.empty();
@@ -148,7 +148,7 @@
 
     function loadAllProducts() {
         $.ajax({
-            url: 'https://localhost:7177/SanPham/DanhsachSPKhach1', 
+            url: 'http://localhost:7177/SanPham/DanhsachSPKhach1', 
             method: 'GET',
             success: function (data) {
                 products = data.data;  
@@ -172,7 +172,7 @@
     };
     console.log(requestData);
         $.ajax({
-            url: 'https://localhost:7177/SanPham/DanhsachSPKhach',
+            url: 'http://localhost:7177/SanPham/DanhsachSPKhach',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(requestData),
@@ -198,7 +198,7 @@
                 <div class="product-item col-3 px-2 mb-4">
                     <div class="product-card p-2 h-100 d-flex flex-column">
                         <div class="product-image mb-2">
-                            <img class="anhsp img-fluid" src="https://localhost:7177${product.anhDauTien}" alt="${product.tenSanPham}">
+                            <img class="anhsp img-fluid" src="http://localhost:7177${product.anhDauTien}" alt="${product.tenSanPham}">
                             <div class="overlay">
                                 <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=${product.maSanPham}" class="text-decoration-none buy ">Mua ngay</a>
                                 <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=${product.maSanPham}" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>

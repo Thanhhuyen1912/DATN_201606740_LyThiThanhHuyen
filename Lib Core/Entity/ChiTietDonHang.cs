@@ -15,5 +15,6 @@ namespace CoreLib.Entity
         public int MaChiTietSP { get; set; }
         public int SoLuong { get; set; }
         public decimal TongTien { get; set; }
+        public decimal Gia { get; set; }
     }
 }

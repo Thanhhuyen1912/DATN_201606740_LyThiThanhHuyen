@@ -335,7 +335,7 @@
                               loadGridData();
              // Function to load data into the grid
                               function loadGridData() {
-                                      var url = "https://localhost:7177/TaiKhoan/Danhsach";
+                                      var url = "http://localhost:7177/TaiKhoan/Danhsach";
                                       $.get(url, {}, function (response) {
                                       var dulieu = response.data || [];
                              // Khởi tạo hoặc cập nhật DataTable
@@ -484,7 +484,7 @@
             $('#tt123').show();
             // Gọi API lấy chi tiết tài khoản
             $.ajax({
-                url: `https://localhost:7177/TaiKhoan/ChiTiet?matk=${id}`,
+                url: `http://localhost:7177/TaiKhoan/ChiTiet?matk=${id}`,
                 type: 'GET',
                 success: function (response) {
                     if (!response || !response.data) {
@@ -520,7 +520,7 @@
              // fill data in listGrid1
                               function loadChiTietSanPham(matk) {
                                                 $.ajax({
-                                                url: `https://localhost:7177/DiaChi/DanhSach?mtk=${matk}`,
+                                                url: `http://localhost:7177/DiaChi/DanhSach?mtk=${matk}`,
                                                 type: 'GET',
                                                 success: function (response) {
                                                 if (response && response.data && response.data.length > 0) {
@@ -664,7 +664,7 @@
 
         };
             $.ajax({
-                url: "https://localhost:7177/TaiKhoan/Sua",
+                url: "http://localhost:7177/TaiKhoan/Sua",
                 type: "PUT",
                 processData: false,
                 contentType: "application/json",
@@ -704,7 +704,7 @@
                                                  trangThai: $("#strangthai").val() === "" ? null : $("#strangthai").val() === "true"
                                                  };
                                                  $.ajax({
-                                                 url: "https://localhost:7177/TaiKhoan/TimKiem",
+                                                 url: "http://localhost:7177/TaiKhoan/TimKiem",
                                                  type: "POST",
                                                  contentType: "application/json",
                                                  data: JSON.stringify(searchData),
@@ -773,7 +773,7 @@
                                              Xa: $("#sxa").val() || null,                                            
                                              };
                                              $.ajax({
-                                             url: "https://localhost:7177/DiaChi/TimKiem",
+                                             url: "http://localhost:7177/DiaChi/TimKiem",
                                              type: "POST",
                                              contentType: "application/json",
                                              data: JSON.stringify(searchData),

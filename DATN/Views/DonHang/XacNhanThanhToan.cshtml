@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Thanh Toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.DTO.TTTToan
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Bên trái: QR -->
+        <div class="col-md-5 text-center d-flex flex-column align-items-center justify-content-center">
+            <img src="@Model.URLThanhToan" alt="QR Thanh toán" class="img-fluid rounded border shadow-sm mb-3" style="max-width: 350px;" />
+        </div>
+
+        <!-- Bên phải: Thông tin đơn hàng -->
+        <div class="col-md-7">
+            <h2 class="mb-4">Thông tin đơn hàng</h2>
+            <ul class="list-group">
+                <li class="list-group-item mt-2">
+                    <strong>Mã đơn hàng:</strong> ĐH @Model.donhang.MaDonHang
+                </li>
+                <li class="list-group-item mt-2">
+                    <strong>Khách hàng mua:</strong> @Model.taikhoan.HoTen
+                </li>
+                <li class="list-group-item mt-2">
+                    <strong>Email:</strong> @Model.taikhoan.Email
+                </li>
+                <li class="list-group-item">
+                    <strong>Thông tin nhận hàng:</strong><br />
+                    <span class="ms-3 mt-2"><strong>Họ và tên:</strong> @Model.diachi.HoTenNguoiNhan</span><br />
+                    <span class="ms-3 mt-2"><strong>Số điện thoại:</strong> @Model.diachi.SoDienThoaiNguoiNhan</span><br />
+                    <span class="ms-3 mt-2"><strong>Địa chỉ:</strong> @Model.diachi.ChiTiet, @Model.diachi.Xa, @Model.diachi.Huyen, @Model.diachi.ThanhPho</span>
+                </li>
+                <li class="list-group-item mt-2">
+                    <strong>Số tiền:</strong> <span class="text-danger">@Model.donhang.TongTien.ToString("N0") VNĐ</span>
+                </li>
+            </ul>
+
+            <div style="text-align:center">
+                <a href="@Url.Action("Index", "SanPhamKhach")" class="btncapnhat">Thanh toán sau</a>
+                <a class="btncapnhat" id="checkthanhtoan">Kiểm tra trạng thái thanh toán</a>
+            </div>
+        </div>
+    </div>
+</div>

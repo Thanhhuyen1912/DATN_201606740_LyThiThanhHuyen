@@ -22,9 +22,10 @@
             <tr class="cart-item"
                 data-mactsp="@product.chitietgiohang.MaChiTietSanPham"
                 data-gia="@product.chitietsanpham.Gia"
+                data-machitietgio="@product.chitietgiohang.MaChiTietGio"
                 data-giagiam="@product.chitietsanpham.GiaGiam">
                 <td>@product.tensanpham</td>
-                <td><img src="https://localhost:7177/@product.anh.URL" width="80" /></td>
+                <td><img src="http://localhost:7177/@product.anh.URL" width="80" /></td>
                 <td>@product.chitietsanpham.Gia.ToString("N0")đ</td>
                 <td>@product.chitietsanpham.GiaGiam.ToString("N0")đ</td>
                 <td class="product-quantity">
@@ -133,6 +134,7 @@
             $(".cart-item").each(function () {
                 const row = $(this); // Dòng sản phẩm hiện tại
                 const mactsp = row.data("mactsp"); // Lấy mã sản phẩm từ dữ liệu
+                const mactgio = row.data("machitietgio"); // Lấy mã sản phẩm từ dữ liệu
                 const gia = parseFloat(row.data("gia")); // Lấy giá sản phẩm từ dữ liệu
                 const soluong = parseInt(row.find(".qty-input").val()); // Lấy số lượng từ input và đảm bảo là số nguyên
 
@@ -147,7 +149,8 @@
                     MaGioHang: maGioHang,
                     MaChiTietSanPham: mactsp,
                     SoLuong: soluong,
-                    TongTien: gia * soluong
+                    TongTien: gia * soluong,
+                    MaChiTietGio: mactgio
                 });
             });
 

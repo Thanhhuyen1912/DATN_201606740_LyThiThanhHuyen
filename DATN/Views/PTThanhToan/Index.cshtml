@@ -177,7 +177,7 @@
                 loadGridData();
             // Function to load data into the grid
                 function loadGridData() {
-                            var url = "https://localhost:7177/PhuongThuc/DanhSach";
+                            var url = "http://localhost:7177/PhuongThuc/DanhSach";
                             $.get(url, {}, function (response) {
                         var dulieu = response.data || [];
 
@@ -281,7 +281,7 @@
                             };
 
                             $.ajax({
-                                url: "https://localhost:7177/PhuongThuc/Them",
+                                url: "http://localhost:7177/PhuongThuc/Them",
                                 method: "POST",
                                 contentType: "application/json",
                                 data: JSON.stringify(productData),
@@ -314,7 +314,7 @@
                             let id = rowData.maPhuongThuc;
 
                             $.ajax({
-                                url: `https://localhost:7177/PhuongThuc/Chitiet?math=${id}`,
+                                url: `http://localhost:7177/PhuongThuc/Chitiet?math=${id}`,
                                 type: 'GET',
                                 success: function (respone) {
                                     if (respone && respone.data ) {
@@ -390,7 +390,7 @@
                             };
 
                             $.ajax({
-                                url: "https://localhost:7177/PhuongThuc/Sua",
+                                url: "http://localhost:7177/PhuongThuc/Sua",
                                 method: "PUT",
                                 contentType: "application/json",
                                 data: JSON.stringify(productData),
@@ -428,7 +428,7 @@
                                              };
                                              console.log(searchData);
                                              $.ajax({
-                                             url: "https://localhost:7177/PhuongThuc/TimKiem",
+                                             url: "http://localhost:7177/PhuongThuc/TimKiem",
                                              type: "POST",
                                              contentType: "application/json",
                                              data: JSON.stringify(searchData),

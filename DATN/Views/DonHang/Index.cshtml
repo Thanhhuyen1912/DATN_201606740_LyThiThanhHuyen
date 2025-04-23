@@ -274,7 +274,7 @@
                                 `<option value="">----</option>`
                             );
             $.ajax({
-                url: 'https://localhost:7177/PhuongThuc/Danhsach',
+                url: 'http://localhost:7177/PhuongThuc/Danhsach',
                 method: 'GET',
                 success: function (res) {
                     console.log(res);
@@ -341,7 +341,7 @@
                               loadGridData();
              // Function to load data into the grid
                               function loadGridData() {
-                                      var url = "https://localhost:7177/DonHang/Danhsach";
+                                      var url = "http://localhost:7177/DonHang/Danhsach";
                                       $.get(url, {}, function (response) {
                                       var dulieu = response.data || [];
                              // Khởi tạo hoặc cập nhật DataTable
@@ -488,7 +488,7 @@
             $('#tt123').show();
             // Gọi API lấy chi tiết tài khoản
             $.ajax({
-                url: `https://localhost:7177/DonHang/ChiTiet?madh=${id}`,
+                url: `http://localhost:7177/DonHang/ChiTiet?madh=${id}`,
                 type: 'GET',
                 success: function (response) {
                     if (!response || !response.data) {
@@ -538,7 +538,7 @@
              // fill data in listGrid1
                               function loadChiTietSanPham(madh) {
                                                 $.ajax({
-                                                url: `https://localhost:7177/DonHang/DanhSachSP?madonhang=${madh}`,
+                                                url: `http://localhost:7177/DonHang/DanhSachSP?madonhang=${madh}`,
                                                 type: 'GET',
                                                 success: function (response) {
                                                 if (response && response.data && response.data.length > 0) {
@@ -624,7 +624,7 @@
             const ngaycapnhat = new Date().toISOString();
 
             // Xây URL có query string
-            const url = `https://localhost:7177/DonHang/CapNhat?madonhang=${madonhang}&ttvanchuyen=${encodeURIComponent(ttvanchuyen)}&ttthanhtoan=${ttthanhtoan}&ngaycapnhat=${encodeURIComponent(ngaycapnhat)}`;
+            const url = `http://localhost:7177/DonHang/CapNhat?madonhang=${madonhang}&ttvanchuyen=${encodeURIComponent(ttvanchuyen)}&ttthanhtoan=${ttthanhtoan}&ngaycapnhat=${encodeURIComponent(ngaycapnhat)}`;
             console.log(url);
             $.ajax({
                 url: url,
@@ -662,7 +662,7 @@
                                                 };
                                                 console.log(searchData);
                                                 $.ajax({
-                                                url: 'https://localhost:7177/DonHang/TimKiem',
+                                                url: 'http://localhost:7177/DonHang/TimKiem',
                                                 method: 'POST',
                                                 contentType: 'application/json',
                                                 data: JSON.stringify(searchData),
