@@ -26,20 +26,22 @@ namespace API.Controllers
             try
             {
                 _logger.LogInformation("Received Webhook: {0}", payload.ToString());
-
+                await System.IO.File.AppendAllTextAsync("webhook_log.txt", payload.ToString() + "\n");
                 var dataArray = payload.GetProperty("data").EnumerateArray();
                 foreach (var item in dataArray)
                 {
                     var soTien = item.GetProperty("amount").GetDecimal(); 
                     var noiDung = item.GetProperty("description").GetString();
                     var thoiGianStr = item.GetProperty("when").GetString();
+                    var stkgui = item.GetProperty("corresponsiveAccount").GetString();
                     var thoiGian = DateTime.Parse(thoiGianStr); 
 
                     var thanhToan = new ThanhToan
                     {
                         SoTienGiaoDich = soTien,
                         NoiDungChuyenKhoan = noiDung,
-                        ThoiGian = thoiGian
+                        ThoiGian = thoiGian,
+                        STKGui = stkgui
                     };
 
                     _context.ThanhToan.Add(thanhToan);

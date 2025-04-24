@@ -16,5 +16,6 @@ namespace CoreLib.Entity
         public decimal SoTienGiaoDich { get; set; }
         public DateTime ThoiGian { get; set; }
        public string NoiDungChuyenKhoan { get; set; }
+       public string STKGui { get; set; }
     }
 }

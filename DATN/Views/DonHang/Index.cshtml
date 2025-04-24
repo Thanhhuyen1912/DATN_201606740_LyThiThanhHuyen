@@ -95,11 +95,12 @@
                     <thead style="height:50px;font-size:17px">
                         <tr>
                             <th>Họ tên</th>
-                            <th>TT vận chuyển</th>
-                            <th>Giá trị giảm</th>
+                            <th>Vận chuyển</th>
+                            <th>Chiết khấu</th>
                             <th>Thành tiền</th>
                             <th>PT thanh toán</th>
                             <th>TT thanh toán</th>
+                            <th>Ngày tạo</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -355,11 +356,11 @@
                                          paging: true,
                                          data: dulieu,
                                          columns: [
-                                                         { "data": "tenDatMua", "width": "15%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "15%" },
-                                                         { "data": "tienGiam", "width": "15%" },
-                                                         { "data": "tongTien", "width": "15%" },
-                                                         { "data": "phuongthucthanhtoan", "width": "15%" },
+                                                         { "data": "tenDatMua", "width": "10%" },
+                                                         { "data": "trangThaiVanChuyen", "width": "14%" },
+                                                         { "data": "tienGiam", "width": "13%" },
+                                                         { "data": "tongTien", "width": "12%" },
+                                                         { "data": "phuongthucthanhtoan", "width": "18%" },
                                                           {
                                                              data: "trangThaiThanhToan",
                                                              width: "15%",
@@ -367,9 +368,26 @@
                                                              return data === true ? "Đã thanh toán" : "Chưa thanh toán";
                                                              }
                                                          },
+                                                                {
+            data: "ngayTao",
+            width: "10%",
+            render: function (data, type, row) {
+                if (data) {
+                    const date = new Date(data);
+                    const formatted = date.toLocaleString("vi-VN", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    });
+                    return formatted;
+                }
+                return "";
+            }
+        },
+
                                                          {
                                                              "data": "maDonHang",
-                                                             "width": "10%",
+                                                             "width":"8%",
                                                              render: function (data) {
                                                              let editButton = `
                                                              <button class='ViewDetails btn btn-link' data-id="${data}">
