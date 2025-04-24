@@ -16,7 +16,7 @@
             <h2 class="mb-4">Thông tin đơn hàng</h2>
             <ul class="list-group">
                 <li class="list-group-item mt-2">
-                    <strong>Mã đơn hàng:</strong> ĐH @Model.donhang.MaDonHang
+                    <strong>Mã đơn hàng:</strong> @($"DH{Model.donhang.MaDonHang}")
                 </li>
                 <li class="list-group-item mt-2">
                     <strong>Khách hàng mua:</strong> @Model.taikhoan.HoTen
@@ -33,12 +33,68 @@
                 <li class="list-group-item mt-2">
                     <strong>Số tiền:</strong> <span class="text-danger">@Model.donhang.TongTien.ToString("N0") VNĐ</span>
                 </li>
+                <li id="noidungchuyenkhoan" hidden>@($"TTDH{Model.donhang.MaDonHang}HN")</li>
+                <li id="sotien" hidden>@Model.donhang.TongTien</li>
+                <li id="madonhang" hidden>@Model.donhang.MaDonHang</li>
+                <li id="mataikhoan" hidden>@Model.taikhoan.MaTaiKhoan</li>
+
             </ul>
 
             <div style="text-align:center">
                 <a href="@Url.Action("Index", "SanPhamKhach")" class="btncapnhat">Thanh toán sau</a>
-                <a class="btncapnhat" id="checkthanhtoan">Kiểm tra trạng thái thanh toán</a>
+                <br/>
+                <a href="#" class="btncapnhat" id="checkthanhtoan">Kiểm tra trạng thái thanh toán</a>
             </div>
         </div>
     </div>
 </div>
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        display: block;
+        text-align: center;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $("#checkthanhtoan").on("click", function (e) {
+            e.preventDefault();
+
+        const noidung = $("#noidungchuyenkhoan").text().trim();
+        const sotien = parseFloat($("#sotien").text().trim());
+        const madonhang = $("#madonhang").text().trim();
+        const mataikhoan = $("#mataikhoan").text().trim();
+
+            const data = {
+                noidungchuyenkhoan: noidung,
+                sotien: sotien,
+                madonhang: madonhang,
+                mataikhoan: mataikhoan
+            };
+
+            console.log(data);
+
+            $.ajax({
+                url: '/DonHang/CheckChuyenKhoan',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.code === 0) {
+                        alert(result.message);
+                        window.location.href = "/SanPhamKhach/Index";
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Lỗi:", xhr.responseText);
+                    alert("Có lỗi xảy ra khi kiểm tra thanh toán.");
+                }
+            });
+        });
+    });
+</script>

@@ -260,7 +260,7 @@ namespace DATN.Controllers
         {
 
             var tenNganHang = "mb";
-            var soTaiKhoan = "0374212203";
+            var soTaiKhoan = "9969671912";
             // Gọi theo chuẩn vietqr.net (tạo URL trực tiếp)
             var url = $"https://img.vietqr.io/image/{tenNganHang}-{soTaiKhoan}-compact2.png" +
                       $"?amount={soTien.ToString()}&addInfo={noiDung.ToString()}";
