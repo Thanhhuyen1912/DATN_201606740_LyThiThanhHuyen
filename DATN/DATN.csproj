@@ -41,7 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\API\API.csproj" />
-    <ProjectReference Include="..\DataServiceLib\DataServiceLib.csproj" />
     <ProjectReference Include="..\Lib Core\CoreLib.csproj" />
   </ItemGroup>
 
