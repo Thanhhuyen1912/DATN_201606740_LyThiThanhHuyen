@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "Thay đổi địa chỉ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.DTO.viewthaydoidiachi
+<div style="margin: 10px auto; font-size: 24px; text-align: center;">
+    <p>Thay đổi địa chỉ</p>
+</div>
+<!-- Địa chỉ hiện tại -->
+<div style="padding-left: 80px; margin-bottom: 20px;">
+    <strong>Địa chỉ hiện tại:</strong>
+    <div style="padding-left: 120px;" class="border p-2 my-2 rounded" style="font-size: 15px">
+        <label class="w-100">
+            @* <input type="radio" name="MaDiaChi" value="@Model.p.MaDiaChi" /> *@
+            <strong>@Model.p.HoTenNguoiNhan</strong> (@Model.p.SoDienThoaiNguoiNhan)<br />
+            @Model.p.ChiTiet, @Model.p.Xa, @Model.p.Huyen, @Model.p.ThanhPho
+        </label>
+    </div>
+</div>
+<input type="hidden" id="madonhang" value="@Model.madonhang" />
+<!-- Danh sách địa chỉ dưới dạng radio -->
+<div id="address-list" style=" padding-left: 80px;">
+    <strong>Chọn địa chỉ khác:</strong>
+    <!-- Radio buttons sẽ được load bằng AJAX vào đây -->
+    @if (Model != null)
+    {
+        var datHang = Model; // vì bạn truyền list chỉ có 1 phần tử
+        foreach (var diaChi in datHang.list)
+        {
+            <div style="padding-left: 120px; margin-bottom: 20px" class="border p-2 my-2 rounded" style="font-size: 15px">
+                <label class="w-100">
+                    <input type="radio" name="MaDiaChi" value="@diaChi.MaDiaChi" />
+                    <strong>@diaChi.HoTenNguoiNhan</strong> (@diaChi.SoDienThoaiNguoiNhan)<br />
+                    @diaChi.ChiTiet, @diaChi.Xa, @diaChi.Huyen, @diaChi.ThanhPho
+                </label>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Không có địa chỉ nào</p>
+    }
+</div>
+
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <button class="btncapnhat me-2" onclick="capNhatDiaChi()">Cập nhật</button>
+    <a  href="/DonHang/DonMua" class="btncapnhat">Quay lại</a>
+</div>
+
+<style>
+    .btncapnhat {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        display: block;
+        text-align: center;
+    }
+
+        .btncapnhat:hover {
+            background-color: #fdb9a4;
+            color: #a75851;
+        }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     async function capNhatDiaChi() {
+        const maDonHang = document.getElementById("madonhang").value;
+        const maDiaChi = document.querySelector('input[name="MaDiaChi"]:checked')?.value;
+
+        if (!maDiaChi) {
+            alert("Vui lòng chọn địa chỉ mới.");
+            return;
+        }
+
+        const data = {
+            madonhang: parseInt(maDonHang),
+            madiachi: parseInt(maDiaChi)
+        };
+
+        const response = await fetch('/DonHang/doidiachi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.redirected) {
+            alert("Cập nhật thành công");
+            window.location.href = response.url;
+        } else {
+            alert("Có lỗi xảy ra khi cập nhật.");
+        }
+    }
+</script>

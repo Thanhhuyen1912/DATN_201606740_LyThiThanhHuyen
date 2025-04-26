@@ -368,23 +368,22 @@
                                                              return data === true ? "Đã thanh toán" : "Chưa thanh toán";
                                                              }
                                                          },
-                                                                {
-            data: "ngayTao",
-            width: "10%",
-            render: function (data, type, row) {
-                if (data) {
-                    const date = new Date(data);
-                    const formatted = date.toLocaleString("vi-VN", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric"
-                    });
-                    return formatted;
-                }
-                return "";
-            }
-        },
-
+                                                         {
+                                                            data: "ngayTao",
+                                                            width: "10%",
+                                                            render: function (data, type, row) {
+                                                                if (data) {
+                                                                const date = new Date(data);
+                                                                const formatted = date.toLocaleString("vi-VN", {
+                                                                day: "2-digit",
+                                                                month: "2-digit",
+                                                                year: "numeric"
+                                                                });
+                                                                return formatted;
+                                                                }
+                                                            return "";
+                                                            }
+                                                         },
                                                          {
                                                              "data": "maDonHang",
                                                              "width":"8%",
@@ -695,12 +694,12 @@
                                                  ordering: true,
                                                  paging: true,
                                                  data: res.data,
-                                                 columns: [
-                                                         { "data": "tenDatMua", "width": "15%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "15%" },
-                                                         { "data": "tienGiam", "width": "15%" },
-                                                         { "data": "tongTien", "width": "15%" },
-                                                         { "data": "phuongthucthanhtoan", "width": "15%" },
+                                                   columns: [
+                                                         { "data": "tenDatMua", "width": "10%" },
+                                                         { "data": "trangThaiVanChuyen", "width": "14%" },
+                                                         { "data": "tienGiam", "width": "13%" },
+                                                         { "data": "tongTien", "width": "12%" },
+                                                         { "data": "phuongthucthanhtoan", "width": "18%" },
                                                           {
                                                              data: "trangThaiThanhToan",
                                                              width: "15%",
@@ -709,8 +708,24 @@
                                                              }
                                                          },
                                                          {
+                                                            data: "ngayTao",
+                                                            width: "10%",
+                                                            render: function (data, type, row) {
+                                                                if (data) {
+                                                                const date = new Date(data);
+                                                                const formatted = date.toLocaleString("vi-VN", {
+                                                                day: "2-digit",
+                                                                month: "2-digit",
+                                                                year: "numeric"
+                                                                });
+                                                                return formatted;
+                                                                }
+                                                            return "";
+                                                            }
+                                                         },
+                                                         {
                                                              "data": "maDonHang",
-                                                             "width": "10%",
+                                                             "width":"8%",
                                                              render: function (data) {
                                                              let editButton = `
                                                              <button class='ViewDetails btn btn-link' data-id="${data}">

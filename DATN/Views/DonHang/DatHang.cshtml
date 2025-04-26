@@ -171,9 +171,6 @@
             magiamgia: magiamgia,
             thanhtien: parseFloat(thanhtien)
         };
-
-        console.log(data);
-
            $.ajax({
         url: '/DonHang/XacNhan',
         method: 'POST',
@@ -202,8 +199,6 @@
 
         const magiamgia = $("#magiamgia").val();
         const tongtienGoc = parseFloat($("#thanhtien").data("thanhtien"));
-        console.log(magiamgia);
-        console.log(tongtienGoc);
         $.ajax({
             url: '/DonHang/ApDungMaGiamGia',
             type: 'POST',

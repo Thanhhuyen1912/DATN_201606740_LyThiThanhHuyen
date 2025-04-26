@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="~/css/css.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/site1.css" />
 
     <style>
         body {
@@ -79,6 +80,7 @@
                             {
                                 <!-- Nếu đã đăng nhập -->
                                 <a href="@Url.Action("QuanLyTK", "TaiKhoan", new { id = matkhoan })" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Quản lý tài khoản</a>
+                                <a href="@Url.Action("DonMua", "DonHang")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Lịch sử mua hàng</a>
                                 <a href="@Url.Action("DangXuat", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng xuất</a>
                             }
                         }

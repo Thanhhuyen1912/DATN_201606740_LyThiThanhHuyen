@@ -31,7 +31,7 @@ namespace API.Controllers
             return Ok(new { code = 0, message = "Lấy danh sách thành công" , data = result });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("/ThanhToan/TimKiem")]
         public IActionResult Timkiem([FromBody] SearchThanhToan dto)
         {

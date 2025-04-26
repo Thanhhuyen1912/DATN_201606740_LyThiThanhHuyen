@@ -73,8 +73,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-        let currentPage = 1;  
-    const itemsPerPage = 16;  
+        let currentPage = 1;
+    const itemsPerPage = 16;
     //load dropdownlist thuonghieu
           $(document).ready(function () {
                  $.ajax({
@@ -148,11 +148,11 @@
 
     function loadAllProducts() {
         $.ajax({
-            url: 'http://localhost:7177/SanPham/DanhsachSPKhach1', 
+            url: 'http://localhost:7177/SanPham/DanhsachSPKhach1',
             method: 'GET',
             success: function (data) {
-                products = data.data;  
-                renderProducts(products); 
+                products = data.data;
+                renderProducts(products);
             },
             error: function (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -177,8 +177,8 @@
             contentType: 'application/json',
             data: JSON.stringify(requestData),
             success: function (data) {
-                products = data.data;  
-                renderProducts(products);  
+                products = data.data;
+                renderProducts(products);
             },
             error: function (error) {
                 console.error('Lỗi khi gọi API:', error);
@@ -207,9 +207,8 @@
                         <div class="product-info mt-auto">
                             <p class="fw-bold text-center">${product.tenSanPham}</p>
                             <div class="divgia d-flex justify-content-center ">
-                            <p class="gia">${product.giaDauTien.toLocaleString('vi-VN')}₫</p>
-                                <p class="giagiam" id="giagiam">-${product.giaGiamDauTien.toLocaleString('vi-VN')}₫</p>
-                            </div>
+                                <p class="gia">  ${(product.giaDauTien - product.giaGiamDauTien).toLocaleString('vi-VN')}₫</p>
+                                 <p class="ms-1 mt-1" style="font-size:15px; text-decoration: line-through; color: gray;" id="giagoc">${product.giaDauTien.toLocaleString('vi-VN')}₫</p>                           </div>
                         </div>
                     </div>
                 </div>
@@ -249,14 +248,12 @@
         color: #a75851;
         padding: 7px;
         border-radius: 4px;
-   
         display: block;
         text-align: center;
-
     }
 
     #sgioitinh, #sthuonghieu, #snhomhuong, #stensanpham, sgiamax, sgiamin {
-        font-size: 14px; 
+        font-size: 14px;
     }
 
 </style>

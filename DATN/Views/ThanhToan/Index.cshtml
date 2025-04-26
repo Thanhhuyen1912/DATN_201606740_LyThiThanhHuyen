@@ -18,7 +18,7 @@
         <ul class="nav nav-pills nav-tabs-btn nav-pills-btn-success row" role="tablist">
             <li class="nav-item col gsm-link-tab">
                 <a class="nav-link active show" data-toggle="tab" href="#subjectListTab" role="tab" aria-selected="true">
-                    <span class="nav-link-title text-uppercase">Danh sách nhóm hương</span>
+                    <span class="nav-link-title text-uppercase">Danh sách đơn thanh toán</span>
                 </a>
             </li>
 
@@ -88,89 +88,12 @@
                     <tbody></tbody>
                 </table>
             </div>
-
-            <!-- Add/Edit Product Form Tab (Unified for Create/Edit) -->
-          @*   <div class="tab-pane fade boxshadow pt-2" id="subjectFormTab" role="tabpanel">
-                <div class="form-group row nopadding">
-                    <form id="SubjectForm" class="col-12 ">
-                        <input type="hidden" class="form-control" id="">
-                        <!-- Product Id Field -->
-                        <div class="col-md-12 d-inline-block">
-                            <div class="form-group row nopadding">
-                                <div class="col-md-3">
-                                    <label class="col-form-label" for="manhomhuong"></label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" id="manhomhuong" required hidden>
-                                </div>
-                            </div>
-
-                            <!-- Product Name Field -->
-
-                            <div class="form-group row nopadding">
-                                <div class="col-md-3">
-                                    <label class="col-form-label">Tên nhóm hương(*)</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control" id="tennhomhuong">
-                                </div>
-                            </div>
-                            <!-- Product Price Field -->
-                            <div class="form-group row nopadding">
-                                <div class="col-md-3">
-                                    <label class="col-form-label" for="trangthai">Trạng thái</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-control" id="trangthai" required></select>
-                                </div>
-                            </div>
-                            <!-- Product Quantity Field -->
-
-                            <div class="form-group row nopadding">
-                                <div class="col-md-3">
-                                    <label class="col-form-label" for="mota">Mô tả</label>
-                                </div>
-                                <div class="col-md-4">
-                                    <textarea class="form-control" id="mota" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </form>
-                </div> *@
-
-                <!-- Button Group -->
-               @*  <div class="form-group row">
-                    <div class="row d-flex justify-content-center col-12">
-                        <button style="background-color: #fdb9a4;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button>
-                        <button style="display:none;background-color: #fdb9a4;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">Cập nhật</button>
-                        <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button>
-                    </div>
-                </div> *@
             </div>
         </div>
     </div>
 
 @section Scripts {
     <script>
-
-         // load dropdownlist trangthai
-                    // $(document).ready(function () {
-
-                    //         let trangThaiOptions = [
-                    //         { value: true, text: "Đang bán" },
-                    //         { value: false, text: "Ngưng bán" }
-                    //         ];
-
-                    //         let select = $("#trangthai");
-                    //         let select1 = $("#strangthai");
-                    //         select1.append(`<option value="">---</option>`);
-                    //         trangThaiOptions.forEach(function (item) {
-                    //         select.append(`<option value="${item.value}">${item.text}</option>`);
-                    //         select1.append(`<option value="${item.value}">${item.text}</option>`);
-                    //         });
-                    //         });
         $(document).ready(function () {
             // Load initial data
                 loadGridData();
@@ -233,162 +156,7 @@
                                       $('#sngaycuoi').val('');
 
                               });
-            // Reset form
-                // $('#Reset').click(function () {
-                //             $('#SubjectForm')[0].reset();
-                //             $("#tProductID").val('').prop('readonly', false);;
-                //             $('#Insert').show();
-                //             $('#Update').hide();
-                //             $('#formTabTitle').text('Tạo mới');
-                //         });
-            // Insert new product
-                // $('#Insert').click(function () {
-                //             const productData = {
-                //                 tenNhomHuong: $("#tennhomhuong").val(),
-                //                 moTa: $("#mota").val(),
-                //                 trangThai: $("#trangthai").val() === "true",
-                //                 ngayCapNhat: new Date().toISOString()
-                //             };
-
-                //             $.ajax({
-                //                 url: "http://localhost:7177/nhomhuong/Them",
-                //                 method: "POST",
-                //                 contentType: "application/json",
-                //                 data: JSON.stringify(productData),
-                //                 success: function () {
-                //                     $("#tennhomhuong").val('');
-                //                     $("#mota").val('');
-                //                     Swal.fire({
-                //                         title: 'Thành công!',
-                //                         text: 'Nhóm hương mới đã được thêm.',
-                //                         icon: 'success',
-                //                         confirmButtonText: 'OK'
-                //                     });
-                //                     loadGridData(); // Reload dữ liệu
-                //                 },
-                //                 error: function (xhr) {
-                //                     Swal.fire({
-                //                         title: 'Thất bại!',
-                //                         text: 'Đã xảy ra lỗi khi thêm nhóm hương.',
-                //                         icon: 'error',
-                //                         confirmButtonText: 'OK'
-                //                     });
-                //                 }
-                //             });
-                //         });
-            // View product details
-                // $(document).on('click', '.ViewDetails', function () {
-                //           let table = $('#listGrid').DataTable();
-                //             let row = $(this).closest('tr');
-                //             let rowData = table.row(row).data();
-                //             let id = rowData.maNhomHuong;
-
-                //             $.ajax({
-                //                 url: `http://localhost:7177/nhomhuong/Chitiet?manh=${id}`,
-                //                 type: 'GET',
-                //                 success: function (respone) {
-                //                     if (respone && respone.data ) {
-                //                         const data = respone.data;
-                //                         $("#tennhomhuong").val(data.tenNhomHuong);
-                //                         $("#manhomhuong").val(data.maNhomHuong);
-                //                         $("#mota").val(data.moTa);
-                //                         $("#trangthai").val(data.trangThai.toString());
-                //                         $('#Insert').hide();
-                //                         $('#Update').show();
-                //                         $('#formTabTitle').text('Chi tiết');
-                //                         $('a[href="#subjectFormTab"]').tab('show');
-                //                     } else {
-                //                         alert('Chi tiết nhóm hương không tìm thấy.');
-                //                     }
-                //                 },
-                //                 error: function () {
-                //                     alert('Có lỗi xảy ra khi tải chi tiết.');
-                //                 }
-                //             });
-                //         });
-            // Delete product
-        //         $(document).on('click', '.DeleteSubject', function () {
-        //     if (confirm("Bạn có chắc chắn muốn xóa?")) {
-        //         let table = $('#listGrid').DataTable();
-        //         let row = $(this).closest('tr');
-        //         let rowData = table.row(row).data();
-        //         let id = rowData.producT_ID;
-        //         $.ajax({
-        //             url: '@Url.Action("DeleteProduct", "Products")'  + '?id=' + id,
-        //             type: 'DELETE',
-        //             contentType: 'application/json; charset=utf-8', // Đảm bảo header đúng
-        //             success: function (response) {
-        //                 // Kiểm tra kết quả trả về từ server
-        //                 if (response && response.code === 0) {
-        //                     Swal.fire({
-        //                         title: 'Thành công!',
-        //                         text: 'Sản phẩm đã được xóa.',
-        //                         icon: 'success',
-        //                         confirmButtonText: 'OK'
-        //                     }).then(() => {
-        //                         // Xóa hàng trong DataTable và vẽ lại
-        //                         table.row(row).remove().draw();
-        //                     });
-        //                 } else {
-        //                     Swal.fire({
-        //                         title: 'Thất bại!',
-        //                         text: response.message || 'Không thể xóa sản phẩm.',
-        //                         icon: 'error',
-        //                         confirmButtonText: 'OK'
-        //                     });
-        //                 }
-        //             },
-        //                     error: function (xhr) {
-        //                 Swal.fire({
-        //                     title: 'Thất bại!',
-        //                     text: 'Đã xảy ra lỗi khi xóa sản phẩm.',
-        //                     icon: 'error',
-        //                     confirmButtonText: 'OK'
-        //                 });
-        //             }
-        //         });
-        //     }
-        // });
-            // Update
-                // $('#Update').click(function () {
-                //             const productData = {
-                //                 maNhomHuong: $("#manhomhuong").val(),
-                //                 tenNhomHuong: $("#tennhomhuong").val(),
-                //                 moTa: $("#mota").val(),
-                //                 trangThai: $("#trangthai").val() === "true",
-                //                 ngayCapNhat: new Date().toISOString()
-                //             };
-
-                //             $.ajax({
-                //                 url: "http://localhost:7177/nhomhuong/Sua",
-                //                 method: "PUT",
-                //                 contentType: "application/json",
-                //                 data: JSON.stringify(productData),
-                //                 success: function () {
-                //                     $("#tennhomhuong").val('');
-                //                     $("#mota").val('');
-                //                     $('#Insert').show();
-                //                     $('#Update').hide();
-                //                     $('#formTabTitle').text('Tạo mới');
-                //                     Swal.fire({
-                //                         title: 'Thành công!',
-                //                         text: 'Nhóm hương đã được cập nhật.',
-                //                         icon: 'success',
-                //                         confirmButtonText: 'OK'
-                //                     });
-                //                     loadGridData(); // Reload dữ liệu
-                //                 },
-                //                 error: function (xhr) {
-                //                     Swal.fire({
-                //                         title: 'Thất bại!',
-                //                         text: 'Đã xảy ra lỗi khi cập nhật nhóm hương.',
-                //                         icon: 'error',
-                //                         confirmButtonText: 'OK'
-                //                     });
-                //                 }
-                //             });
-                //         });
-            // Search
+            
                 $('#searchButton').on('click', function () {
                                              let searchData = {
                                              madonhang: $("#smadonhang").val() || null,
