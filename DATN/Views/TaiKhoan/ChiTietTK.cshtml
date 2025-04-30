@@ -11,8 +11,8 @@
 
 <form id="formCapNhatTK" class="w-50 mx-auto border p-4 rounded shadow-sm">
 
-    <h1 class="text-center mb-4">Cập nhật thông tin tài khoản</h1>
-    <br/>
+    <h1 class="text-center mb-4 mt-3" style="font-size:20px">Cập nhật thông tin tài khoản</h1>
+    <br />
     <input type="hidden" asp-for="MaTaiKhoan" />
 
     <div class="form-group mb-3">
@@ -40,7 +40,7 @@
     </div>
 
 
-    <button type="submit" class="btncapnhat"  d-block mx-auto px-4">Lưu thay đổi</button>
+    <button type="submit" class="btncapnhat" d-block mx-auto px-4">Lưu thay đổi</button>
 </form>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -89,7 +89,7 @@
 
         // Set lại giá trị mật khẩu nếu có
         var matKhauValue = "@ViewBag.MatKhau";
-        var mkInput = document.getElementById("MatKhau");       
+        var mkInput = document.getElementById("MatKhau");
         if (mkInput && matKhauValue !== '') {
             mkInput.value = matKhauValue;
         }

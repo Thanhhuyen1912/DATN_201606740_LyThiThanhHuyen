@@ -133,8 +133,15 @@ namespace DATN.Controllers
             var diachi = _context.DiaChi.FirstOrDefault(p => p.MaDiaChi == id);
             if (diachi != null)
             {
-                _context.DiaChi.Remove(diachi);
-                _context.SaveChanges();
+                try
+                {
+                    _context.DiaChi.Remove(diachi);
+                    _context.SaveChanges();                    
+                }
+                catch
+                {
+                    TempData["Message"] = "Tài khoản đã được sử dụng để đặt hàng";
+                }
                 return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
             }
             else

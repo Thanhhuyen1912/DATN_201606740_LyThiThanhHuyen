@@ -13,13 +13,13 @@
 
         <!-- Bên phải: Thông tin đơn hàng -->
         <div class="col-md-7">
-            <h2 class="mb-4">Thông tin đơn hàng</h2>
+            <h2 style="font-size: 22px" class="mb-4">Thông tin đơn hàng</h2>
             <ul class="list-group">
                 <li class="list-group-item mt-2">
                     <strong>Mã đơn hàng:</strong> @($"DH{Model.donhang.MaDonHang}")
                 </li>
                 <li class="list-group-item mt-2">
-                    <strong>Khách hàng mua:</strong> @Model.taikhoan.HoTen
+                    <strong>Tài khoản đặt hàng:</strong> @Model.taikhoan.HoTen
                 </li>
                 <li class="list-group-item mt-2">
                     <strong>Email:</strong> @Model.taikhoan.Email
@@ -41,7 +41,7 @@
             </ul>
 
             <div style="text-align:center">
-                <a href="@Url.Action("Index", "SanPhamKhach")" class="btncapnhat">Thanh toán sau</a>
+                <a href="@Url.Action("Index", "SanPhamKhach")" class="btncapnhat mt-2">Thanh toán sau</a>
                 <br/>
                 <a href="#" class="btncapnhat" id="checkthanhtoan">Kiểm tra trạng thái thanh toán</a>
             </div>

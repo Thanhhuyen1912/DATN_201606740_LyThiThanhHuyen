@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Danh sách sản phẩm yêu thích";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model List<CoreLib.DTO.SanPhamDTO>
+<div class="row" id="productList">
+    @foreach (var product in Model)
+    {
+        <div class="product-item col-3 px-2 mb-4">
+            <div class="product-card p-2 h-100 d-flex flex-column">
+                <div class="product-image mb-2">
+                    <img class="anhsp" src="http://localhost:7177/@product.AnhDauTien">             
+                    <div class="overlay">
+                        <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none buy ">Mua ngay</a>
+                        <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                    </div>
+                </div>
+                <br />
+                <p style="font-weight: bold; padding: 5px">@product.TenSanPham</p>
+                <div class="divgia">
+                    <p class="gia">
+                        @Convert.ToDecimal(product.GiaDauTien - product.GiaGiamDauTien).ToString("N0")đ
+                    </p>
+                    <p class=" ms-1 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;" id="giagiam">
+                        -@Convert.ToDecimal(product.GiaDauTien).ToString("N0")đ
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

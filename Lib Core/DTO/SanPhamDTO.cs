@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lib_Core.DTO
+namespace CoreLib.DTO
 {
     public class SanPhamDTO
     {

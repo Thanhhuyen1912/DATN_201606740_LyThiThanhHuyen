@@ -2,6 +2,14 @@
     ViewData["Title"] = "Quản lý tài khoản";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@if (TempData["Message"] != null)
+{
+    <script>
+        alert('@TempData["Message"]');
+    </script>
+}
+
 @model CoreLib.DTO.ThongTinTaiKhoanViewModel
 <div class="container mt-4">
     <div class="row">

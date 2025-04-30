@@ -4,6 +4,7 @@ using CoreLib.Entity;
 using Lib_Core.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SANPHAM.Authorize;
 
 namespace DATN.Controllers
 {
@@ -20,6 +21,72 @@ namespace DATN.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [RequiredLogin]
+        public IActionResult YeuThich()
+        {
+            int ma = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+            var list = _context.YeuThich.ToList();
+            var danhsach = list.Select(sp => new SanPhamDTO
+   {
+       MaSanPham = sp.MaSanPham,
+       TenSanPham = _context.SanPham.Where(spm=>spm.MaSanPham == sp.MaSanPham).Select(spm=>spm.TenSanPham).FirstOrDefault(),
+       AnhDauTien = (from asp in _context.AnhSanPham
+                     join a in _context.Anh on asp.MaAnh equals a.MaAnh
+                     where asp.MaSanPham == sp.MaSanPham
+                     orderby asp.MaAnh
+                     select a.URL).FirstOrDefault(),
+       GiaDauTien = _context.ChiTietSanPham.Where(ct => ct.MaSanPham == sp.MaSanPham)
+                       .OrderBy(ct => ct.MaChiTietSP)
+                       .Select(ct => ct.Gia)
+                       .FirstOrDefault(),
+       GiaGiamDauTien = _context.ChiTietSanPham.Where(ct => ct.MaSanPham == sp.MaSanPham)
+                       .OrderBy(ct => ct.MaChiTietSP)
+                       .Select(ct => ct.GiaGiam)
+                       .FirstOrDefault()
+   })
+   .ToList();
+            return View(danhsach);
+        }
+        [HttpGet]
+        [RequiredLogin]
+        public IActionResult Themyeuthich(int id)
+        {
+            int ma = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+            if (ma > 0)
+            {
+                // Check sản phẩm đã tồn tại trong bảng yêu thích hay chưa
+                var exists = _context.YeuThich
+                    .Any(yt => yt.MaSanPham == id && yt.MaTaiKhoan == ma);
+
+                if (!exists)
+                {
+                    var yeuthich = new YeuThich
+                    {
+                        MaSanPham = id,
+                        MaTaiKhoan = ma,
+                        NgayCapNhat = DateTime.Now
+                    };
+
+                    _context.YeuThich.Add(yeuthich);
+                    _context.SaveChanges();
+                    TempData["Message"] = "Đã thêm vào yêu thích";
+                }
+                else
+                {
+                    TempData["Message"] = "Sản phẩm này đã có trong yêu thích";
+                }
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["Message"] = "Vui lòng đăng nhập!";
+                return RedirectToAction("DangNhap", "TaiKhoan");
+            }
+        }
+
         public IActionResult ChiTietSP(int masp)
         {
             var sp = _context.SanPham.FirstOrDefault(sp => sp.MaSanPham == masp);

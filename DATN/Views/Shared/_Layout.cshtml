@@ -14,7 +14,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&amp;display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="~/css/css.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/css/site1.css" />
+    @* <link rel="stylesheet" href="~/css/site1.css" /> *@
 
     <style>
         body {
@@ -52,7 +52,7 @@
                 <div>
                     @ViewBag.User
                 </div>
-                <i class="fas fa-search text-gray-800"></i>
+               
                 <!-- Icon người dùng + menu thả xuống -->
                 <div class="relative" id="user-container">
                     <i class="fas fa-user text-gray-800 cursor-pointer" id="user-icon"></i>
@@ -80,7 +80,7 @@
                             {
                                 <!-- Nếu đã đăng nhập -->
                                 <a href="@Url.Action("QuanLyTK", "TaiKhoan", new { id = matkhoan })" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Quản lý tài khoản</a>
-                                <a href="@Url.Action("DonMua", "DonHang")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Lịch sử mua hàng</a>
+                                <a href="@Url.Action("DonMua", "DonHang")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Lịch sử mua</a>
                                 <a href="@Url.Action("DangXuat", "TaiKhoan")" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Đăng xuất</a>
                             }
                         }
@@ -88,7 +88,13 @@
 
 
                 </div>
+                <div class="relative">
+                    <a href="@Url.Action("YeuThich", "SanPhamKhach")" <i class="bi bi-heart-fill"></i></a>
+                    <span class="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-[10px] rounded-full px-[3px] py-[1px] leading-none">
+                        0
+                    </span>
 
+                </div>
                 <div class="relative">
                     <a href="@Url.Action("Index", "GioHang")" class="fas fa-shopping-bag text-gray-800"></a>
                     <span class="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-[10px] rounded-full px-[3px] py-[1px] leading-none">
