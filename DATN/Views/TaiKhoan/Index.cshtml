@@ -224,16 +224,16 @@
                 <div class="form-group row">
                     <div class="form3 row justify-content-center col-12">
                         @* <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert">Thêm mới</button> *@
-                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">
+                        <button style="background-color: #fdb9a4;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update">
                             Cập nhật
                         </button>
                         @* <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset">Làm mới</button> *@
                     </div>
                     <div class="form4 row justify-content-center col-12" style="display: none">
                         @* <button style="background-color: #fdb9a4" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Insert1">Thêm mới</button> *@
-                        <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update1">
+                        @* <button style="background-color: #fdb9a4;display:none;" type="button" class="btn btn-primary mz-3 col-md-2 col-sm-12" id="Update1">
                             Cập nhật
-                        </button>
+                        </button> *@
                         @* <button type="button" class="btn btn-secondary mz-3 col-md-2 col-sm-12" id="Reset1">Làm mới</button> *@
                     </div>
                 </div>
@@ -435,12 +435,15 @@
                                         $('.form2').hide();
                                         $('#listGrid_paginate').show();
                                         $('#tt').show();
+                                        $('#tt10').show();
                                         $('#tt1').hide();
+                                        $('#tt11').hide();
                                         $('#backbt').show();
                                         $('#backbt1').hide();
                                         $('#Insert').show();
                                         $('#Insert1').hide();
                                         $('.form10').show();
+                                        $('.form3').show();
                                         $('.form11').hide();
                                         $('#searchButton').show();
                                         $('#searchButton1').hide();
@@ -651,6 +654,11 @@
                                });
              // Update
                                     $('#Update').click(function () {
+                                         $('.form3').show();
+                                         $('#SubjectForm').show();
+                                                 $('.form2').hide();
+                                                $('.form4').hide();
+                                                $('.form1').show();
                     const data1 = {
             maTaiKhoan: parseInt($("#tmataikhoan").val()),
             hoTen: $("#thoten").val(),

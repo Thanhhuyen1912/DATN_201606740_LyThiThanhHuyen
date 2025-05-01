@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Đánh giá sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.Entity.SanPham
+<div id="formDanhGia" style="margin: 0px 30px">
+    <div class="mb-3">
+        <label style="font-size: 17px" class="form-label">Tên sản phẩm</label>
+        <input type="text" class="form-control" value="@Model.TenSanPham" readonly />
+        <input hidden type="text" id="MaSanPham" name="MaSanPham" class="form-control" value="@Model.MaSanPham" readonly />
+    </div>
+    <h2 style="font-size: 17px">Đánh giá</h2>
+    <br/>
+    <div id="starRating" class="mb-3">
+        <input type="hidden" name="SoSao" id="soSao" value="0" />
+        <i class="bi bi-star star" data-value="1" style="font-size: 1.5rem; cursor: pointer;"></i>
+        <i class="bi bi-star star" data-value="2" style="font-size: 1.5rem; cursor: pointer;"></i>
+        <i class="bi bi-star star" data-value="3" style="font-size: 1.5rem; cursor: pointer;"></i>
+        <i class="bi bi-star star" data-value="4" style="font-size: 1.5rem; cursor: pointer;"></i>
+        <i class="bi bi-star star" data-value="5" style="font-size: 1.5rem; cursor: pointer;"></i>
+    </div>
+
+    <div class="mb-3">
+        <label style="font-size: 17px" class="form-label">Nội dung đánh giá</label><br/>
+        <textarea name="NoiDung"id="MoTa" class="form-control" rows="4" placeholder="Viết đánh giá..."></textarea>
+    </div>
+    <!-- Truyền MaTaiKhoan từ ViewData vào view -->
+    <p hidden>Mã tài khoản: @ViewData["MaTaiKhoan"]</p>
+
+    <button type="submit" id="btndanhgia" class="btn btn-primary">Gửi đánh giá</button>
+</div>
+<script>
+     const stars = document.querySelectorAll('.star');
+     const hiddenInput = document.getElementById('soSao');
+
+     stars.forEach(star => {
+         star.addEventListener('click', function () {
+             const value = parseInt(this.getAttribute('data-value'));
+             hiddenInput.value = value;
+
+             stars.forEach((s, index) => {
+                 if (index < value) {
+                     s.classList.remove('bi-star');
+                     s.classList.add('bi-star-fill');
+                 } else {
+                     s.classList.remove('bi-star-fill');
+                     s.classList.add('bi-star');
+                 }
+             });
+         });
+     });
+     // Gửi form khi nhấn gửi đánh giá
+       $('#btndanhgia').on('click', function (e) {
+        e.preventDefault();
+
+        // Lấy giá trị từ form
+        const soDiem = parseInt(hiddenInput.value);
+        const mota = document.getElementById('MoTa').value;
+        const maSanPham = parseInt(document.getElementById('MaSanPham').value);
+        const maTaiKhoan = parseInt('@ViewBag.MaTaiKhoan');
+
+        // Dữ liệu gửi lên server
+        const reviewData = {
+            MaSanPham: maSanPham,
+            SoDiem: soDiem,
+            MoTa: mota,
+            MaTaiKhoan: maTaiKhoan
+        };
+        // Gửi request Ajax
+        $.ajax({
+            url: '/DonHang/DanhGia',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(reviewData),
+            success: function (data) {
+                alert(data.message);
+                 window.location.href = data.redirectUrl;
+            },
+            error: function (xhr, status, error) {
+                console.error('Lỗi:', responseText);
+                alert('Có lỗi xảy ra khi gửi đánh giá.' , error);
+            }
+        });
+    });
+
+</script>

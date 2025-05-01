@@ -191,6 +191,17 @@ namespace DATN.Controllers
                 return Json(new { code = 1, message = "Đặt hàng không thành công: " + ex.Message });
             }
         }
+        [HttpPost]
+        public IActionResult TaoSessionMaDonHang([FromBody] DonHangSessionDto data)
+        {
+            HttpContext.Session.SetInt32("MaDonHang", int.Parse(data.MaDonHang));
+            return Ok();
+        }
+
+        public class DonHangSessionDto
+        {
+            public string MaDonHang { get; set; }
+        }
 
         public class OrderRequest
         {
@@ -265,6 +276,7 @@ namespace DATN.Controllers
                 taikhoan = taikhoan,
                 URLThanhToan = Url
             };
+            HttpContext.Session.Remove("MaDonHang");
             return View(list);
         }
         private string TaoURLQRThanhToan(decimal soTien, string noiDung)
@@ -341,7 +353,6 @@ namespace DATN.Controllers
         [RequiredLogin]
         public async Task<IActionResult> ThayDoiDiaChi(string id)
         {
-            Console.WriteLine($"madonhang = {id}");
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Mã đơn hàng không được để trống.");
@@ -437,29 +448,118 @@ namespace DATN.Controllers
             return RedirectToAction("DonMua", "DonHang", new { page });
         }
 
+
         [RequiredLogin]
         [HttpGet]
-        public IActionResult XemChiTiet(int id)
+        public async Task<IActionResult> XemChiTiet(int id)
         {
             var donhang = _context.ChiTietDonHang
                 .Where(p => p.MaDonHang == id)
-                .Select(dh => new
+                .Select(dh => new Chitietdh
                 {
-                    MaSanPham = _context.ChiTietSanPham.Where(ct => ct.MaChiTietSP == dh.MaChiTietSP).Select(ct => ct.MaSanPham).FirstOrDefault(),
-                    GiaTien = _context.ChiTietSanPham.Where(ct => ct.MaChiTietSP == dh.MaChiTietSP).Select(ct => ct.Gia).FirstOrDefault(),
-                    GiaGiam = _context.ChiTietSanPham.Where(ct => ct.MaChiTietSP == dh.MaChiTietSP).Select(ct => ct.GiaGiam).FirstOrDefault(),
+                    MaSanPham = _context.ChiTietSanPham
+                        .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                        .Select(ct => ct.MaSanPham)
+                        .FirstOrDefault(),
+
+                    GiaTien = _context.ChiTietSanPham
+                        .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                        .Select(ct => ct.Gia)
+                        .FirstOrDefault(),
+
+                    GiaGiam = _context.ChiTietSanPham
+                        .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                        .Select(ct => ct.GiaGiam)
+                        .FirstOrDefault(),
+
                     TenSanPham = (from ct in _context.ChiTietSanPham
                                   join sp in _context.SanPham on ct.MaSanPham equals sp.MaSanPham
                                   where ct.MaChiTietSP == dh.MaChiTietSP
                                   select sp.TenSanPham).FirstOrDefault(),
+
                     SoLuong = dh.SoLuong,
                     TongTien = dh.TongTien
-                }).ToList();
+                })
+                .ToList();
+            int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+            
+            var dg = _context.DanhGia.ToList();
 
-            return View(donhang);
+            var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
 
+            var giatrigiam = _context.MaGiamGia.Where(gg => gg.MMaGiamGia == don.MMaGiamGia).FirstOrDefault();
+
+            var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
+
+            var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
+            var xa1 = await _locationService.GetWardNameByIdAsync(int.Parse(diachi.Xa), int.Parse(diachi.Huyen));
+            var tp1 = await _locationService.GetProvinceNameByIdAsync(int.Parse(diachi.ThanhPho));
+
+            diachi.Huyen = huyen1; diachi.ThanhPho = tp1; diachi.Xa = xa1;
+
+            var taikhoan = _context.TaiKhoan.Where(tk => tk.MaTaiKhoan == don.MaTaiKhoan).FirstOrDefault();
+
+            var pttt = _context.PhuongThucThanhToan.Where(pt => pt.MaPhuongThuc == don.MaPhuongThucThanhToan).Select(pt => pt.TenPhuongThuc).FirstOrDefault();
+            var nd = new NdChitiet
+            {
+                chitiet = donhang,
+                id = id,
+                dh = don,
+                danhgia = dg,
+                mataikhoan = mataikhoan,
+                diachi = diachi,
+                taikhoan = taikhoan,
+                phuongthucthanhtoan = pttt,
+                ttthanhtoan = don.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán",
+                giamgia = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri
+            };
+
+            return View(nd);
         }
-    }
 
+        [RequiredLogin]
+        [HttpGet]
+        public IActionResult DanhGia(int id)
+        {
+            int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+            ViewBag.MaTaiKhoan = mataikhoan;
+            var sp = _context.SanPham.Where(sp =>sp.MaSanPham == id).FirstOrDefault();
+            return View(sp);
+        }
+        [HttpPost]
+        public IActionResult DanhGia([FromBody] DanhGiaForm danhgia)
+        {
+            try
+            {
+                Console.WriteLine($"MaTaiKhoan: {danhgia.MaTaiKhoan}, MaSanPham: {danhgia.MaSanPham}, SoDiem: {danhgia.SoDiem}");
+
+                var dg = _context.DanhGia
+                    .Where(dg => dg.MaTaiKhoan == danhgia.MaTaiKhoan && dg.MaSanPham == danhgia.MaSanPham)
+                    .FirstOrDefault();
+
+                if (dg == null)
+                {
+                    var danhg = new DanhGia
+                    {
+                        MaSanPham = danhgia.MaSanPham,
+                        SoDiem = danhgia.SoDiem,
+                        MoTa = danhgia.MoTa,
+                        MaTaiKhoan = danhgia.MaTaiKhoan,
+                        NgayCapNhat = DateTime.Now
+                    };
+                    _context.DanhGia.Add(danhg);
+                    _context.SaveChanges();
+                }
+
+                return Json(new { message = "Đánh giá thành công", redirectUrl = Url.Action("DonMua", "DonHang") });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Lỗi: {ex.Message}");
+                return Json(new { message = "Có lỗi xảy ra khi xử lý đánh giá." });
+            }
+        }
+
+    }
 
 }

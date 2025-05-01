@@ -1,4 +1,134 @@
-﻿<div style="margin: 10px auto; font-size: 24px; text-align: center;">
+﻿@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model CoreLib.DTO.NdChitiet
+<div>
+    <div class="col-md-12 d-flex">
+        <div style="margin: 0 auto">
+            <h3 style="font-size: 22px; text-align: center" class="mt-2 mb-3">Thông tin đặt hàng</h3>
+            <!-- Product Name Field -->
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Họ tên người đặt</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="thoten" value="@Model.taikhoan.HoTen" readonly />
+                </div>
+            </div>
+            <!-- Product Price Field -->
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label" for="temail">Email</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="temail" value="@Model.taikhoan.Email" readonly />
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2" hidden>
+                <div class="col-md-6">
+                    <label class="col-form-label"></label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tmadonhang" readonly />
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Trạng thái vận chuyển</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="temail" value="@Model.dh.TrangThaiVanChuyen" readonly />
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Phương thức thanh toán</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tptthanhtoan" value="@Model.phuongthucthanhtoan" readonly />
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Trạng thái thanh toán</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text"  style="font-size: 15px" class="form-control" id="tptthanhtoan" value="@Model.ttthanhtoan" readonly/>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Số tiền giảm giá</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="ttiengiam" value="@Model.giamgia.ToString("N0")đ" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Thành tiền</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tthanhtien" value="@Model.dh.TongTien.ToString("N0")đ" readonly>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 0 auto">
+            <h3 style="font-size: 22px; text-align: center" class="mt-2 mb-3">Thông tin nhận hàng</h3>
+
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Tên người nhận</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="ttennguoinhan" value="@Model.diachi.HoTenNguoiNhan" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Số điện thoại nhận</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tsdtnhan" value="@Model.diachi.SoDienThoaiNguoiNhan" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Thành phố</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tthanhpho" value="@Model.diachi.ThanhPho" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Huyện</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="thuyen" value="@Model.diachi.Huyen" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Xã</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="txa" value="@Model.diachi.Xa" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Chi tiết</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tchitiet" value="@Model.diachi.ChiTiet" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin: 10px auto; font-size:22px; text-align: center;">
     <p>Danh sách sản phẩm mua</p>
 </div>
 <table id="donmuaTable" class="table table-bordered table-sm">
@@ -12,14 +142,26 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.chitiet)
         {
             <tr style="font-size:15px">
                 <td>@item.TenSanPham</td>
                 <td>@item.GiaTien.ToString("N0")đ</td>
                 <td>@item.GiaGiam.ToString("N0")đ</td>
                 <td>@item.SoLuong</td>
-                <td>@item.TongTien.ToString("N0")đ</td>               
+                <td>@item.TongTien.ToString("N0")đ</td>
+                @{
+                    var daDanhGia = Model.danhgia.Where(d => d.MaSanPham == item.MaSanPham && d.MaTaiKhoan == Model.mataikhoan).FirstOrDefault();
+                }
+                @if (Model.dh.TrangThaiVanChuyen == "Đã vận chuyển" && daDanhGia == null)
+                {
+                    <td width="50px">
+                        <a href="/DonHang/DanhGia?id=@item.MaSanPham">
+                            <i class="bi bi-star"></i>
+                        </a>
+                    </td>
+
+                }
             </tr>
         }
     </tbody>

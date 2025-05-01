@@ -1,4 +1,9 @@
-﻿<div style="margin: 10px auto; font-size: 24px; text-align: center;">
+﻿@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin: 10px auto; font-size: 24px; text-align: center;">
     <p>Danh sách đơn hàng</p>
 </div>
 @if (TempData["Message"] != null)
@@ -17,7 +22,7 @@
             <th class="tt" style="width: 200px; cursor: pointer;" onclick="sortTable(3)">Trạng thái thanh toán</th>
             <th class="tt" style="width: 140px; cursor: pointer;" onclick="sortTable(4)">Người nhận</th>
             <th class="tt" style="width: 140px; cursor: pointer;" onclick="sortTable(5)">SĐT nhận hàng</th>
-            <th class="tt" style="width: 130px;"></th>
+            <th class="tt" style="width: 120px;"></th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +35,8 @@
                 <td>@(item.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán")</td>
                 <td>@item.TenNhanHang</td>
                 <td>@item.SDTNhanHang</td>
-                <td>
+                <td hidden class="ma-don-hang">@item.MaDonHang</td>
+                <td class="mt-1">
                     <div class="d-inline-flex">
                         <a class="tt btn btn-sm me-1" href="/DonHang/XemChiTiet/@item.MaDonHang">
                             <i class="bi bi-list"></i>
@@ -44,6 +50,12 @@
                                 <i class="bi bi-x-lg"></i>
                             </button>
                         </form>
+                        @if (!item.TrangThaiThanhToan)
+                        {
+                            <a class="tt btn btn-sm me-1" id="btnXacNhan" >
+                                <i class="bi bi-currency-dollar"></i>
+                            </a>
+                        }
                     </div>
 
 
@@ -87,6 +99,32 @@
             alert('Đơn hàng đã xử lý, không thể thay đổi địa chỉ.');
         }
     }
+
+    document.getElementById("btnXacNhan").addEventListener("click", function (e) {
+        e.preventDefault();
+        var data = document.querySelector('.ma-don-hang').innerText;
+        console.log("mã đơn hàng:  " + data);
+        // Gọi đến action để tạo session
+        fetch('/DonHang/TaoSessionMaDonHang', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ MaDonHang: data })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Chuyển hướng sau khi session được tạo
+                window.location.href = '/DonHang/XacNhanThanhToan';
+            } else {
+                alert("Lỗi khi tạo session.");
+            }
+        })
+        .catch(error => {
+            console.error("Lỗi:", error);
+        });
+    });
+
 
 
     document.addEventListener("DOMContentLoaded", function () {
