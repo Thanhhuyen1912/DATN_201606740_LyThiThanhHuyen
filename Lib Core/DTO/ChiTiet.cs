@@ -30,6 +30,22 @@ namespace CoreLib.DTO
         public decimal giamgia {  get; set; }
 
     }
+    public class HienThiChiTiet
+    {
+        public ChiTiet spchinh { get; set; }
+        public decimal diemtrungbinh {  get; set; }
+        public List<Hienthidanhgia> danhgias { get; set; }
+        public List<SanPhamDTO> dslienquan { get; set; }
+    }
+    public class Hienthidanhgia
+    {
+        public int MaSanPham { get; set; }
+        public int MaTaiKhoan { get; set; }
+        public string TenKhachHang { get; set; }
+        public int SoDiem { get; set; }
+        public string MoTa { get; set; }
+        public DateTime NgayDanhGia { get; set; }
+    }
     public class DanhGiaForm
     {
         public string MoTa { get; set; }

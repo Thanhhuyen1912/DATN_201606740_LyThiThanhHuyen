@@ -1,8 +1,446 @@
 ﻿@{
-    ViewData["Title"] = "Danh sách kích thước";
+    ViewData["Title"] = "Thống kê";
     Layout = "~/Views/Shared/_Layout1.cshtml";
 }
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css" />
+<!-- jQuery - cần trước nếu dùng $ -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Highcharts core + modules -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+    </figure>
+<div class="d-flex col-12">
+    <figure class="highcharts1-figure1 col-5">
+        <div>
+            <div id="container1"></div>
+        </div>
+    </figure>
+    <figure class="highcharts2-figure2 col-7">
+        <div>
+            <div id="container2"></div>
+        </div>
+    </figure>
+</div>
+<pre id="csv">@Model.dulieu</pre>
+<pre id="csv1">@Model.dulieu_thuonghieu</pre>
+<pre id="csv2">@Model.dulieu_nhomhuong</pre>
+
+
+<script>
+  
+                       (function (H) {
+            const animateSVGPath = (svgElem, animation, callback = void 0) => {
+                const length = svgElem.element.getTotalLength();
+                svgElem.attr({
+                    'stroke-dasharray': length,
+                    'stroke-dashoffset': length,
+                    opacity: 1
+                });
+                svgElem.animate({
+                    'stroke-dashoffset': 0
+                }, animation, callback);
+            };
+
+            H.seriesTypes.line.prototype.animate = function (init) {
+                const series = this,
+                    animation = H.animObject(series.options.animation);
+                if (!init) {
+                    animateSVGPath(series.graph, animation);
+                }
+            };
+
+            H.addEvent(H.Axis, 'afterRender', function () {
+                const axis = this,
+                    chart = axis.chart,
+                    animation = H.animObject(chart.renderer.globalAnimation);
+
+                axis.axisGroup
+                    // Init
+                    .attr({
+                        opacity: 0,
+                        rotation: -3,
+                        scaleY: 0.9
+                    })
+
+                    // Animate
+                    .animate({
+                        opacity: 1,
+                        rotation: 0,
+                        scaleY: 1
+                    }, animation);
+                if (axis.horiz) {
+                    axis.labelGroup
+                        // Init
+                        .attr({
+                            opacity: 0,
+                            rotation: 3,
+                            scaleY: 0.5
+                        })
+
+                        // Animate
+                        .animate({
+                            opacity: 1,
+                            rotation: 0,
+                            scaleY: 1
+                        }, animation);
+                } else {
+                    axis.labelGroup
+                        // Init
+                        .attr({
+                            opacity: 0,
+                            rotation: 3,
+                            scaleX: -0.5
+                        })
+
+                        // Animate
+                        .animate({
+                            opacity: 1,
+                            rotation: 0,
+                            scaleX: 1
+                        }, animation);
+                }
+
+                if (axis.plotLinesAndBands) {
+                    axis.plotLinesAndBands.forEach(plotLine => {
+                        const animation = H.animObject(plotLine.options.animation);
+
+                        // Init
+                        plotLine.label.attr({
+                            opacity: 0
+                        });
+
+                        // Animate
+                        animateSVGPath(
+                            plotLine.svgElem,
+                            animation,
+                            function () {
+                                plotLine.label.animate({
+                                    opacity: 1
+                                });
+                            }
+                        );
+                    });
+                }
+            });
+        }(Highcharts));
+        //Doanh thu tổng
+              Highcharts.chart('container', {
+            chart: {
+                type: 'spline'
+            },
+
+            title: {
+                text: 'Thống kê doanh thu'
+            },
+
+            data: {
+            csv: document.getElementById('csv').innerText.trim()
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Doanh thu'
+                },
+                plotLines: [{
+                    color: 'white',
+                    width: 2,
+                    value: 0,
+                    animation: {
+                        duration: 1000,
+                        defer: 4000
+                    },
+                    label: {
+                        text: 'Tháng',
+                        align: 'right',
+                        x: 10,
+                        y: -10
+
+                    }
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    animation: {
+                        duration: 1000
+                    },
+                    marker: {
+                        enabled: false
+                    },
+                    lineWidth: 2
+                }
+            },
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        yAxis: {
+                            tickAmount: 2,
+                            title: {
+                                reserveSpace: false
+                            }
+                        }
+                    }
+                }]
+            }
+        });
+        //Doanh thu theo thương hiệu
+                   const csvText = document.getElementById('csv1').innerText.trim();
+        const lines = csvText.split('\n');
+        const data = [];
+
+        for (let i = 1; i < lines.length; i++) {
+            const [name, , percent] = lines[i].split(',');
+            data.push({
+                name: name.trim(),
+                y: parseFloat(percent)
+            });
+        }
+
+                // Data retrieved from https://netmarketshare.com/
+        // Build the chart
+        Highcharts.chart('container1', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Doanh thu thương hiệu'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Doanh thu',
+                colorByPoint: true,
+                data: data
+            }]
+        });
+        // Doanh thu theo nhóm hương
+              const csvText1 = document.getElementById('csv2').innerText.trim();
+    const lines1 = csvText1.split('\n');
+    const data1 = [];
+
+    for (let i = 1; i < lines1.length; i++) {
+        const [name, , percent] = lines1[i].split(',');
+        data1.push({
+            name: name.trim(),
+            y: parseFloat(percent)
+        });
+    }
+
+            // Data retrieved from https://netmarketshare.com/
+    // Build the chart
+       $(document).ready(function () {
+    Highcharts.chart('container2', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Doanh thu nhóm hương'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            name: 'Doanh thu',
+            colorByPoint: true,
+            data: data1
+        }]
+    });
+    });
+</script>
+
+
+
+<style>
+    /* biểu đồ 1 */
+    .highcharts-figure,
+    .highcharts-data-table table {
+        min-width: 360px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    #container1, #container2 {
+        height: 400px; 
+    }
+    .highcharts-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    #csv, #csv1, #csv2 {
+        display: none;
+    }
+    /* biểu đồ 2 */
+    .highcharts1-figure1,
+    .highcharts1-data-table table {
+        min-width: 380px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts1-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts1-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts1-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts1-data-table td,
+    .highcharts1-data-table th,
+    .highcharts1-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts1-data-table thead tr,
+    .highcharts1-data-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts1-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    input[type="number"] {
+        min-width: 50px;
+    }
+    /* biểu đồ 3 */
+    .highcharts2-figure2,
+    .highcharts2-data-table table {
+        min-width: 380px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts2-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts2-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts2-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts2-data-table td,
+    .highcharts2-data-table th,
+    .highcharts2-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts2-data-table thead tr,
+    .highcharts2-data-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts2-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    input[type="number"] {
+        min-width: 50px;
+    }
+</style>

@@ -2,7 +2,7 @@
     ViewData["Title"] = "Danh sách sản phẩm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model CoreLib.DTO.ChiTiet
+@model CoreLib.DTO.HienThiChiTiet
 <style>
     .product-image {
         width: 100%;
@@ -23,14 +23,16 @@
         font-weight: bold;
         color: #000;
     }
-    .btnyeuthich{
+
+    .btnyeuthich {
         color: #ffa58d;
         /* background-color: aliceblue; */
     }
-    .btnyeuthich:hover
-    {
-        color: #ff9375;
-    }
+
+        .btnyeuthich:hover {
+            color: #ff9375;
+        }
+
     .buy-btn {
         background-color: #ffa58d;
         border: none;
@@ -55,12 +57,12 @@
         margin-bottom: 8px;
     }
 
-    .chonkichthuoc button{
+    .chonkichthuoc button {
         background-color: #ffa58d;
         color: white;
-        padding:4px
+        padding: 4px
     }
-       
+
 
         /* Active: hiệu ứng khi đã click */
         .chonkichthuoc button.btn-active {
@@ -76,7 +78,7 @@
             <!-- Ảnh chính -->
             <div class="text-center">
                 <img id="mainImage"
-                     src="http://localhost:7177/@Model.anhdau.URL"
+                     src="http://localhost:7177/@Model.spchinh.anhdau.URL"
                      style="width:250px; height:auto; display:block; margin: 0 auto; transition: opacity 0.3s ease;"
                      class="product-image mb-3"
                      alt="Sản phẩm chính" />
@@ -93,7 +95,7 @@
                 <!-- Container chứa ảnh nhỏ có scroll -->
                 <div id="thumbnailContainer" class="d-flex overflow-hidden"
                      style="max-width: 290px; scroll-behavior: smooth;">
-                    @foreach (var anh in Model.anhs)
+                    @foreach (var anh in Model.spchinh.anhs)
                     {
                         <img src="http://localhost:7177/@anh.URL"
                              class="thumbnail me-2"
@@ -114,45 +116,47 @@
         <!-- Thông tin sản phẩm -->
         <div class="col-md-6">
             <h1 style="font-size: 28px; font-weight: bold;">
-                @Model.sanpham.TenSanPham
+                @Model.spchinh.sanpham.TenSanPham
             </h1>
             <div class="d-flex">
                 <div class="price mb-3" id="gia">
-                    @Model.GiaThapNhat.ToString("N0")đ
+                    @Model.spchinh.GiaThapNhat.ToString("N0")đ
                 </div>
                 <div class=" ms-2 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;" id="giagiam">
                 </div>
             </div>
             <div class="icon-text"><span><i class="bi bi-truck-flatbed"></i></span> Giao hàng toàn quốc</div>
             <div class="icon-text"><span><i class="bi bi-arrow-clockwise"></i></span> Cam kết đổi/trả hàng miễn phí</div>
-            <div class="mt-2 d-flex me-1"><b>Số lượng</b>:  <p style="padding-left: 4px" id="soluong"> Còn hàng</p></div>
+            <div class="mt-2 d-flex me-1"><b>Số lượng</b>:  <p style="padding-left: 4px" id="soluong"> Còn hàng</p>
+                <b class="ms-5">Giới tính</b>: @Model.spchinh.sanpham.GioiTinh
+            </div>
             <div class="mt-2">
-                <b>Nhóm hương</b>: @Model.nhomhuong
+                <b>Nhóm hương</b>: @Model.spchinh.nhomhuong
             </div>
             <div class="d-flex mt-2">
                 <div>
-                    <b>Thương hiệu</b>: @Model.thuonghieu
+                    <b>Thương hiệu</b>: @Model.spchinh.thuonghieu
                 </div>
                 <div class="ms-5">
-                    <b>Xuất xứ</b>: @Model.xuatxu
+                    <b>Xuất xứ</b>: @Model.spchinh.xuatxu
                 </div>
             </div>
-            <div id="mactsp" hidden ></div>
+            <div id="mactsp" hidden></div>
             <div class="mt-2">
                 <strong>Kích thước:</strong>
                 <div class="d-flex flex-wrap">
-                    @for (int i = 0; i < Model.chitietsanpham.Count; i++)
+                    @for (int i = 0; i < Model.spchinh.chitietsanpham.Count; i++)
                     {
                         try
                         {
-                            var ct = Model.chitietsanpham[i];
+                            var ct = Model.spchinh.chitietsanpham[i];
                             <div class="chonkichthuoc m-1">
                                 <button type="button"
                                         class="m-1"
-                                        onclick="chonKichThuoc(@i)" >
+                                        onclick="chonKichThuoc(@i)">
                                     @ct.KichThuoc.TenKichThuoc
                                 </button>
-                                
+
                             </div>
                         }
                         catch (Exception ex)
@@ -171,14 +175,71 @@
 
             <!-- Nút -->
             <div class="d-flex gap-2">
-                <button class="btn btnyeuthich" onclick="themYeuThich(@Model.sanpham.MaSanPham)"><i class="bi bi-heart-fill"></i></button>
+                <button class="btn btnyeuthich" onclick="themYeuThich(@Model.spchinh.sanpham.MaSanPham)"><i class="bi bi-heart-fill"></i></button>
                 <button class="btn add-to-cart">Thêm vào giỏ hàng</button>
                 <button class="btn buy-btn text-white btnDatHang">Mua ngay</button>
-             
+
             </div>
         </div>
     </div>
 </div>
+<br />
+<hr />
+<div class="container mt-3" style="margin:0px 100px">
+    <div>
+        <span style="font-size: 17px">Số điểm nhận xét: </span>
+        @for (int i = 1; i <= 5; i++)
+        {
+            if (i <= Model.diemtrungbinh)
+            {
+                <i style="font-size: 18px" class="bi bi-star-fill text-warning"></i>
+            }
+            else
+            {
+                <i class="bi bi-star text-warning"></i>
+            }
+        }
+        <hr class="mt-2 me-6" style="width: 500px" />
+        <div style="font-size: 17px; margin-top: 10px">Đánh giá: </div>
+        @foreach (var item in Model.danhgias)
+        {
+            <div style="font-size: 16px">
+                <div class="d-flex mt-2 ms-3"><strong>@item.TenKhachHang</strong><p class="ms-4" style="color: gray"> <i class="bi bi-chevron-compact-left"></i>@item.NgayDanhGia<i class="bi bi-chevron-compact-right"></i></p></div>
+                <p class="mt-1 ms-4">@item.MoTa</p>
+            </div>
+        }
+    </div>
+</div>
+<hr />
+<div>
+    <p style="font-size:20px; margin: 10px auto; text-align: center;">Sản phẩm liên quan</p>
+    <div class="product-container mt-3">
+            @foreach (var product in Model.dslienquan)
+            {
+                <div class="product-item col-3">
+                    <div class="product-image">
+                        <img class="anhsp" src="http://localhost:7177/@product.AnhDauTien">
+                        <div class="overlay">
+                            <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none buy ">Mua ngay</a>
+                            <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                        </div>
+                    </div>
+                    <br />
+                    <p style="font-weight: bold; padding: 5px">@product.TenSanPham</p>
+                    <div class="divgia">
+                        <p class="gia">
+                            @Convert.ToDecimal(product.GiaDauTien - product.GiaGiamDauTien).ToString("N0")đ
+                        </p>
+                        <p class=" ms-1 mt-1" style=" font-size:15px; text-decoration: line-through; color: gray;" id="giagiam">
+                            -@Convert.ToDecimal(product.GiaDauTien).ToString("N0")đ
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
 
 <script>
     function updateQty(change) {
@@ -194,7 +255,7 @@
     }
     function scrollThumbnails(direction) {
         const container = document.getElementById("thumbnailContainer");
-        const scrollAmount = 95; 
+        const scrollAmount = 95;
 
         container.scrollBy({
             left: direction * scrollAmount,
@@ -202,7 +263,7 @@
         });
     }
     // Lấy danh sách chi tiết sản phẩm từ Razor
-    var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.chitietsanpham));
+    var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.spchinh.chitietsanpham));
 
        function formatVN(num) {
         return num.toLocaleString('vi-VN', {
@@ -285,7 +346,7 @@
             });
         });
     });
-    
+
 
      // Hàm parseDecimal xử lý chuỗi số có dấu phẩy hoặc khoảng trắng
      function parseDecimal(value) {
@@ -307,7 +368,7 @@
      // Tính tổng tiền sau giảm giá
      var tongtien = (gia) * soluong;
         var data = {
-            mataikhoan: maTaiKhoan, 
+            mataikhoan: maTaiKhoan,
            chitietgiohangs: [
         {
             MaGioHang: maGioHang,                // hoặc null nếu tự sinh trong CSDL
