@@ -4,13 +4,13 @@
 }
 @model CoreLib.Entity.SanPham
 <div id="formDanhGia" style="margin: 0px 30px">
-    <div class="mb-3">
+    <div class="mb-3 mt-3">
         <label style="font-size: 17px" class="form-label">Tên sản phẩm</label>
         <input type="text" class="form-control" value="@Model.TenSanPham" readonly />
         <input hidden type="text" id="MaSanPham" name="MaSanPham" class="form-control" value="@Model.MaSanPham" readonly />
     </div>
     <h2 style="font-size: 17px">Đánh giá</h2>
-    <br/>
+    <br />
     <div id="starRating" class="mb-3">
         <input type="hidden" name="SoSao" id="soSao" value="0" />
         <i class="bi bi-star star" data-value="1" style="font-size: 1.5rem; cursor: pointer;"></i>
@@ -21,13 +21,16 @@
     </div>
 
     <div class="mb-3">
-        <label style="font-size: 17px" class="form-label">Nội dung đánh giá</label><br/>
-        <textarea name="NoiDung"id="MoTa" class="form-control" rows="4" placeholder="Viết đánh giá..."></textarea>
+        <label style="font-size: 17px" class="form-label">Nội dung đánh giá</label><br />
+        <textarea name="NoiDung" id="MoTa" class="form-control" rows="4" placeholder="Viết đánh giá..."></textarea>
     </div>
     <!-- Truyền MaTaiKhoan từ ViewData vào view -->
     <p hidden>Mã tài khoản: @ViewData["MaTaiKhoan"]</p>
+    <div style="text-align: center; justify-content:center; align-content: center">
+        <button type="submit" id="btndanhgia" class="btn btndanhgia">Gửi đánh giá</button>
+    </div>
 
-    <button type="submit" id="btndanhgia" class="btn btn-primary">Gửi đánh giá</button>
+   
 </div>
 <script>
      const stars = document.querySelectorAll('.star');
@@ -84,3 +87,13 @@
     });
 
 </script>
+<style>
+    .btndanhgia {
+        background-color: #fdb9a4;
+        color: #a75851;
+        padding: 7px;
+        border-radius: 4px;
+        display: block;
+        text-align: center;
+    }
+</style>

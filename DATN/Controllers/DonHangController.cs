@@ -3,11 +3,7 @@ using CoreLib.AppDbContext;
 using CoreLib.DTO;
 using CoreLib.Entity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 using SANPHAM.Authorize;
-using System;
-
 namespace DATN.Controllers
 {
     public class DonHangController : Controller
@@ -33,16 +29,16 @@ namespace DATN.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
+        [RequiredLoginBuy]
         public IActionResult DatHang()
         {
             return View();
         }
         //Khachhang
-        [RequiredLogin]
+        [RequiredLoginBuy]
         [HttpPost]
         public async Task<IActionResult> DatHang([FromBody] Guidathang guidh)
         {
-            Console.WriteLine("dulieu:" + JsonConvert.SerializeObject(guidh));
             int ma = int.Parse(HttpContext.Session.GetString("MaGioHang"));
             if (guidh == null || guidh.mataikhoan == 0)
             {
@@ -117,7 +113,7 @@ namespace DATN.Controllers
                 ViewBag.Tongtien = listsp[0].soluong * (listsp[0].Gia - listsp[0].GiaGiam);
             }
             ViewBag.Giamgia = 0;
-
+            HttpContext.Session.Remove("MaSanPham");
             return View(list);
         }
         [RequiredLogin]
@@ -172,7 +168,7 @@ namespace DATN.Controllers
                 }
 
                 _context.SaveChanges();
-                HttpContext.Session.SetInt32("MaDonHang", donhang.MaDonHang); // nếu là số nguyên
+                HttpContext.Session.SetInt32("MaDonHang", donhang.MaDonHang);
                 if (donhang.MaPhuongThucThanhToan == 2)
                 {
                     return Json(new { code = 0, message = "Đặt hàng thành công vui lòng hoàn thành thanh toán.", redirectUrl = Url.Action("XacNhanThanhToan", "DonHang") });
@@ -181,9 +177,7 @@ namespace DATN.Controllers
                 {
                     return Json(new { code = 0, message = "Đặt hàng thành công", redirectUrl = Url.Action("Index", "SanPhamKhach") });
 
-                }
-
-                //   return Json(new { code = 0, message = "Đặt hàng thành công", redirectUrl = Url.Action("Index", "SanPhamKhach") });
+                }               
 
             }
             catch (Exception ex)
@@ -197,20 +191,7 @@ namespace DATN.Controllers
             HttpContext.Session.SetInt32("MaDonHang", int.Parse(data.MaDonHang));
             return Ok();
         }
-
-        public class DonHangSessionDto
-        {
-            public string MaDonHang { get; set; }
-        }
-
-        public class OrderRequest
-        {
-            public decimal thanhtien { get; set; }
-            public int diachi { get; set; }
-            public int maphuongthuc { get; set; }
-            public string magiamgia { get; set; }
-            public List<ChiTietGioHang> listsp { get; set; }
-        }
+      
         [RequiredLogin]
         [HttpPost]
         public IActionResult ApDungMaGiamGia([FromBody] MaGiamGiaRequest request)
@@ -246,13 +227,7 @@ namespace DATN.Controllers
             {
                 return Json(new { code = 1, message = "Không thể áp dụng mã giảm giá" });
             }
-        }
-
-        public class MaGiamGiaRequest
-        {
-            public string magiamgia { get; set; }
-            public decimal tongtien { get; set; }
-        }
+        }       
         [RequiredLogin]
         [HttpGet]
         public async Task<IActionResult> XacNhanThanhToan()
@@ -317,7 +292,6 @@ namespace DATN.Controllers
 
             return Json(new { code = 0, message = "Xác thực thanh toán thành công" });
         }
-
         [RequiredLogin]
         public IActionResult DonMua()
         {

@@ -3,6 +3,24 @@ using System.Reflection;
 
 namespace CoreLib.DTO
 {
+    public class DonHangSessionDto
+    {
+        public string MaDonHang { get; set; }
+    }
+
+    public class OrderRequest
+    {
+        public decimal thanhtien { get; set; }
+        public int diachi { get; set; }
+        public int maphuongthuc { get; set; }
+        public string magiamgia { get; set; }
+        public List<ChiTietGioHang> listsp { get; set; }
+    }
+    public class MaGiamGiaRequest
+    {
+        public string magiamgia { get; set; }
+        public decimal tongtien { get; set; }
+    }
     public class ChiTiet
     {
         public SanPham sanpham {  get; set; }

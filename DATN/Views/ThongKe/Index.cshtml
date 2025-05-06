@@ -11,30 +11,77 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
+<div>
+    <div class="d-flex col-12">
+        <figure class="highcharts-figure  col-4 bg-black">
+            <div id="container6"></div>
+        </figure>
+        <figure class="highcharts-figure  col-8">
+            <div id="container"></div>
+        </figure>
+    </div>
+    <div class="d-flex col-12">
+        <figure class="highcharts7-figure7 col-6">
+            <div>
+                <div id="container7"></div>
+            </div>
+        </figure>
+        <figure class="highcharts8-figure8 col-6">
+            <div>
+                <div id="container8"></div>
+            </div>
+        </figure>
+    </div>
+@*     <div class="d-flex col-12">
+        <figure class="highcharts5-figure5 col-3">
+            <div>
+                <div id="container5"></div>
+            </div>
+        </figure>
+        <figure class="highcharts6-figure6 col-3">
+            <div>
+                <div id="container6"></div>
+            </div>
+        </figure>
+    </div> *@
+    <div class="d-flex col-12">
+        <figure class="highcharts1-figure1 col-2">
+            <div>
+                <div id="container1"></div>
+            </div>
+        </figure>
+        <figure class="highcharts2-figure2 col-2">
+            <div>
+                <div id="container2"></div>
+            </div>
+        </figure>
+    </div>
+    <div class="d-flex col-12" style="text-align: center">
+        <figure class="highcharts3-figure3 col-3">
+            <div>
+                <div id="container3" hidden></div>
+            </div>
+        </figure>
+        <figure class="highcharts4-figure4 col-3">
+            <div>
+                <div id="container4" hidden></div>
+            </div>
+        </figure>
+    </div>
 
-
-    <figure class="highcharts-figure">
-        <div id="container"></div>
-    </figure>
-<div class="d-flex col-12">
-    <figure class="highcharts1-figure1 col-5">
-        <div>
-            <div id="container1"></div>
-        </div>
-    </figure>
-    <figure class="highcharts2-figure2 col-7">
-        <div>
-            <div id="container2"></div>
-        </div>
-    </figure>
 </div>
 <pre id="csv">@Model.dulieu</pre>
 <pre id="csv1">@Model.dulieu_thuonghieu</pre>
 <pre id="csv2">@Model.dulieu_nhomhuong</pre>
+<pre id="csv3">@Model.dulieu_gioitinh</pre>
+<pre id="csv4">@Model.dulieu_xuatxu</pre>
+<pre id="csv5">@Model.dulieu_donut</pre>
+<pre id="csv6">@Model.dulieu_top5chay</pre>
+<pre id="csv7">@Model.dulieu_top5e</pre>
 
 
 <script>
-  
+
                        (function (H) {
             const animateSVGPath = (svgElem, animation, callback = void 0) => {
                 const length = svgElem.element.getTotalLength();
@@ -137,7 +184,7 @@
             },
 
             title: {
-                text: 'Thống kê doanh thu'
+                text: 'Doanh thu trong năm'
             },
 
             data: {
@@ -294,6 +341,237 @@
         }]
     });
     });
+
+    //Doanh thu theo giới tính
+     const csvText3 = document.getElementById('csv3').innerText.trim();
+        const lines3 = csvText3.split('\n');
+        const data3 = [];
+
+        for (let i = 1; i < lines3.length; i++) {
+            const [name, , percent] = lines3[i].split(',');
+            data3.push({
+                name: name.trim(),
+                y: parseFloat(percent)
+            });
+        }
+
+                // Data retrieved from https://netmarketshare.com/
+        // Build the chart
+        Highcharts.chart('container3', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Doanh thu giới tính'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Doanh thu',
+                colorByPoint: true,
+                data: data3
+            }]
+        });
+          //Doanh thu theo xuất xứ
+     const csvText4 = document.getElementById('csv4').innerText.trim();
+        const lines4 = csvText4.split('\n');
+        const data4 = [];
+
+        for (let i = 1; i < lines4.length; i++) {
+            const [name, , percent] = lines4[i].split(',');
+            data4.push({
+                name: name.trim(),
+                y: parseFloat(percent)
+            });
+        }
+
+                // Data retrieved from https://netmarketshare.com/
+        // Build the chart
+        Highcharts.chart('container4', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Doanh thu xuất xứ'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Doanh thu',
+                colorByPoint: true,
+                data: data4
+            }]
+        });
+        //Doanh thu tổng donut
+           const csvText5 = document.getElementById('csv5').innerText.trim();
+    const lines5 = csvText5.split('\n');
+    const [tong, online, offline] = lines5[1].split(',').map(Number);
+
+    const data5 = [
+        { name: 'Online', y: online },
+        { name: 'Offline', y: offline }
+    ];
+
+    Highcharts.chart('container6', {
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'Tỷ lệ doanh thu'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                innerSize: '75%',
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.percentage:.0f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Doanh thu',
+            colorByPoint: true,
+            data: data5
+        }]
+    });
+    //top5 sp bán chạy
+        const csvText_top5 = document.getElementById('csv6').innerText.trim();
+    const lines_top5 = csvText_top5.split('\n');
+    const categories_top5 = [];
+    const data_top5 = [];
+
+    for (let i = 1; i < lines_top5.length; i++) {
+        const [name, value] = lines_top5[i].split(',');
+        categories_top5.push(name.trim());
+        data_top5.push(parseInt(value));
+    }
+
+    Highcharts.chart('container7', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Top 5 Sản phẩm bán chạy nhất'
+        },
+        xAxis: {
+            categories: categories_top5,
+            crosshair: true,
+            accessibility: {
+                description: 'Tên sản phẩm'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Số lượng bán'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' sản phẩm'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Sản phẩm',
+            data: data_top5
+        }]
+    });
+     //top5 sp còn nhiều
+        const csvText_top5e = document.getElementById('csv7').innerText.trim();
+    const lines_top5e = csvText_top5e.split('\n');
+    const categories_top5e = [];
+    const data_top5e = [];
+
+    for (let i = 1; i < lines_top5e.length; i++) {
+        const [name, value] = lines_top5e[i].split(',');
+        categories_top5e.push(name.trim());
+        data_top5e.push(parseInt(value));
+    }
+
+    Highcharts.chart('container8', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Top 5 Sản phẩm còn SL nhiều'
+        },
+        xAxis: {
+            categories: categories_top5e,
+            crosshair: true,
+            accessibility: {
+                description: 'Tên sản phẩm'
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Số lượng còn'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' sản phẩm'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Sản phẩm',
+            data: data_top5e
+        }]
+    });
 </script>
 
 
@@ -303,7 +581,7 @@
     .highcharts-figure,
     .highcharts-data-table table {
         min-width: 360px;
-        max-width: 800px;
+        max-width: 900px;
         margin: 1em auto;
     }
 
@@ -317,9 +595,10 @@
         max-width: 500px;
     }
 
-    #container1, #container2 {
-        height: 400px; 
+    #container1, #container2, #container3, #container4, #container5, #container6 {
+        height: 400px;
     }
+
     .highcharts-data-table caption {
         padding: 1em 0;
         font-size: 1.2em;
@@ -346,7 +625,7 @@
         background: #f1f7ff;
     }
 
-    #csv, #csv1, #csv2 {
+    #csv, #csv1, #csv2, #csv3, #csv4 ,#csv5, #csv6, #csv7{
         display: none;
     }
     /* biểu đồ 2 */
@@ -437,6 +716,54 @@
     }
 
     .highcharts2-data-table tr:hover {
+        background: #f1f7ff;
+    }
+
+    input[type="number"] {
+        min-width: 50px;
+    }
+
+    /* biểu đồ 4 */
+    .highcharts3-figure3,
+    .highcharts3-data-table table {
+        min-width: 380px;
+        max-width: 800px;
+        margin: 1em auto;
+    }
+
+    .highcharts3-data-table table {
+        font-family: Verdana, sans-serif;
+        border-collapse: collapse;
+        border: 1px solid #ebebeb;
+        margin: 10px auto;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .highcharts3-data-table caption {
+        padding: 1em 0;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    .highcharts3-data-table th {
+        font-weight: 600;
+        padding: 0.5em;
+    }
+
+    .highcharts3-data-table td,
+    .highcharts3-data-table th,
+    .highcharts3-data-table caption {
+        padding: 0.5em;
+    }
+
+    .highcharts3-data-table thead tr,
+    .highcharts3-data-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+
+    .highcharts3-data-table tr:hover {
         background: #f1f7ff;
     }
 

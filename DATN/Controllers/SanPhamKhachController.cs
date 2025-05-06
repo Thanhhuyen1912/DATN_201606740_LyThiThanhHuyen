@@ -89,6 +89,7 @@ namespace DATN.Controllers
 
         public IActionResult ChiTietSP(int masp)
         {
+            HttpContext.Session.SetInt32("MaSanPham", masp);
             var sp = _context.SanPham.FirstOrDefault(sp => sp.MaSanPham == masp);
 
             if (sp == null)
