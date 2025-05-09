@@ -3,6 +3,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model List<CoreLib.DTO.SanPhamDTO>
+<div class="m-2" style="font-size: 20px; text-align: center">
+    Danh sách sản phẩm yêu thích
+</div>
 <div class="row" id="productList">
     @foreach (var product in Model)
     {
@@ -12,7 +15,7 @@
                     <img class="anhsp" src="http://localhost:7177/@product.AnhDauTien">             
                     <div class="overlay">
                         <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none buy ">Mua ngay</a>
-                        <a href="https://localhost:7050/SanPhamKhach/ChiTietSP?masp=@product.MaSanPham" class="text-decoration-none cart"><i class="bi bi-cart-plus"></i></a>
+                        <a href="#" onclick="xoaYeuThich(@product.MaSanPham)"  class="text-decoration-none cart"><i class="bi bi-trash3"></i></a>
                     </div>
                 </div>
                 <br />
@@ -29,3 +32,30 @@
         </div>
     }
 </div>
+
+<script>
+        function xoaYeuThich(maSanPham) {
+        if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi yêu thích?")) return;
+
+        $.ajax({
+            url: '/SanPhamKhach/XoaYeuThich',
+            type: 'POST',
+            data: {
+                maSanPham: maSanPham
+            },
+            success: function (res) {
+                if (res.code === 0) {
+                    alert(res.message);
+                    $("#soluongyeuthich").text(res.soluong);
+                    location.reload(); 
+                } else {
+                    alert(res.message);
+                }
+            },
+            error: function () {
+                alert("Lỗi khi gửi yêu cầu xóa.");
+            }
+        });
+    }
+
+</script>

@@ -339,7 +339,7 @@
 
 @section Scripts {
     <script>
-                        let selectedFiles = [];
+        let selectedFiles = [];
         let deletedImageIds = [];
         const MAX_IMAGES = 5;
 
@@ -384,7 +384,7 @@
         $('#preview-new').on('click', '.remove-img', function () {
             const index = $(this).data('index');
             selectedFiles.splice(index, 1);
-            renderPreviewNewImages(); // render lại toàn bộ sau khi xóa
+            renderPreviewNewImages(); 
         });
 
         $(document).on('click', '.remove-img1', function () {
@@ -427,24 +427,24 @@
                              $('#tt').show();
                              $('#tt1').hide();
                              $("#sngaycuoi").datepicker({
-                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend
+                             dateFormat: "yy-mm-dd", 
                              changeMonth: true,
                              changeYear: true
 
                              });
                              $("#sngaydau").datepicker({
-                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend,
+                             dateFormat: "yy-mm-dd",
                              changeMonth: true,
                              changeYear: true
                              });
                              $("#sngaycuoi1").datepicker({
-                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend
+                             dateFormat: "yy-mm-dd", 
                              changeMonth: true,
                              changeYear: true
 
                              });
                              $("#sngaydau1").datepicker({
-                             dateFormat: "yy-mm-dd", // hoặc "dd/mm/yy" tùy format backend,
+                             dateFormat: "yy-mm-dd", 
                              changeMonth: true,
                              changeYear: true
                              });
@@ -459,7 +459,6 @@
                              select.empty();
                              select.append(`<option value="">---</option>`);
 
-                         // Truy cập đúng vào mảng "data"
                              if (data.data && Array.isArray(data.data)) {
                              data.data.forEach(function (item) {
                                  select.append(`<option value="${item.maThuongHieu}">${item.tenThuongHieu}</option>`);
@@ -499,8 +498,6 @@
                              let select1 = $("#skichthuoc");
                              select1.append(`<option value="">---</option>`);
                              
-
-                         // Truy cập đúng vào mảng "data"
                              if (data.data && Array.isArray(data.data)) {
                              data.data.forEach(function (item) {
                                  select1.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
@@ -521,8 +518,6 @@
 
                              select.empty();
 
-
-                         // Truy cập đúng vào mảng "data"
                              if (data.data && Array.isArray(data.data)) {
                              data.data.forEach(function (item) {
                                  select.append(`<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`);
@@ -542,8 +537,6 @@
                              let select = $("#snhomhuong");
                              select.empty();
                              select.append(`<option value="">---</option>`);
-
-                         // Truy cập đúng vào mảng "data"
                              if (data.data && Array.isArray(data.data)) {
                              data.data.forEach(function (item) {
                                  select.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
@@ -564,7 +557,6 @@
                                          let select1 = $("#tnhomhuong");
                                         select1.empty();
 
-        // Truy cập đúng vào mảng "data"
                                              if (data.data && Array.isArray(data.data)) {
                                             data.data.forEach(function (item) {
                                             select1.append(`<option value="${item.maNhomHuong}">${item.tenNhomHuong}</option>`);
@@ -605,7 +597,6 @@
                                       var url = "http://localhost:7177/SanPham/Danhsach";
                                       $.get(url, {}, function (response) {
                                       var dulieu = response.data || [];
-                             // Khởi tạo hoặc cập nhật DataTable
                                       $('#listGrid').DataTable({
                                          dom: '<"top"f>rt<"bottom"ip><"clear">',
                                          destroy: true,
@@ -655,9 +646,9 @@
                                          let table = $('#listGrid').DataTable();
                                          let currentOrder = table.order();
                                          if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
-                                             table.order([1, 'desc']).draw(); // Sắp xếp giảm dần
+                                             table.order([1, 'desc']).draw(); 
                                          } else {
-                                             table.order([1, 'asc']).draw(); // Sắp xếp tăng dần
+                                             table.order([1, 'asc']).draw(); 
                                          }
                                       });
                                       })
@@ -816,7 +807,6 @@
                                          $('#preview-new').empty();
                               }
 
-             // lấy tên sản phẩm
                               $('a[href="#subjectFormTab"]').on('shown.bs.tab', function () {
                                          let tenSP1 = sessionStorage.getItem("TenSanPham");
                                          $("#xtensp").val(tenSP1);
@@ -946,7 +936,6 @@
                                                 });
                               });
 
-                                             // Khai báo toàn cục7
              // fill data in listGrid1
                               function loadChiTietSanPham(masp) {
                                                 $.ajax({
@@ -968,8 +957,22 @@
                                                     { data: "tenSanPham", width: "23%" },
                                                     { data: "tenKichThuoc", width: "13%" },
                                                     { data: "soLuong", width: "10%" },
-                                                    { data: "gia", width: "10%" },
-                                                    { data: "giaGiam", width: "10%" },
+                                                            {
+          "data": "gia",
+          "render": function (data, type, row) {
+            return data.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          },
+          "width": "15%"
+        },
+
+                                                            {
+          "data": "giaGiam",
+          "render": function (data, type, row) {
+            return data.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          },
+          "width": "14%"
+        },
+
                                                     {
                                                         data: "trangThai", width: "14%",
                                                         render: function (data) {
@@ -1005,7 +1008,6 @@
                                                 }
                                                 });
                                                 } else {
-                            // Không có dữ liệu: reset bảng và xoá sessionStorage
                                                 if ($.fn.DataTable.isDataTable('#listGrid1')) {
                                                 $('#listGrid1').DataTable().clear().draw();
                                                 }
@@ -1067,8 +1069,8 @@
                                                      $("#xkichthuoc").val(data.maKichThuoc);
                                                      $("#xsoluong").val(data.soLuong);
                                                      $("#xgia").val(data.gia);
-                                                     $("#xtrangthai").val(data.trangThai.toString());
                                                      $("#xgiagiam").val(data.giaGiam);
+                                                     $("#xtrangthai").val(data.trangThai.toString());
                                                      $('#Insert1').hide();
                                                      $('#Update1').show();
                                                      $('.form2').show();
@@ -1323,13 +1325,11 @@
 }
 
 <style>
-    /* Hide default sorting arrows */
     #listGrid thead th {
         cursor: default;
         position: relative;
     }
 
-        /* Hide the sorting arrows */
         #listGrid thead th.sorting:before,
         #listGrid thead th.sorting:after,
         #listGrid thead th.sorting_asc:before,
@@ -1344,7 +1344,6 @@
         position: relative;
     }
 
-        /* Hide the sorting arrows */
         #listGrid1 thead th.sorting:before,
         #listGrid1 thead th.sorting:after,
         #listGrid1 thead th.sorting_asc:before,
@@ -1353,39 +1352,31 @@
         #listGrid1 thead th.sorting_desc:after {
             display: none;
         }
-    /* Align search bar to the top left */
     .dataTables_filter {
         text-align: center;
     }
 
-    /* Center the pagination controls at the bottom */
     .dataTables_length, .dataTables_filter, .dataTables_paginate {
         text-align: center;
     }
-    /* Align custom sort button with search and pagination */
     .dataTables_wrapper .top {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
-    /* Ưu tiên cao hơn để ghi đè màu mặc định */
-    /* Đổi màu khi được chọn (tab active) */
-    /* Khi tab được chọn (active), đổi màu nền và màu chữ */
+
     li.gsm-link-tab > a.custom-tab-link.active {
-        background-color: #fdb9a4 !important; /* Màu nền hồng */
-        color: #a75851 !important; /* Màu chữ tùy chỉnh */
+        background-color: #fdb9a4 !important; 
+        color: #a75851 !important;
         border-color: transparent !important;
     }
 
-        /* Đảm bảo không bị ghi đè bởi các quy tắc khác cho màu chữ trong span */
         li.gsm-link-tab > a.custom-tab-link.active span {
-            color: #a75851 !important; /* Màu chữ trong span */
+            color: #a75851 !important;
         }
-
-    /* Nếu vẫn không được, ghi đè lại trong các tình huống khác */
     li.gsm-link-tab > a.custom-tab-link.active {
-        color: #a75851 !important; /* Màu chữ chữ cho tất cả trạng thái */
+        color: #a75851 !important;
     }
 
     .rotating-icon {

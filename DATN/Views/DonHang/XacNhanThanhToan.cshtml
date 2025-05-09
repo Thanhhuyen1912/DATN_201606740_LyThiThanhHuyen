@@ -2,6 +2,10 @@
     ViewData["Title"] = "Thanh Toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using System.Globalization
+@{
+    var culture = new CultureInfo("vi-VN");
+}
 @model CoreLib.DTO.TTTToan
 
 <div class="container mt-4">
@@ -31,7 +35,7 @@
                     <span class="ms-3 mt-2"><strong>Địa chỉ:</strong> @Model.diachi.ChiTiet, @Model.diachi.Xa, @Model.diachi.Huyen, @Model.diachi.ThanhPho</span>
                 </li>
                 <li class="list-group-item mt-2">
-                    <strong>Số tiền:</strong> <span class="text-danger">@Model.donhang.TongTien.ToString("N0") VNĐ</span>
+                    <strong>Số tiền:</strong> <span class="text-danger">@Model.donhang.TongTien.ToString("C0", culture)</span>
                 </li>
                 <li id="noidungchuyenkhoan" hidden>@($"TTDH{Model.donhang.MaDonHang}HN")</li>
                 <li id="sotien" hidden>@Model.donhang.TongTien</li>

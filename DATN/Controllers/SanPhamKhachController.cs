@@ -19,15 +19,44 @@ namespace DATN.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.TieuDe = "Sản phẩm";
             return View();
+        }
+        [HttpPost]
+        public IActionResult XoaYeuThich(int maSanPham)
+        {
+            try
+            {
+                int maTaiKhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+                var item = _context.YeuThich
+                    .FirstOrDefault(x => x.MaSanPham == maSanPham && x.MaTaiKhoan == maTaiKhoan);
+
+                if (item != null)
+                {
+                    _context.YeuThich.Remove(item);
+                    _context.SaveChanges();
+
+                    int quantity = _context.YeuThich.Count(y => y.MaTaiKhoan == maTaiKhoan);
+                    return Json(new { code = 0, message = "Đã xóa khỏi danh sách yêu thích!", soluong = quantity });
+                }
+                else
+                {
+                    return Json(new { code = 1, message = "Không tìm thấy sản phẩm trong yêu thích." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { code = 500, message = "Lỗi khi xóa sản phẩm yêu thích." });
+            }
         }
 
         [HttpGet]
         [RequiredLogin]
         public IActionResult YeuThich()
         {
+            ViewBag.TieuDe = "Sản phẩm yêu thích";
             int ma = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
-            var list = _context.YeuThich.ToList();
+            var list = _context.YeuThich.Where(yt=>yt.MaTaiKhoan == ma).ToList();
             var danhsach = list.Select(sp => new SanPhamDTO
             {
                 MaSanPham = sp.MaSanPham,
@@ -45,50 +74,63 @@ namespace DATN.Controllers
                        .OrderBy(ct => ct.MaChiTietSP)
                        .Select(ct => ct.GiaGiam)
                        .FirstOrDefault()
-            })
-   .ToList();
+            }).ToList();
+            var quantity_yeuthich = _context.YeuThich.Where(ctg => ctg.MaTaiKhoan == ma).Count();
+            HttpContext.Session.SetInt32("SoLuongYeuThich", quantity_yeuthich);
             return View(danhsach);
         }
         [HttpGet]
         [RequiredLogin]
         public IActionResult Themyeuthich(int id)
         {
-            int ma = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
-            if (ma > 0)
+            try
             {
-                // Check sản phẩm đã tồn tại trong bảng yêu thích hay chưa
-                var exists = _context.YeuThich
+                var maStr = HttpContext.Session.GetString("MaTaiKhoan");
+                if (string.IsNullOrEmpty(maStr))
+                {
+                    return Json(new { code = -1, message = "Vui lòng đăng nhập!", url = Url.Action("DangNhap", "TaiKhoan") });
+                }
+
+                int ma = int.Parse(maStr);
+
+                // Kiểm tra nếu sản phẩm đã có trong danh sách yêu thích
+                bool exists = _context.YeuThich
                     .Any(yt => yt.MaSanPham == id && yt.MaTaiKhoan == ma);
 
-                if (!exists)
+                if (exists)
                 {
-                    var yeuthich = new YeuThich
-                    {
-                        MaSanPham = id,
-                        MaTaiKhoan = ma,
-                        NgayCapNhat = DateTime.Now
-                    };
-
-                    _context.YeuThich.Add(yeuthich);
-                    _context.SaveChanges();
-                    TempData["Message"] = "Đã thêm vào yêu thích";
-                }
-                else
-                {
-                    TempData["Message"] = "Sản phẩm này đã có trong yêu thích";
+                    return Json(new { code = 1, message = "Sản phẩm đã có trong yêu thích!" });
                 }
 
-                return RedirectToAction("Index");
+                // Thêm vào bảng yêu thích
+                var yeuthich = new YeuThich
+                {
+                    MaSanPham = id,
+                    MaTaiKhoan = ma,
+                    NgayCapNhat = DateTime.Now
+                };
+
+                _context.YeuThich.Add(yeuthich);
+                _context.SaveChanges();
+
+                // Lấy lại tổng số yêu thích của tài khoản này
+                int quantity = _context.YeuThich
+                    .Count(y => y.MaTaiKhoan == ma);
+
+                return Json(new { code = 0, message = "Đã thêm vào yêu thích!", soluong = quantity });
             }
-            else
+            catch (Exception ex)
             {
-                TempData["Message"] = "Vui lòng đăng nhập!";
-                return RedirectToAction("DangNhap", "TaiKhoan");
+                return Json(new { code = 500, message = "Lỗi máy chủ"});
             }
         }
 
+
         public IActionResult ChiTietSP(int masp)
         {
+            ViewBag.TieuDe = "Sản phẩm » Chi tiết sản phẩm ";
+            ViewBag.View = "Index";
+            ViewBag.Controller = "SanPhamKhach";
             HttpContext.Session.SetInt32("MaSanPham", masp);
             var sp = _context.SanPham.FirstOrDefault(sp => sp.MaSanPham == masp);
 

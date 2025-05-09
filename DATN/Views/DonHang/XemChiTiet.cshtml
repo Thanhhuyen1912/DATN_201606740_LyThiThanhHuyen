@@ -2,6 +2,10 @@
     ViewData["Title"] = "Chi tiết đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using System.Globalization
+@{
+    var culture = new CultureInfo("vi-VN");
+}
 @model CoreLib.DTO.NdChitiet
 <div>
     <div class="col-md-12 d-flex">
@@ -67,10 +71,26 @@
             </div>
             <div class="form-group row nopadding mt-2">
                 <div class="col-md-6">
+                    <label class="col-form-label">Tiền vận chuyển</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="ttiengiam" value="30.000đ"  readonly />
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
                     <label class="col-form-label">Thành tiền</label>
                 </div>
                 <div class="col-md-6">
                     <input type="text" style="font-size: 15px" class="form-control" id="tthanhtien" value="@Model.dh.TongTien.ToString("N0")đ" readonly>
+                </div>
+            </div>
+            <div class="form-group row nopadding mt-2">
+                <div class="col-md-6">
+                    <label class="col-form-label">Ngày đặt hàng</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" style="font-size: 15px" class="form-control" id="tthanhtien" value="@Model.dh.NgayTao" readonly>
                 </div>
             </div>
         </div>
@@ -146,10 +166,10 @@
         {
             <tr style="font-size:15px">
                 <td>@item.TenSanPham</td>
-                <td>@item.GiaTien.ToString("N0")đ</td>
-                <td>@item.GiaGiam.ToString("N0")đ</td>
+                <td>@item.GiaTien.ToString("C0", culture)</td>
+                <td>@item.GiaGiam.ToString("C0", culture)</td>
                 <td>@item.SoLuong</td>
-                <td>@item.TongTien.ToString("N0")đ</td>
+                <td>@item.TongTien.ToString("C0", culture)</td>
                 @{
                     var daDanhGia = Model.danhgia.Where(d => d.MaSanPham == item.MaSanPham && d.MaTaiKhoan == Model.mataikhoan).FirstOrDefault();
                 }

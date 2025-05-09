@@ -2,17 +2,25 @@
     ViewData["Title"] = "Lịch sử mua hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@using System.Globalization
+@{
+    var culture = new CultureInfo("vi-VN");
+}
 <div style="margin: 10px auto; font-size: 24px; text-align: center;">
     <p>Danh sách đơn hàng</p>
 </div>
+
+@using System.Text.Encodings.Web
+@using System.Text.Json
+
 @if (TempData["Message"] != null)
 {
-    <div class="alert alert-info alert-dismissible fade show" role="alert">
-        @TempData["Message"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    var message = TempData["Message"].ToString();
+    <script>
+        alert(@Html.Raw(JsonSerializer.Serialize(message)));
+    </script>
 }
+
 <table id="donmuaTable" class="table table-bordered table-sm">
     <thead>
         <tr>
@@ -31,7 +39,7 @@
             <tr style="font-size:15px">
                 <td>@item.NgayTao?.ToString("dd/MM/yyyy")</td>
                 <td>@item.TrangThaiVanChuyen</td>
-                <td>@item.TongTien?.ToString("N0") đ</td>
+                <td>@item.TongTien?.ToString("C0", culture)</td>
                 <td>@(item.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán")</td>
                 <td>@item.TenNhanHang</td>
                 <td>@item.SDTNhanHang</td>
@@ -50,7 +58,7 @@
                                 <i class="bi bi-x-lg"></i>
                             </button>
                         </form>
-                        @if (!item.TrangThaiThanhToan)
+                        @if (!item.TrangThaiThanhToan && item.MaPhuongThucThanhToan == 2)
                         {
                             <a class="tt btn btn-sm me-1" id="btnXacNhan" >
                                 <i class="bi bi-currency-dollar"></i>

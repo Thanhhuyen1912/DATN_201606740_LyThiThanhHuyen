@@ -238,7 +238,6 @@
             }
         </div>
     </div>
-</div>
 
 
 <script>
@@ -263,7 +262,7 @@
         });
     }
     // Lấy danh sách chi tiết sản phẩm từ Razor
-    var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.spchinh.chitietsanpham));
+    var dsChiTiet = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.spchinh.chitietsanpham))
 
        function formatVN(num) {
         return num.toLocaleString('vi-VN', {
@@ -271,22 +270,33 @@
         });
     }
 
-    function themYeuThich(id) {
-        fetch('/SanPhamKhach/Themyeuthich?id=' + id, {
-            method: 'GET'
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('Đã thêm vào yêu thích!');
-            } else {
-                alert('Thêm thất bại!');
+         function themYeuThich(id) {
+        $.ajax({
+            url: '/SanPhamKhach/Themyeuthich',
+            type: 'GET',
+            data: { id: id },
+            success: function (response) {
+                if (response.code === 0) {
+                    $("#soluongyeuthich").text(response.soluong);
+                    alert(response.message);
+                } else if (response.code === 1) {
+                    alert(response.message);
+                } else if (response.code === -1 || response.code === 500) {
+                    alert(response.message);
+                    if (response.url) {
+                        window.location.href = response.url;
+                    }
+                } else {
+                    alert("Lỗi không xác định.");
+                }
+            },
+            error: function () {
+                alert("Không thể kết nối máy chủ.");
             }
-        })
-        .catch(error => {
-            console.error('Lỗi:', error);
-            alert('Có lỗi xảy ra!');
         });
     }
+
+
       function chonKichThuoc(i) {
         var ct = dsChiTiet[i];
         if (!ct) return alert("Không tìm thấy chi tiết sản phẩm!");
@@ -335,6 +345,8 @@
                     if (response.code == 1) {
                         alert(response.message);  // Thông báo khi chưa đăng nhập hoặc chưa có giỏ hàng
                     } else if (response.code ==0) {
+                        console.log(response.soluong);
+                         $("#soluonggio").text(response.soluong);
                         alert(response.message);  // Thông báo khi thành công
                     } else {
                         alert("Có lỗi xảy ra khi cập nhật giỏ hàng.");

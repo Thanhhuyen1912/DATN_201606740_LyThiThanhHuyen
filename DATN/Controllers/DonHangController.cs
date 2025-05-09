@@ -32,6 +32,7 @@ namespace DATN.Controllers
         [RequiredLoginBuy]
         public IActionResult DatHang()
         {
+            ViewBag.TieuDe = "Đặt hàng";
             return View();
         }
         //Khachhang
@@ -39,6 +40,7 @@ namespace DATN.Controllers
         [HttpPost]
         public async Task<IActionResult> DatHang([FromBody] Guidathang guidh)
         {
+            ViewBag.TieuDe = "Đặt hàng";
             int ma = int.Parse(HttpContext.Session.GetString("MaGioHang"));
             if (guidh == null || guidh.mataikhoan == 0)
             {
@@ -122,7 +124,6 @@ namespace DATN.Controllers
         {
             try
             {
-                // Logic xử lý đơn hàng
                 int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
                 int magiohang = int.Parse(HttpContext.Session.GetString("MaGioHang"));
                 DonHang donhang = new DonHang
@@ -232,6 +233,7 @@ namespace DATN.Controllers
         [HttpGet]
         public async Task<IActionResult> XacNhanThanhToan()
         {
+            ViewBag.TieuDe = "Thanh toán";
             int? madonhang = HttpContext.Session.GetInt32("MaDonHang");
             var donhang = _context.DonHang.Where(dh => dh.MaDonHang == madonhang).FirstOrDefault();
             int? mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
@@ -259,7 +261,6 @@ namespace DATN.Controllers
 
             var tenNganHang = "mb";
             var soTaiKhoan = "9969671912";
-            // Gọi theo chuẩn vietqr.net (tạo URL trực tiếp)
             var url = $"https://img.vietqr.io/image/{tenNganHang}-{soTaiKhoan}-compact2.png" +
                       $"?amount={soTien.ToString()}&addInfo={noiDung.ToString()}";
 
@@ -295,6 +296,7 @@ namespace DATN.Controllers
         [RequiredLogin]
         public IActionResult DonMua()
         {
+            ViewBag.TieuDe = "Lịch sử mua hàng";
             int? mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
             var donhang = _context.DonHang
                 .Where(sp => sp.MaTaiKhoan == mataikhoan)
@@ -327,6 +329,7 @@ namespace DATN.Controllers
         [RequiredLogin]
         public async Task<IActionResult> ThayDoiDiaChi(string id)
         {
+            ViewBag.TieuDe = "Thay đổi địa chỉ";
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Mã đơn hàng không được để trống.");
@@ -427,6 +430,7 @@ namespace DATN.Controllers
         [HttpGet]
         public async Task<IActionResult> XemChiTiet(int id)
         {
+            ViewBag.TieuDe = "Chi tiết đơn hàng";
             var donhang = _context.ChiTietDonHang
                 .Where(p => p.MaDonHang == id)
                 .Select(dh => new Chitietdh
@@ -460,9 +464,12 @@ namespace DATN.Controllers
             var dg = _context.DanhGia.ToList();
 
             var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
-
+            decimal sotienduocgiam = 0;
             var giatrigiam = _context.MaGiamGia.Where(gg => gg.MMaGiamGia == don.MMaGiamGia).FirstOrDefault();
-
+            if (giatrigiam != null)
+            {
+                sotienduocgiam = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri;
+            }    
             var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
 
             var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
@@ -485,7 +492,7 @@ namespace DATN.Controllers
                 taikhoan = taikhoan,
                 phuongthucthanhtoan = pttt,
                 ttthanhtoan = don.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán",
-                giamgia = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri
+                giamgia = sotienduocgiam
             };
 
             return View(nd);
@@ -495,6 +502,7 @@ namespace DATN.Controllers
         [HttpGet]
         public IActionResult DanhGia(int id)
         {
+            ViewBag.TieuDe = "Đánh giá sản phẩm";
             int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
             ViewBag.MaTaiKhoan = mataikhoan;
             var sp = _context.SanPham.Where(sp =>sp.MaSanPham == id).FirstOrDefault();
@@ -505,11 +513,8 @@ namespace DATN.Controllers
         {
             try
             {
-                Console.WriteLine($"MaTaiKhoan: {danhgia.MaTaiKhoan}, MaSanPham: {danhgia.MaSanPham}, SoDiem: {danhgia.SoDiem}");
-
                 var dg = _context.DanhGia
-                    .Where(dg => dg.MaTaiKhoan == danhgia.MaTaiKhoan && dg.MaSanPham == danhgia.MaSanPham)
-                    .FirstOrDefault();
+                    .FirstOrDefault(dg => dg.MaTaiKhoan == danhgia.MaTaiKhoan && dg.MaSanPham == danhgia.MaSanPham);
 
                 if (dg == null)
                 {
@@ -525,15 +530,13 @@ namespace DATN.Controllers
                     _context.SaveChanges();
                 }
 
-                return Json(new { message = "Đánh giá thành công", redirectUrl = Url.Action("DonMua", "DonHang") });
+                return Ok(new { message = "Đánh giá thành công", redirectUrl = Url.Action("DonMua", "DonHang") });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Lỗi: {ex.Message}");
-                return Json(new { message = "Có lỗi xảy ra khi xử lý đánh giá." });
+                return StatusCode(500, new { message = "Có lỗi xảy ra khi xử lý đánh giá." });
             }
         }
-
     }
 
 }

@@ -33,16 +33,19 @@ namespace DATN.Controllers
         [HttpGet]
         public IActionResult DangNhap()
         {
+            ViewBag.TieuDe = "Đăng nhập";
             return View();
         }
         [HttpGet]
         public IActionResult DangKy()
         {
+            ViewBag.TieuDe = "Đăng ký";
             return View();
         }
         [HttpGet]
         public IActionResult ThemDiaChi()
         {
+            ViewBag.TieuDe = "Thêm địa chỉ";
             string? ma = HttpContext.Session.GetString("MaTaiKhoan");
             if (ma != null)
             {
@@ -58,7 +61,7 @@ namespace DATN.Controllers
         }
         [HttpPost]
         public IActionResult ThemDiaChi(string HoTenNguoiNhan, string SoDienThoaiNguoiNhan, string Huyen, string Xa, string ChiTiet, string ThanhPho)
-        {
+        {          
             string? ma = HttpContext.Session.GetString("MaTaiKhoan");
             if (ma != null)
             {
@@ -86,6 +89,7 @@ namespace DATN.Controllers
         [HttpGet]
         public IActionResult CapNhatDiaChi(int id)
         {
+            ViewBag.TieuDe = "Cập nhật địa chỉ";
             string? ma = HttpContext.Session.GetString("MaTaiKhoan");
             if (ma != null)
             {
@@ -140,7 +144,7 @@ namespace DATN.Controllers
                 }
                 catch
                 {
-                    TempData["Message"] = "Tài khoản đã được sử dụng để đặt hàng";
+                    TempData["Message1"] = "Tài khoản đã được sử dụng để đặt hàng";
                 }
                 return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = ma });
             }
@@ -172,6 +176,10 @@ namespace DATN.Controllers
                 HttpContext.Session.SetString("Role", tk.LoaiTaiKhoan.ToString() ?? "");
                 HttpContext.Session.SetString("MaTaiKhoan", tk.MaTaiKhoan.ToString());
                 HttpContext.Session.SetString("User", tk.HoTen.ToString() ?? "");
+                var quantity_giohang = _context.ChiTietGioHang.Where(ctg => ctg.MaGioHang == giohang.MaGioHang).Sum(ctg => ctg.SoLuong);
+                HttpContext.Session.SetInt32("SoLuongGioHang", quantity_giohang);
+                var quantity_yeuthich = _context.YeuThich.Where(ctg => ctg.MaTaiKhoan == tk.MaTaiKhoan).Count();
+                HttpContext.Session.SetInt32("SoLuongYeuThich", quantity_yeuthich);
                 string? returnUrl = HttpContext.Session.GetString("ReturnUrl");
                 if (returnUrl != null)
                 {
@@ -190,6 +198,8 @@ namespace DATN.Controllers
         {
             HttpContext.Session.Remove("Role");
             HttpContext.Session.Remove("MaTaiKhoan");
+            HttpContext.Session.Remove("SoLuongYeuThich");
+            HttpContext.Session.Remove("SoLuongGioHang");
             HttpContext.Session.Remove("User");
             return RedirectToAction("Index", "Home");
         }
@@ -219,8 +229,10 @@ namespace DATN.Controllers
             }
         }
         [HttpGet]
+        [RequiredLogin]
         public async Task<IActionResult> QuanLyTK(string id)
         {
+            ViewBag.TieuDe = "Cập nhật thông tin cá nhân";
             if (!int.TryParse(id, out int maTaiKhoan))
             {
                 return RedirectToAction("DangNhap", "TaiKhoan");
@@ -261,6 +273,7 @@ namespace DATN.Controllers
 
         public IActionResult ChiTietTK(string id)
         {
+            ViewBag.TieuDe = "Thông tin tài khoản";
             if (!int.TryParse(id, out int maTaiKhoan))
             {
                 return RedirectToAction("QuanLyTK", "TaiKhoan", new { id = id });

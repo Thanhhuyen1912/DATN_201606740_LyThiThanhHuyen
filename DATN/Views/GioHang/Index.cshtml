@@ -2,6 +2,10 @@
     ViewData["Title"] = "Giỏ hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using System.Globalization
+@{
+    var culture = new CultureInfo("vi-VN");
+}
 @model List<CoreLib.DTO.Hienthigiohang>
 <table class="table align-middle mt-2">
 
@@ -26,8 +30,8 @@
                 data-giagiam="@product.chitietsanpham.GiaGiam">
                 <td>@product.tensanpham</td>
                 <td><img src="http://localhost:7177/@product.anh.URL" width="80" /></td>
-                <td>@product.chitietsanpham.Gia.ToString("N0")đ</td>
-                <td>@product.chitietsanpham.GiaGiam.ToString("N0")đ</td>
+                <td>@product.chitietsanpham.Gia.ToString("C0", culture)</td>
+                <td>@product.chitietsanpham.GiaGiam.ToString("C0", culture)</td>
                 <td class="product-quantity">
                     <div class="d-flex justify-content-center align-items-center">
                         <button class="btn btn-sm" onclick="updateQty(this, -1)">−</button>
@@ -35,7 +39,7 @@
                         <button class="btn btn-sm" onclick="updateQty(this, 1)">+</button>
                     </div>
                 </td>
-                <td class="product-total ">@product.chitietgiohang.TongTien.ToString("N0")đ</td>
+                <td class="product-total ">@product.chitietgiohang.TongTien.ToString("C0", culture)</td>
                 <td>
                     <a class="btn update" data-id="@product.chitietgiohang.MaChiTietGio"><i class="bi bi-check2-all"></i></a>
                     <a class="btn delete" data-id="@product.chitietgiohang.MaChiTietGio"><i class="bi bi-x"></i></a>
@@ -50,7 +54,7 @@
             <td></td>
             <td class="product-total">
                 <b>
-                    @ViewBag.Tongtien.ToString("N0")đ
+                    @ViewBag.Tongtien.ToString("C0", culture)
                 </b>
             </td>
             <td></td>
@@ -63,6 +67,7 @@
 <div style="text-align:center; align-content:center; justify-content:center">
     <button  id="btnThanhToan" class="btn">Đặt hàng</button>
 </div>
+<a href="@Url.Action("Index", "SanPhamKhach")" style="color: gray" class="d-block mb-3 text-decoration-none">‹ Tiếp tục chọn sản phẩm</a>
 <script>
             function updateQty(button, change) {
         // Tìm input gần nhất với button đang được nhấn

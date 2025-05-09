@@ -243,7 +243,18 @@
                             columns: [
                                         { "data": "maHienThi","width": "15%" },
                                         { "data": "loaiGiamGia","width": "15%" },
-                                        { "data": "giaTri","width": "15%" },
+                                           {
+            data: "giaTri",
+            width: "15%",
+            render: function (data, type, row) {
+                if (row.loaiGiamGia === "Giảm theo %") {
+                    return data + " %";
+                } else {
+                    return parseInt(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                }
+            }
+        },
+
                                          {
                                                         data: "ngayBatDau", width: "15%",
                                                         render: function (data) {
@@ -398,7 +409,7 @@
         const month = String(ngay.getMonth() + 1).padStart(2, '0');
         const day = String(ngay.getDate()).padStart(2, '0');
 
-        const formatted = `${year}-${month}-${day}`;  // "2025-04-14"
+        const formatted = `${year}-${month}-${day}`;  
         $("#ngaybatdau").val(formatted);
 
 
@@ -410,7 +421,7 @@
         const month1 = String(ngay1.getMonth() + 1).padStart(2, '0');
         const day1 = String(ngay1.getDate()).padStart(2, '0');
 
-        const formatted1 = `${year1}-${month1}-${day1}`;  // "2025-04-14"
+        const formatted1 = `${year1}-${month1}-${day1}`;
         $("#ngayketthuc").val(formatted1);
 
                                         $('#Insert').hide();

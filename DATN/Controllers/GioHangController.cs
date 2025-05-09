@@ -19,6 +19,7 @@ namespace DATN.Controllers
         [RequiredLogin]
         public IActionResult Index()
         {
+            ViewBag.TieuDe = "Giỏ hàng";
             string? ma = HttpContext.Session.GetString("MaTaiKhoan");
             if (ma == null)
             {
@@ -26,7 +27,8 @@ namespace DATN.Controllers
             }
             var giohang = _context.GioHang.Where(gh => gh.MaTaiKhoan == int.Parse(ma)).FirstOrDefault();
             HttpContext.Session.SetString("MaGioHang", giohang.MaGioHang.ToString());
-
+            var quantity_giohang = _context.ChiTietGioHang.Where(ctg => ctg.MaGioHang == giohang.MaGioHang).Sum(ctg => ctg.SoLuong);
+            HttpContext.Session.SetInt32("SoLuongGioHang", quantity_giohang);
             var listct = _context.ChiTietGioHang.Where(ct => ct.MaGioHang == giohang.MaGioHang).ToList();
             var list = new List<Hienthigiohang>();
 
@@ -54,6 +56,7 @@ namespace DATN.Controllers
         {
             try
             {
+
                 string? ma = HttpContext.Session.GetString("MaTaiKhoan");
                 if (ma == null)
                 {
@@ -75,7 +78,7 @@ namespace DATN.Controllers
                     return RedirectToAction("DangNhap", "TaiKhoan");
                 }
 
-                var giohang = _context.GioHang.Where(gh => gh.MaTaiKhoan == magiohang.Value).FirstOrDefault();
+                var giohang = _context.GioHang.Where(gh => gh.MaGioHang == magiohang.Value).FirstOrDefault();
 
                 // Kiểm tra xem chi tiết sản phẩm đã có trong giỏ hàng chưa
                 var existingItem = _context.ChiTietGioHang
@@ -105,8 +108,9 @@ namespace DATN.Controllers
                 }
 
                 _context.SaveChanges();
-
-                return Json(new { code = 0, message = "Giỏ hàng đã được cập nhật" });
+                var quantity_giohang = _context.ChiTietGioHang.Where(ctg => ctg.MaGioHang == giohang.MaGioHang).Sum(ctg => ctg.SoLuong);
+                HttpContext.Session.SetInt32("SoLuongGioHang", quantity_giohang);
+                return Json(new { code = 0, message = "Giỏ hàng đã được cập nhật", soluong = quantity_giohang });
             }
             catch (Exception ex)
             {

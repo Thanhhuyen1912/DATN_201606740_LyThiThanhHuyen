@@ -70,20 +70,26 @@
             MaTaiKhoan: maTaiKhoan
         };
         // Gửi request Ajax
-        $.ajax({
-            url: '/DonHang/DanhGia',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(reviewData),
-            success: function (data) {
-                alert(data.message);
-                 window.location.href = data.redirectUrl;
-            },
-            error: function (xhr, status, error) {
-                console.error('Lỗi:', responseText);
-                alert('Có lỗi xảy ra khi gửi đánh giá.' , error);
+            $.ajax({
+        url: '/DonHang/DanhGia',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(reviewData),
+        success: function (data) {
+            alert(data.message);
+            window.location.href = data.redirectUrl;
+        },
+        error: function (xhr) {
+            console.error('Lỗi:', xhr.responseText);
+            try {
+                const res = JSON.parse(xhr.responseText);
+                alert(res.message);
+            } catch {
+                alert('Có lỗi xảy ra khi gửi đánh giá.');
             }
-        });
+        }
+    });
+
     });
 
 </script>

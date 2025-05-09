@@ -184,6 +184,14 @@
                             </div>
                             <div class="form-group row nopadding">
                                 <div class="col-md-3">
+                                    <label class="col-form-label">Tổng tiền</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="ttongtien" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
                                     <label class="col-form-label">Số tiền giảm giá</label>
                                 </div>
                                 <div class="col-md-4">
@@ -198,9 +206,9 @@
                                     <input type="text" class="form-control" id="tthanhtien" readonly>
                                 </div>
                             </div>
-                                <div style="margin: 0 auto">
-                                    <h3>Thông tin nhận hàng</h3>
-                                </div>
+                            <div style="margin: 0 auto">
+                                <h3>Thông tin nhận hàng</h3>
+                            </div>
                             <div class="form-group row nopadding">
                                 <div class="col-md-3">
                                     <label class="col-form-label">Tên người nhận</label>
@@ -249,7 +257,7 @@
                                     <input type="text" class="form-control" id="tchitiet" readonly>
                                 </div>
                             </div>
-                                                 
+
                         </div>
                     </form>
                 </div>
@@ -278,7 +286,6 @@
                 url: 'http://localhost:7177/PhuongThuc/Danhsach',
                 method: 'GET',
                 success: function (res) {
-                    console.log(res);
                     if (Array.isArray(res.data)) {
                         res.data.forEach(function (item) {
                             $('#shinhthucvanchuyen').append(
@@ -345,6 +352,7 @@
                                       var url = "http://localhost:7177/DonHang/Danhsach";
                                       $.get(url, {}, function (response) {
                                       var dulieu = response.data || [];
+                                      dulieu.sort((a, b) => new Date(b.NgayTao) - new Date(a.NgayTao));
                              // Khởi tạo hoặc cập nhật DataTable
                                       $('#listGrid').DataTable({
                                          dom: '<"top"f>rt<"bottom"ip><"clear">',
@@ -357,9 +365,23 @@
                                          data: dulieu,
                                          columns: [
                                                          { "data": "tenDatMua", "width": "10%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "14%" },
-                                                         { "data": "tienGiam", "width": "13%" },
-                                                         { "data": "tongTien", "width": "12%" },
+                                                         { "data": "trangThaiVanChuyen", "width": "12%" },
+                                                                {
+          data: "soTienGiam",
+          width: "12%",
+          render: function (data, type, row) {
+              let formatted = "";
+           return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+        },
+      
+
+                                                         { "data": "thanhTien", "width": "12%",
+                                                          render: function (data, type, row) {
+              let formatted = "";
+             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+                                                         },
                                                          { "data": "phuongthucthanhtoan", "width": "18%" },
                                                           {
                                                              data: "trangThaiThanhToan",
@@ -368,25 +390,32 @@
                                                              return data === true ? "Đã thanh toán" : "Chưa thanh toán";
                                                              }
                                                          },
-                                                         {
-                                                            data: "ngayTao",
-                                                            width: "10%",
-                                                            render: function (data, type, row) {
-                                                                if (data) {
-                                                                const date = new Date(data);
-                                                                const formatted = date.toLocaleString("vi-VN", {
-                                                                day: "2-digit",
-                                                                month: "2-digit",
-                                                                year: "numeric"
-                                                                });
-                                                                return formatted;
-                                                                }
-                                                            return "";
-                                                            }
-                                                         },
+                                                                      {
+          data: "ngayTao",  // giữ nguyên kiểu DateTime
+          width: "13%",
+          render: function (data, type, row) {
+            if (!data) return "";
+
+            // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
+            if (type === "sort" || type === "type") {
+              return data;
+            }
+
+            const date = new Date(data);
+            const pad = n => n.toString().padStart(2, '0');
+            return pad(date.getDate()) + "/" +
+                   pad(date.getMonth() + 1) + "/" +
+                   date.getFullYear() + " " +
+                   pad(date.getHours()) + ":" +
+                   pad(date.getMinutes()) + ":" +
+                   pad(date.getSeconds());
+          }
+        }
+        ,
+
                                                          {
                                                              "data": "maDonHang",
-                                                             "width":"8%",
+                                                             "width":"13%",
                                                              render: function (data) {
                                                              let editButton = `
                                                              <button class='ViewDetails btn btn-link' data-id="${data}">
@@ -451,13 +480,13 @@
                                         $('#backbt').show();
                                         $('#backbt1').hide();
                                         $('.form3').show();
-                                        $('#tt11').hide();                                        
+                                        $('#tt11').hide();
                                         $('#Insert').show();
                                         $('.form10').show();
                                         $('.form11').hide();
                                         $('#searchButton').show();
                                         sessionStorage.removeItem("madonhang");
-                              });                         
+                              });
         var cityList = [];
         var districtList = [];
         var wardList = [];
@@ -480,7 +509,7 @@
                                 url: 'https://provinces.open-api.vn/api/w/',
                                 method: 'GET',
                                 success: function (data) {
-                                    wardList = data; 
+                                    wardList = data;
                                 },
                                 error: function () {
                                     console.log("Lỗi khi tải danh sách xã");
@@ -515,7 +544,7 @@
                         alert('Chi tiết đơn hàng không tìm thấy.');
                         return;
                     }
-
+                    console.log(response);
                   const data = response.data;
                   var cityName = cityList.find(city => city.code == parseInt(data.diaChiTP));
                   var nameTP = cityName ? cityName.name : 'Không tìm thấy';
@@ -525,7 +554,7 @@
 
                   var wardName = wardList.find(city => city.code == parseInt(data.diaChiXa));
                   var nameXa = wardName ? wardName.name : 'Không tìm thấy';
-
+                  console.log(data.thanhTien);
                     // Gán dữ liệu vào form
                     $("#thoten").val(data.tenDatMua);
                     $("#temail").val(data.mail);
@@ -533,8 +562,9 @@
                     $("#tttvanchuyen").val(data.trangThaiVanChuyen);
                     $("#tptthanhtoan").val(data.phuongthucthanhtoan);
                     $("#tttthanhtoan").val(data.trangThaiThanhToan.toString());
-                    $("#ttiengiam").val(data.tienGiam);
-                    $("#tthanhtien").val(data.tongTien);
+                    $("#ttiengiam").val(data.soTienGiam.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                    $("#ttongtien").val(data.tongTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                    $("#tthanhtien").val(data.thanhTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
                     $("#ttennguoinhan").val(data.tenNhanHang);
                     $("#tsdtnhan").val(data.sdtNhanHang);
                     $("#tthanhpho").val(nameTP);
@@ -575,11 +605,26 @@
                                                 data: dulieu,
                                                 columns: [
                                                     { data: "tenSanPham", width: "20%" },
-                                                    { data: "giaTien", width: "20%" },
-                                                    { data: "giaGiam", width: "20%" },
+                                                      { "data": "giaTien", "width": "20%",
+                                                          render: function (data, type, row) {
+              let formatted = "";
+             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+                                                         },
+                                                      { "data": "giaGiam", "width": "20%",
+                                                          render: function (data, type, row) {
+              let formatted = "";
+             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+                                                         },
                                                     { data: "soLuong", width: "20%" },
-                                                    { data: "tongTien", width: "20%" },
-                                                  
+                                                     { "data": "tongTien", "width": "20%",
+                                                          render: function (data, type, row) {
+              let formatted = "";
+             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+                                                         },
+
                                                 ],
                                                 language: {
                                                 search: "Tìm kiếm:",
@@ -699,9 +744,36 @@
                                                  data: res.data,
                                                    columns: [
                                                          { "data": "tenDatMua", "width": "10%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "14%" },
-                                                         { "data": "tienGiam", "width": "13%" },
-                                                         { "data": "tongTien", "width": "12%" },
+                                                         { "data": "trangThaiVanChuyen", "width": "12%" },
+                                                                {
+          data: "tienGiam",
+          width: "12%",
+          render: function (data, type, row) {
+              let formatted = "";
+            if (!data || !row) return formatted = parseFloat(0.0).toLocaleString("vi-VN", { style: "currency", currency: "VND" });;
+
+
+            if (row.loaiGiamGia && row.loaiGiamGia.includes("Giảm theo %")) {
+              const tongTien = row.tongTien || 0;
+              const giam = (data * tongTien) / 100;
+              formatted = giam.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+            } else if(row.loaiGiamGia && row.loaiGiamGia.includes("Giảm tiền mặt")) {
+              formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+            }
+            else
+            {
+                 formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+            }
+            return formatted;
+          }
+        },
+
+                                                         { "data": "tongTien", "width": "12%",
+                                                          render: function (data, type, row) {
+              let formatted = "";
+             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+          }
+                                                         },
                                                          { "data": "phuongthucthanhtoan", "width": "18%" },
                                                           {
                                                              data: "trangThaiThanhToan",
@@ -710,25 +782,32 @@
                                                              return data === true ? "Đã thanh toán" : "Chưa thanh toán";
                                                              }
                                                          },
-                                                         {
-                                                            data: "ngayTao",
-                                                            width: "10%",
-                                                            render: function (data, type, row) {
-                                                                if (data) {
-                                                                const date = new Date(data);
-                                                                const formatted = date.toLocaleString("vi-VN", {
-                                                                day: "2-digit",
-                                                                month: "2-digit",
-                                                                year: "numeric"
-                                                                });
-                                                                return formatted;
-                                                                }
-                                                            return "";
-                                                            }
-                                                         },
+                                                                      {
+          data: "ngayTao",  // giữ nguyên kiểu DateTime
+          width: "13%",
+          render: function (data, type, row) {
+            if (!data) return "";
+
+            // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
+            if (type === "sort" || type === "type") {
+              return data;
+            }
+
+            const date = new Date(data);
+            const pad = n => n.toString().padStart(2, '0');
+            return pad(date.getDate()) + "/" +
+                   pad(date.getMonth() + 1) + "/" +
+                   date.getFullYear() + " " +
+                   pad(date.getHours()) + ":" +
+                   pad(date.getMinutes()) + ":" +
+                   pad(date.getSeconds());
+          }
+        }
+        ,
+
                                                          {
                                                              "data": "maDonHang",
-                                                             "width":"8%",
+                                                             "width":"13%",
                                                              render: function (data) {
                                                              let editButton = `
                                                              <button class='ViewDetails btn btn-link' data-id="${data}">
@@ -753,7 +832,7 @@
                                                  error: function (err) {
                                                  }
                                                  });
-                             });          
+                             });
              });
     </script>
 }

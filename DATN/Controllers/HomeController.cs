@@ -19,13 +19,12 @@ namespace DATN.Controllers
             _context = context;
             _logger = logger;
         }
-
-
         public IActionResult Index()
         {
             ViewBag.User = HttpContext.Session.GetString("User");
-
-
+            ViewBag.TieuDe = "Trang chủ";
+            ViewBag.View = "Index";
+            ViewBag.Controller = "Home";
             var top10SanPham = _context.SanPham
     .OrderByDescending(sp => sp.MaSanPham)
     .Take(10)
@@ -38,7 +37,7 @@ namespace DATN.Controllers
                       where asp.MaSanPham == sp.MaSanPham
                       orderby asp.MaAnh
                       select a.URL).FirstOrDefault(),
-        GiaDauTien = _context.ChiTietSanPham.Where(ct=>ct.MaSanPham == sp.MaSanPham)
+        GiaDauTien = _context.ChiTietSanPham.Where(ct => ct.MaSanPham == sp.MaSanPham)
                         .OrderBy(ct => ct.MaChiTietSP)
                         .Select(ct => ct.Gia)
                         .FirstOrDefault(),
@@ -77,9 +76,6 @@ namespace DATN.Controllers
                 .OrderByDescending(sp => sp.GiaGiamDauTien)  // Sắp xếp theo giá giảm cao nhất
                 .Take(10) // Lấy 10 sản phẩm đầu tiên
                 .ToList(); // Chuyển đổi thành danh sách
-
-
-
 
 
 
