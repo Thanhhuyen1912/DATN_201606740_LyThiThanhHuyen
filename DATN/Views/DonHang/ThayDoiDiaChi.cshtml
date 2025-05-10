@@ -27,7 +27,7 @@
         var datHang = Model; // vì bạn truyền list chỉ có 1 phần tử
         foreach (var diaChi in datHang.list)
         {
-            <div style="padding-left: 120px; margin-bottom: 20px" class="border p-2 my-2 rounded" style="font-size: 15px">
+            <div style="padding-left: 120px; margin-bottom: 20px; font-size: 15px" class="border p-2 my-2 rounded">
                 <label class="w-100">
                     <input type="radio" name="MaDiaChi" value="@diaChi.MaDiaChi" />
                     <strong>@diaChi.HoTenNguoiNhan</strong> (@diaChi.SoDienThoaiNguoiNhan)<br />

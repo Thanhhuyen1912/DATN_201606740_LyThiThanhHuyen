@@ -151,7 +151,6 @@ namespace API.Controllers
              .Select(th => th.LoaiGiamGia)
              .FirstOrDefault(),
 
-         // Tính số tiền giảm thực tế
          SoTienGiam = _context.MaGiamGia
              .Where(gg => gg.MMaGiamGia == sp.MMaGiamGia)
              .Select(th => th.LoaiGiamGia.Contains("Giảm theo %")
@@ -160,7 +159,6 @@ namespace API.Controllers
 
              .FirstOrDefault(),
 
-         // Tính thành tiền = tổng tiền - số tiền giảm
          ThanhTien = sp.TongTien -
              _context.MaGiamGia
                  .Where(th => th.MMaGiamGia == sp.MMaGiamGia)
@@ -327,6 +325,21 @@ namespace API.Controllers
                   .Where(th => th.MaDiaChi == sp.MaDiaChi)
                   .Select(th => th.SoDienThoaiNguoiNhan)
                   .FirstOrDefault(),
+                    SoTienGiam = _context.MaGiamGia
+             .Where(gg => gg.MMaGiamGia == sp.MMaGiamGia)
+             .Select(th => th.LoaiGiamGia.Contains("Giảm theo %")
+                ? (decimal)th.GiaTri / 100 * sp.TongTien
+                : (decimal)th.GiaTri)
+
+             .FirstOrDefault(),
+
+                    ThanhTien = sp.TongTien -
+             _context.MaGiamGia
+                 .Where(th => th.MMaGiamGia == sp.MMaGiamGia)
+                 .Select(th => th.LoaiGiamGia.Contains("Giảm theo %")
+                     ? (decimal)th.GiaTri / 100 * sp.TongTien
+                     : (decimal)th.GiaTri)
+                 .FirstOrDefault(),
                 }).ToList();
             return Ok(new { message = "Tìm kiếm thành công", code = 0, data = donhang });
         }

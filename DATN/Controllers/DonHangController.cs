@@ -4,16 +4,25 @@ using CoreLib.DTO;
 using CoreLib.Entity;
 using Microsoft.AspNetCore.Mvc;
 using SANPHAM.Authorize;
+using System.Text;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 namespace DATN.Controllers
 {
+
     public class DonHangController : Controller
     {
         private readonly AppDbContext _context;
         private readonly ILocationService _locationService;
-        public DonHangController(AppDbContext context, ILocationService locationService)
+        private readonly IWebHostEnvironment _hostEnvironment;
+        private readonly ICompositeViewEngine _viewEngine;
+
+
+        public DonHangController(ICompositeViewEngine viewEngine, AppDbContext context, ILocationService locationService, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _locationService = locationService;
+            _hostEnvironment = hostEnvironment;
+            _viewEngine = viewEngine;
         }
         //Admin
         [RequiredLogin]
@@ -178,7 +187,7 @@ namespace DATN.Controllers
                 {
                     return Json(new { code = 0, message = "Đặt hàng thành công", redirectUrl = Url.Action("Index", "SanPhamKhach") });
 
-                }               
+                }
 
             }
             catch (Exception ex)
@@ -192,7 +201,7 @@ namespace DATN.Controllers
             HttpContext.Session.SetInt32("MaDonHang", int.Parse(data.MaDonHang));
             return Ok();
         }
-      
+
         [RequiredLogin]
         [HttpPost]
         public IActionResult ApDungMaGiamGia([FromBody] MaGiamGiaRequest request)
@@ -228,7 +237,7 @@ namespace DATN.Controllers
             {
                 return Json(new { code = 1, message = "Không thể áp dụng mã giảm giá" });
             }
-        }       
+        }
         [RequiredLogin]
         [HttpGet]
         public async Task<IActionResult> XacNhanThanhToan()
@@ -460,7 +469,7 @@ namespace DATN.Controllers
                 })
                 .ToList();
             int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
-            
+
             var dg = _context.DanhGia.ToList();
 
             var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
@@ -469,7 +478,7 @@ namespace DATN.Controllers
             if (giatrigiam != null)
             {
                 sotienduocgiam = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri;
-            }    
+            }
             var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
 
             var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
@@ -505,7 +514,7 @@ namespace DATN.Controllers
             ViewBag.TieuDe = "Đánh giá sản phẩm";
             int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
             ViewBag.MaTaiKhoan = mataikhoan;
-            var sp = _context.SanPham.Where(sp =>sp.MaSanPham == id).FirstOrDefault();
+            var sp = _context.SanPham.Where(sp => sp.MaSanPham == id).FirstOrDefault();
             return View(sp);
         }
         [HttpPost]
@@ -537,6 +546,157 @@ namespace DATN.Controllers
                 return StatusCode(500, new { message = "Có lỗi xảy ra khi xử lý đánh giá." });
             }
         }
-    }
+        [HttpGet]
+        [RequiredLogin]
+        public async Task<IActionResult> XemHoaDon(int id)
+        {
+            ViewBag.TieuDe = "Xuất hóa đơn";
+            var donhang = _context.ChiTietDonHang
+               .Where(p => p.MaDonHang == id)
+               .Select(dh => new Chitietdh
+               {
+                   MaSanPham = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.MaSanPham)
+                       .FirstOrDefault(),
 
+                   GiaTien = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.Gia)
+                       .FirstOrDefault(),
+
+                   GiaGiam = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.GiaGiam)
+                       .FirstOrDefault(),
+
+                   TenSanPham = (from ct in _context.ChiTietSanPham
+                                 join sp in _context.SanPham on ct.MaSanPham equals sp.MaSanPham
+                                 where ct.MaChiTietSP == dh.MaChiTietSP
+                                 select sp.TenSanPham).FirstOrDefault(),
+
+                   SoLuong = dh.SoLuong,
+                   TongTien = dh.TongTien
+               })
+               .ToList();
+            int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+
+            var dg = _context.DanhGia.ToList();
+
+            var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
+            decimal sotienduocgiam = 0;
+            var giatrigiam = _context.MaGiamGia.Where(gg => gg.MMaGiamGia == don.MMaGiamGia).FirstOrDefault();
+            if (giatrigiam != null)
+            {
+                sotienduocgiam = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri;
+            }
+            var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
+
+            var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
+            var xa1 = await _locationService.GetWardNameByIdAsync(int.Parse(diachi.Xa), int.Parse(diachi.Huyen));
+            var tp1 = await _locationService.GetProvinceNameByIdAsync(int.Parse(diachi.ThanhPho));
+
+            diachi.Huyen = huyen1; diachi.ThanhPho = tp1; diachi.Xa = xa1;
+
+            var taikhoan = _context.TaiKhoan.Where(tk => tk.MaTaiKhoan == don.MaTaiKhoan).FirstOrDefault();
+
+            var pttt = _context.PhuongThucThanhToan.Where(pt => pt.MaPhuongThuc == don.MaPhuongThucThanhToan).Select(pt => pt.TenPhuongThuc).FirstOrDefault();
+            var nd = new NdChitiet
+            {
+                chitiet = donhang,
+                id = id,
+                dh = don,
+                danhgia = dg,
+                mataikhoan = mataikhoan,
+                diachi = diachi,
+                taikhoan = taikhoan,
+                phuongthucthanhtoan = pttt,
+                ttthanhtoan = don.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán",
+                giamgia = sotienduocgiam
+            };
+            ViewBag.TongTienChu = NumberToText.DocTien((long)(nd.dh.TongTien + 30000 - nd.giamgia));
+            ViewBag.TongTienSo = nd.dh.TongTien + 30000 - nd.giamgia;
+            return View(nd);
+        }
+
+        public static class NumberToText
+        {
+            private static readonly string[] ChuSo = { "không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín" };
+
+            private static string DocHangChuc(int number, bool daydu)
+            {
+                string result = "";
+                int chuc = number / 10;
+                int donvi = number % 10;
+
+                if (chuc > 1)
+                {
+                    result = " " + ChuSo[chuc] + " mươi";
+                    if (donvi == 1) result += " mốt";
+                }
+                else if (chuc == 1)
+                {
+                    result = " mười";
+                    if (donvi == 1) result += " một";
+                }
+                else if (daydu && donvi > 0) result = " lẻ";
+
+                if (donvi == 5 && chuc >= 1)
+                {
+                    result += " lăm";
+                }
+                else if (donvi > 0 && !(donvi == 1 && (chuc == 1 || chuc == 0)))
+                {
+                    result += " " + ChuSo[donvi];
+                }
+
+                return result;
+            }
+
+            private static string DocHangTram(int number, bool daydu)
+            {
+                int tram = number / 100;
+                int chuc = number % 100;
+                string result = "";
+
+                if (daydu || tram > 0)
+                {
+                    result = " " + ChuSo[tram] + " trăm";
+                    result += DocHangChuc(chuc, true);
+                }
+                else
+                {
+                    result = DocHangChuc(chuc, false);
+                }
+
+                return result;
+            }
+
+            public static string DocTien(long number)
+            {
+                if (number == 0) return "Không đồng";
+
+                string[] donvi = { "", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ" };
+                string result = "";
+                int i = 0;
+
+                while (number > 0)
+                {
+                    int n = (int)(number % 1000);
+                    if (n != 0)
+                    {
+                        string str = DocHangTram(n, i > 0);
+                        result = str + donvi[i] + result;
+                    }
+                    number /= 1000;
+                    i++;
+                }
+
+                result = result.Trim().Replace("không trăm", "").Replace("lẻ", "");
+
+                result = char.ToUpper(result[0]) + result.Substring(1) + " đồng";
+                return result;
+            }
+        }
+    }
 }

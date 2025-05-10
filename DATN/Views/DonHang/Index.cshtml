@@ -278,462 +278,83 @@
 
 @section Scripts {
     <script>
-                       $(document).ready(function () {
-                            $('#shinhthucvanchuyen').append(
-                                `<option value="">----</option>`
-                            );
-            $.ajax({
-                url: 'http://localhost:7177/PhuongThuc/Danhsach',
-                method: 'GET',
-                success: function (res) {
-                    if (Array.isArray(res.data)) {
-                        res.data.forEach(function (item) {
-                            $('#shinhthucvanchuyen').append(
-                                `<option value="${item.maPhuongThuc}">${item.tenPhuongThuc}</option>`
-                            );
-                        });
-                    }
-                },
-                error: function (err) {
-                    console.error("Lỗi khi lấy danh sách phương thức vận chuyển:", err);
-                }
-            });
-        });
-
-
-         $(document).ready(function () {
-                     $('#tt10').on('click', function () {
-                         $('#tt123').hide();
-                     });
-          });
-         $(document).ready(function () {
-
-                            let trangThaiOptions = [
-                            { value: "Chờ xác nhận", text: "Chờ xác nhận" },
-                            { value: "Đang vận chuyển", text: "Đang vận chuyển" },
-                            { value: "Đã vận chuyển", text: "Đã vận chuyển" },
-                            { value: "Đã hủy", text: "Đã hủy" }
-                            ];
-
-                            let select = $("#strangthaivanchuyen");
-                            let select1 = $("#tttvanchuyen");
-                            select.append(`<option value="">---</option>`);
-                            trangThaiOptions.forEach(function (item) {
-                            select.append(`<option value="${item.value}">${item.text}</option>`);
-                            select1.append(`<option value="${item.value}">${item.text}</option>`);
-                            });
-                            });
-            // load dropdownlist trangthai
-                    $(document).ready(function () {
-
-                            let trangThaiOptions = [
-                            { value: true, text: "Đã thanh toán" },
-                            { value: false, text: "Chưa thanh toán" }
-                            ];
-
-                            let select = $("#strangthaithanhtoan");
-                            let select1 = $("#tttthanhtoan");
-                            select.append(`<option value="">---</option>`);
-                            trangThaiOptions.forEach(function (item) {
-                            select.append(`<option value="${item.value}">${item.text}</option>`);
-                            select1.append(`<option value="${item.value}">${item.text}</option>`);
-                            });
-                            });
-            // select datepicker
-                     $(document).ready(function () {
-                             $('#tt10').show();
-                             $('#tt11').hide();
-                     });
-                     $(document).ready(function () {
-             // Load initial data
-                              loadGridData();
-             // Function to load data into the grid
-                              function loadGridData() {
-                                      var url = "http://localhost:7177/DonHang/Danhsach";
-                                      $.get(url, {}, function (response) {
-                                      var dulieu = response.data || [];
-                                      dulieu.sort((a, b) => new Date(b.NgayTao) - new Date(a.NgayTao));
-                             // Khởi tạo hoặc cập nhật DataTable
-                                      $('#listGrid').DataTable({
-                                         dom: '<"top"f>rt<"bottom"ip><"clear">',
-                                         destroy: true,
-                                         lengthChange: true,
-                                         autoWidth: false,
-                                         searching: false,
-                                         ordering: true,
-                                         paging: true,
-                                         data: dulieu,
-                                         columns: [
-                                                         { "data": "tenDatMua", "width": "10%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "12%" },
-                                                                {
-          data: "soTienGiam",
-          width: "12%",
-          render: function (data, type, row) {
-              let formatted = "";
-           return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-        },
-      
-
-                                                         { "data": "thanhTien", "width": "12%",
-                                                          render: function (data, type, row) {
-              let formatted = "";
-             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-                                                         },
-                                                         { "data": "phuongthucthanhtoan", "width": "18%" },
-                                                          {
-                                                             data: "trangThaiThanhToan",
-                                                             width: "15%",
-                                                             render: function (data, type, row) {
-                                                             return data === true ? "Đã thanh toán" : "Chưa thanh toán";
-                                                             }
-                                                         },
-                                                                      {
-          data: "ngayTao",  // giữ nguyên kiểu DateTime
-          width: "13%",
-          render: function (data, type, row) {
-            if (!data) return "";
-
-            // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
-            if (type === "sort" || type === "type") {
-              return data;
-            }
-
-            const date = new Date(data);
-            const pad = n => n.toString().padStart(2, '0');
-            return pad(date.getDate()) + "/" +
-                   pad(date.getMonth() + 1) + "/" +
-                   date.getFullYear() + " " +
-                   pad(date.getHours()) + ":" +
-                   pad(date.getMinutes()) + ":" +
-                   pad(date.getSeconds());
-          }
-        }
-        ,
-
-                                                         {
-                                                             "data": "maDonHang",
-                                                             "width":"13%",
-                                                             render: function (data) {
-                                                             let editButton = `
-                                                             <button class='ViewDetails btn btn-link' data-id="${data}">
-                                                             <i class="bi bi-pencil-fill"></i>
-                                                             </button>`;
-
-                                                             let DetailsButton = `
-                                                             <button class='DeleteSubject btn btn-link' data-id="${data}">
-                                                             <i class="bi bi-list"></i>
-                                                             </button>`;
-                                                             return editButton + DetailsButton;
-                                                             }
-                                                             }
-                                         ],
-                                         language: {
-                                                  search: "Tìm kiếm:",
-                                                  info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ đơn hàng",
-                                                  zeroRecords: "Không tìm thấy kết quả nào."
-                                         }
-                                      });
-
-                                      $('#alphabetSortBtn').off('click').on('click', function () {
-                                         let table = $('#listGrid').DataTable();
-                                         let currentOrder = table.order();
-                                         if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
-                                             table.order([1, 'desc']).draw();
-                                         } else {
-                                             table.order([1, 'asc']).draw();
-                                         }
-                                      });
-                                      })
-                                      .fail(function () {
-                                      alert("Có lỗi xảy ra khi tải dữ liệu.");
-                                      });
-                              }
-             // quay lại màn hình danh sách sp
-                               $('#backbt').click(function () {
-                                      loadGridData();
-                                      $("#strangthaivanchuyen").val('');
-                                      $("#shinhthucvanchuyen").val('');
-                                      $("#strangthaithanhtoan").val('');
-                                      $("#sngaydau").val('');
-                                      $("#sngaycuoi").val('');
-                              });
-             // Back main form
-                              $('#backbutton').click(function () {
-                                        $('#listGrid1').hide();
-                                        $('#listGrid1_filter').hide();
-                                        $('#listGrid1_info').hide();
-                                        $('#listGrid1_paginate').hide();
-                                        $('#backbutton').hide();
-                                        $('#listGrid').show();
-                                        $('#listGrid_filter').show();
-                                        $('#listGrid_info').show();
-                                        $('.form1').show();
-                                        $('.form2').hide();
-                                        $('#listGrid_paginate').show();
-                                        $('#tt10').show();
-                                        $('#tt2').show();
-                                        $('#tt11').hide();
-                                        $('#tt123').hide();
-                                        $('#backbt').show();
-                                        $('#backbt1').hide();
-                                        $('.form3').show();
-                                        $('#tt11').hide();
-                                        $('#Insert').show();
-                                        $('.form10').show();
-                                        $('.form11').hide();
-                                        $('#searchButton').show();
-                                        sessionStorage.removeItem("madonhang");
-                              });
-        var cityList = [];
-        var districtList = [];
-        var wardList = [];
-
-        $(document).ready(function () {
-            // Gọi API lấy danh sách tỉnh
-            $.ajax({
-                url: 'https://provinces.open-api.vn/api/p/',
-                method: 'GET',
-                success: function (data) {
-                    cityList = data;
-                    // Gọi API lấy tất cả huyện (d/): https://provinces.open-api.vn/api/d/
+                               $(document).ready(function () {
+                                    $('#shinhthucvanchuyen').append(
+                                        `<option value="">----</option>`
+                                    );
                     $.ajax({
-                        url: 'https://provinces.open-api.vn/api/d/',
+                        url: 'http://localhost:7177/PhuongThuc/Danhsach',
                         method: 'GET',
-                        success: function (data) {
-                            districtList = data;
-                            // Gọi API lấy tất cả xã (w/): https://provinces.open-api.vn/api/w/
-                            $.ajax({
-                                url: 'https://provinces.open-api.vn/api/w/',
-                                method: 'GET',
-                                success: function (data) {
-                                    wardList = data;
-                                },
-                                error: function () {
-                                    console.log("Lỗi khi tải danh sách xã");
-                                }
-                            });
+                        success: function (res) {
+                            if (Array.isArray(res.data)) {
+                                res.data.forEach(function (item) {
+                                    $('#shinhthucvanchuyen').append(
+                                        `<option value="${item.maPhuongThuc}">${item.tenPhuongThuc}</option>`
+                                    );
+                                });
+                            }
                         },
-                        error: function () {
-                            console.log("Lỗi khi tải danh sách huyện");
+                        error: function (err) {
+                            console.error("Lỗi khi lấy danh sách phương thức vận chuyển:", err);
                         }
                     });
-                },
-                error: function () {
-                    console.log("Lỗi khi tải danh sách tỉnh");
-                }
-            });
-        });
+                });
 
 
-             // View product details
-            $(document).on('click', '.ViewDetails', function () {
-            const table = $('#listGrid').DataTable();
-            const row = $(this).closest('tr');
-            const rowData = table.row(row).data();
-            const id = rowData.maDonHang;
-            $('#tt123').show();
-            // Gọi API lấy chi tiết tài khoản
-            $.ajax({
-                url: `http://localhost:7177/DonHang/ChiTiet?madh=${id}`,
-                type: 'GET',
-                success: function (response) {
-                    if (!response || !response.data) {
-                        alert('Chi tiết đơn hàng không tìm thấy.');
-                        return;
-                    }
-                    console.log(response);
-                  const data = response.data;
-                  var cityName = cityList.find(city => city.code == parseInt(data.diaChiTP));
-                  var nameTP = cityName ? cityName.name : 'Không tìm thấy';
+                 $(document).ready(function () {
+                             $('#tt10').on('click', function () {
+                                 $('#tt123').hide();
+                             });
+                  });
+                 $(document).ready(function () {
 
-                  var dictrictName = districtList.find(city => city.code == parseInt(data.diaChiHuyen));
-                  var nameHuyen = dictrictName ? dictrictName.name : 'Không tìm thấy';
+                                    let trangThaiOptions = [
+                                    { value: "Chờ xác nhận", text: "Chờ xác nhận" },
+                                    { value: "Đang vận chuyển", text: "Đang vận chuyển" },
+                                    { value: "Đã vận chuyển", text: "Đã vận chuyển" },
+                                    { value: "Đã hủy", text: "Đã hủy" }
+                                    ];
 
-                  var wardName = wardList.find(city => city.code == parseInt(data.diaChiXa));
-                  var nameXa = wardName ? wardName.name : 'Không tìm thấy';
-                  console.log(data.thanhTien);
-                    // Gán dữ liệu vào form
-                    $("#thoten").val(data.tenDatMua);
-                    $("#temail").val(data.mail);
-                    $("#tmadonhang").val(data.maDonHang);
-                    $("#tttvanchuyen").val(data.trangThaiVanChuyen);
-                    $("#tptthanhtoan").val(data.phuongthucthanhtoan);
-                    $("#tttthanhtoan").val(data.trangThaiThanhToan.toString());
-                    $("#ttiengiam").val(data.soTienGiam.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
-                    $("#ttongtien").val(data.tongTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
-                    $("#tthanhtien").val(data.thanhTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
-                    $("#ttennguoinhan").val(data.tenNhanHang);
-                    $("#tsdtnhan").val(data.sdtNhanHang);
-                    $("#tthanhpho").val(nameTP);
-                    $("#thuyen").val(nameHuyen);
-                    $("#txa").val(nameXa);
-                    $("#tchitiet").val(data.diaChiChiTiet);
+                                    let select = $("#strangthaivanchuyen");
+                                    let select1 = $("#tttvanchuyen");
+                                    select.append(`<option value="">---</option>`);
+                                    trangThaiOptions.forEach(function (item) {
+                                    select.append(`<option value="${item.value}">${item.text}</option>`);
+                                    select1.append(`<option value="${item.value}">${item.text}</option>`);
+                                    });
+                                    });
+                    // load dropdownlist trangthai
+                            $(document).ready(function () {
 
-                    // Hiển thị tab form
-                    $('#Update').show();
-                    $('#formTabTitle').text('Chi tiết');
-                    $('a[href="#subjectFormTab"]').tab('show');
-                },
-                error: function () {
-                    alert('Lỗi khi lấy chi tiết danh sách sản phẩm mua.');
-                }
-            });
-        });
+                                    let trangThaiOptions = [
+                                    { value: true, text: "Đã thanh toán" },
+                                    { value: false, text: "Chưa thanh toán" }
+                                    ];
 
-
-
-             // fill data in listGrid1
-                              function loadChiTietSanPham(madh) {
-                                                $.ajax({
-                                                url: `http://localhost:7177/DonHang/DanhSachSP?madonhang=${madh}`,
-                                                type: 'GET',
-                                                success: function (response) {
-                                                if (response && response.data && response.data.length > 0) {
-                                                let dulieu = response.data;
-                                                console.log(dulieu);
-                                                $('#listGrid1').DataTable({
-                                                dom: '<"top"f>rt<"bottom"ip><"clear">',
-                                                destroy: true,
-                                                lengthChange: true,
-                                                autoWidth: false,
-                                                searching: false,
-                                                ordering: true,
-                                                paging: true,
-                                                data: dulieu,
-                                                columns: [
-                                                    { data: "tenSanPham", width: "20%" },
-                                                      { "data": "giaTien", "width": "20%",
-                                                          render: function (data, type, row) {
-              let formatted = "";
-             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-                                                         },
-                                                      { "data": "giaGiam", "width": "20%",
-                                                          render: function (data, type, row) {
-              let formatted = "";
-             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-                                                         },
-                                                    { data: "soLuong", width: "20%" },
-                                                     { "data": "tongTien", "width": "20%",
-                                                          render: function (data, type, row) {
-              let formatted = "";
-             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-                                                         },
-
-                                                ],
-                                                language: {
-                                                search: "Tìm kiếm:",
-                                                info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
-                                                zeroRecords: "Không tìm thấy kết quả nào."
-                                                }
-                                                });
-                                                } else {
-                            // Không có dữ liệu: reset bảng và xoá sessionStorage
-                                                if ($.fn.DataTable.isDataTable('#listGrid1')) {
-                                                $('#listGrid1').DataTable().clear().draw();
-                                                }
-                                                }
-                                                },
-                                                error: function () {
-
-                                                }
-                                                });
-                              }
-
-             // Details List products
-                              $(document).on('click', '.DeleteSubject', function () {
-                                                $('#listGrid').hide();
-                                                $('#listGrid_filter').hide();
-                                                $('#listGrid_info').hide();
-                                                $('#listGrid_paginate').hide();
-                                                $('#listGrid1').show();
-                                                $('#backbutton').show();
-                                                $('#listGrid1_filter').show();
-                                                $('#listGrid1_info').show();
-                                                $('#listGrid1_paginate').show();
-                                                $('.form2').show();
-                                                $('.form4').show();
-                                                $('.form1').hide();
-                                                $('.form3').hide();
-                                                $('#tt2').hide();
-                                                $('#tt').hide();
-                                                $('#tt10').show();
-                                                $('#tt10').show();
-                                                $('#tt1').show();
-                                                $('#tt11').show();
-                                                $('#tt123').hide();
-                                                $('#backbt1').show();
-                                                $('#backbt').hide();
-                                                $('.form11').show();
-                                                $('.form10').hide();
-                                                $('#searchButton1').show();
-                                                $('#searchButton').hide();
-                                                let table = $('#listGrid').DataTable();
-                                                let row = $(this).closest('tr');
-                                                let rowData = table.row(row).data();
-                                                let id = rowData.maDonHang;
-                                                sessionStorage.setItem("madonhang", id);
-                                                console.log(id);
-                                                loadChiTietSanPham(id);
-                               });
-             // Update
-            $('#Update').click(function () {
-            const madonhang = parseInt($("#tmadonhang").val());
-            const ttvanchuyen = $("#tttvanchuyen").val();
-            const ttthanhtoan = $("#tttthanhtoan").val() === "" ? null : $("#tttthanhtoan").val() === "true";
-            const ngaycapnhat = new Date().toISOString();
-
-            // Xây URL có query string
-            const url = `http://localhost:7177/DonHang/CapNhat?madonhang=${madonhang}&ttvanchuyen=${encodeURIComponent(ttvanchuyen)}&ttthanhtoan=${ttthanhtoan}&ngaycapnhat=${encodeURIComponent(ngaycapnhat)}`;
-            console.log(url);
-            $.ajax({
-                url: url,
-                type: "PUT",
-                success: function (res) {
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: res.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                    loadGridData();
-                },
-                error: function (xhr) {
-                    Swal.fire({
-                        title: 'Thất bại!',
-                        text: xhr.responseJSON?.message || 'Đã xảy ra lỗi khi cập nhật đơn hàng.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            });
-        });
-
-
-
-             // Search
-                                $('#searchButton').on('click', function () {
-                                                let searchData = {
-                                                trangThaiVanChuyen: $("#strangthaivanchuyen").val() || null,
-                                                ptthanhtoan: parseInt($("#shinhthucvanchuyen").val()) || null,
-                                                trangthaiThanhToan: $("#strangthaithanhtoan").val() === "" ? null : $("#strangthaithanhtoan").val() === "true",
-                                                ngayBatDau: $("#sngaydau").val() || null,
-                                                ngayKetThuc: $("#sngaycuoi").val() || null
-                                                };
-                                                console.log(searchData);
-                                                $.ajax({
-                                                url: 'http://localhost:7177/DonHang/TimKiem',
-                                                method: 'POST',
-                                                contentType: 'application/json',
-                                                data: JSON.stringify(searchData),
-                                                 success: function (res) {
-                                                                                                      console.log(res);
-                                                 $('#listGrid').DataTable({
+                                    let select = $("#strangthaithanhtoan");
+                                    let select1 = $("#tttthanhtoan");
+                                    select.append(`<option value="">---</option>`);
+                                    trangThaiOptions.forEach(function (item) {
+                                    select.append(`<option value="${item.value}">${item.text}</option>`);
+                                    select1.append(`<option value="${item.value}">${item.text}</option>`);
+                                    });
+                                    });
+                    // select datepicker
+                             $(document).ready(function () {
+                                     $('#tt10').show();
+                                     $('#tt11').hide();
+                             });
+                             $(document).ready(function () {
+                     // Load initial data
+                                      loadGridData();
+                     // Function to load data into the grid
+                                      function loadGridData() {
+                                              var url = "http://localhost:7177/DonHang/Danhsach";
+                                              $.get(url, {}, function (response) {
+                                              var dulieu = response.data || [];
+                                              dulieu.sort((a, b) => new Date(b.NgayTao) - new Date(a.NgayTao));
+                                     // Khởi tạo hoặc cập nhật DataTable
+                                              $('#listGrid').DataTable({
                                                  dom: '<"top"f>rt<"bottom"ip><"clear">',
                                                  destroy: true,
                                                  lengthChange: true,
@@ -741,99 +362,493 @@
                                                  searching: false,
                                                  ordering: true,
                                                  paging: true,
-                                                 data: res.data,
-                                                   columns: [
-                                                         { "data": "tenDatMua", "width": "10%" },
-                                                         { "data": "trangThaiVanChuyen", "width": "12%" },
-                                                                {
-          data: "tienGiam",
-          width: "12%",
-          render: function (data, type, row) {
-              let formatted = "";
-            if (!data || !row) return formatted = parseFloat(0.0).toLocaleString("vi-VN", { style: "currency", currency: "VND" });;
+                                                 data: dulieu,
+                                                 columns: [
+                                                                 { "data": "tenDatMua", "width": "10%" },
+                                                                 { "data": "trangThaiVanChuyen", "width": "12%" },
+                                                                        {
+                  data: "soTienGiam",
+                  width: "11%",
+                  render: function (data, type, row) {
+                      let formatted = "";
+                   return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                },
 
 
-            if (row.loaiGiamGia && row.loaiGiamGia.includes("Giảm theo %")) {
-              const tongTien = row.tongTien || 0;
-              const giam = (data * tongTien) / 100;
-              formatted = giam.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-            } else if(row.loaiGiamGia && row.loaiGiamGia.includes("Giảm tiền mặt")) {
-              formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-            }
-            else
-            {
-                 formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-            }
-            return formatted;
-          }
-        },
+                                                                 { "data": "thanhTien", "width": "11%",
+                                                                  render: function (data, type, row) {
+                      let formatted = "";
+                     return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                                                                 },
+                                                                 { "data": "phuongthucthanhtoan", "width": "17%" },
+                                                                  {
+                                                                     data: "trangThaiThanhToan",
+                                                                     width: "15%",
+                                                                     render: function (data, type, row) {
+                                                                     return data === true ? "Đã thanh toán" : "Chưa thanh toán";
+                                                                     }
+                                                                 },
+                                                                              {
+                  data: "ngayTao",  // giữ nguyên kiểu DateTime
+                  width: "13%",
+                  render: function (data, type, row) {
+                    if (!data) return "";
 
-                                                         { "data": "tongTien", "width": "12%",
-                                                          render: function (data, type, row) {
-              let formatted = "";
-             return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
-          }
-                                                         },
-                                                         { "data": "phuongthucthanhtoan", "width": "18%" },
-                                                          {
-                                                             data: "trangThaiThanhToan",
-                                                             width: "15%",
-                                                             render: function (data, type, row) {
-                                                             return data === true ? "Đã thanh toán" : "Chưa thanh toán";
-                                                             }
-                                                         },
-                                                                      {
-          data: "ngayTao",  // giữ nguyên kiểu DateTime
-          width: "13%",
-          render: function (data, type, row) {
-            if (!data) return "";
+                    // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
+                    if (type === "sort" || type === "type") {
+                      return data;
+                    }
 
-            // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
-            if (type === "sort" || type === "type") {
-              return data;
-            }
+                    const date = new Date(data);
+                    const pad = n => n.toString().padStart(2, '0');
+                    return pad(date.getDate()) + "/" +
+                           pad(date.getMonth() + 1) + "/" +
+                           date.getFullYear() + " " +
+                           pad(date.getHours()) + ":" +
+                           pad(date.getMinutes()) + ":" +
+                           pad(date.getSeconds());
+                  }
+                }
+                ,
 
-            const date = new Date(data);
-            const pad = n => n.toString().padStart(2, '0');
-            return pad(date.getDate()) + "/" +
-                   pad(date.getMonth() + 1) + "/" +
-                   date.getFullYear() + " " +
-                   pad(date.getHours()) + ":" +
-                   pad(date.getMinutes()) + ":" +
-                   pad(date.getSeconds());
-          }
-        }
-        ,
+                                                                 {
+                                                                     "data": "maDonHang",
+                                                                     "width":"16%",
+                                                                     render: function (data) {
+                                                                     let editButton = `
+                                                                     <button class='ViewDetails btn btn-link' data-id="${data}">
+                                                                     <i class="bi bi-pencil-fill"></i>
+                                                                     </button>`;
 
-                                                         {
-                                                             "data": "maDonHang",
-                                                             "width":"13%",
-                                                             render: function (data) {
-                                                             let editButton = `
-                                                             <button class='ViewDetails btn btn-link' data-id="${data}">
-                                                             <i class="bi bi-pencil-fill"></i>
-                                                             </button>`;
-
-                                                             let DetailsButton = `
-                                                             <button class='DeleteSubject btn btn-link' data-id="${data}">
-                                                             <i class="bi bi-list"></i>
-                                                             </button>`;
-                                                             return editButton + DetailsButton;
-                                                             }
-                                                             }
-                                         ],
+                                                                     let DetailsButton = `
+                                                                     <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                                     <i class="bi bi-list"></i>
+                                                                     </button>`;
+                                                                      let PdfButton = `
+                                                                     <button class='Viewpdf btn btn-link' data-id="${data}">
+                                                                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                                     </button>`;
+                                                                     return editButton + DetailsButton + PdfButton;
+                                                                     }
+                                                                     }
+                                                 ],
                                                  language: {
-                                                 search: "Tìm kiếm:",
-                                                 info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ tài khoản",
-                                                 zeroRecords: "Không tìm thấy kết quả nào."
+                                                          search: "Tìm kiếm:",
+                                                          info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ đơn hàng",
+                                                          zeroRecords: "Không tìm thấy kết quả nào."
                                                  }
-                                                 });
-                                                 },
-                                                 error: function (err) {
+                                              });
+
+                                              $('#alphabetSortBtn').off('click').on('click', function () {
+                                                 let table = $('#listGrid').DataTable();
+                                                 let currentOrder = table.order();
+                                                 if (currentOrder[0][0] === 1 && currentOrder[0][1] === 'asc') {
+                                                     table.order([1, 'desc']).draw();
+                                                 } else {
+                                                     table.order([1, 'asc']).draw();
                                                  }
-                                                 });
-                             });
-             });
+                                              });
+                                              })
+                                              .fail(function () {
+                                              alert("Có lỗi xảy ra khi tải dữ liệu.");
+                                              });
+                                      }
+                     // quay lại màn hình danh sách sp
+                                       $('#backbt').click(function () {
+                                              loadGridData();
+                                              $("#strangthaivanchuyen").val('');
+                                              $("#shinhthucvanchuyen").val('');
+                                              $("#strangthaithanhtoan").val('');
+                                              $("#sngaydau").val('');
+                                              $("#sngaycuoi").val('');
+                                      });
+                     // Back main form
+                                      $('#backbutton').click(function () {
+                                                $('#listGrid1').hide();
+                                                $('#listGrid1_filter').hide();
+                                                $('#listGrid1_info').hide();
+                                                $('#listGrid1_paginate').hide();
+                                                $('#backbutton').hide();
+                                                $('#listGrid').show();
+                                                $('#listGrid_filter').show();
+                                                $('#listGrid_info').show();
+                                                $('.form1').show();
+                                                $('.form2').hide();
+                                                $('#listGrid_paginate').show();
+                                                $('#tt10').show();
+                                                $('#tt2').show();
+                                                $('#tt11').hide();
+                                                $('#tt123').hide();
+                                                $('#backbt').show();
+                                                $('#backbt1').hide();
+                                                $('.form3').show();
+                                                $('#tt11').hide();
+                                                $('#Insert').show();
+                                                $('.form10').show();
+                                                $('.form11').hide();
+                                                $('#searchButton').show();
+                                                sessionStorage.removeItem("madonhang");
+                                      });
+                var cityList = [];
+                var districtList = [];
+                var wardList = [];
+
+                $(document).ready(function () {
+                    // Gọi API lấy danh sách tỉnh
+                    $.ajax({
+                        url: 'https://provinces.open-api.vn/api/p/',
+                        method: 'GET',
+                        success: function (data) {
+                            cityList = data;
+                            // Gọi API lấy tất cả huyện (d/): https://provinces.open-api.vn/api/d/
+                            $.ajax({
+                                url: 'https://provinces.open-api.vn/api/d/',
+                                method: 'GET',
+                                success: function (data) {
+                                    districtList = data;
+                                    // Gọi API lấy tất cả xã (w/): https://provinces.open-api.vn/api/w/
+                                    $.ajax({
+                                        url: 'https://provinces.open-api.vn/api/w/',
+                                        method: 'GET',
+                                        success: function (data) {
+                                            wardList = data;
+                                        },
+                                        error: function () {
+                                            console.log("Lỗi khi tải danh sách xã");
+                                        }
+                                    });
+                                },
+                                error: function () {
+                                    console.log("Lỗi khi tải danh sách huyện");
+                                }
+                            });
+                        },
+                        error: function () {
+                            console.log("Lỗi khi tải danh sách tỉnh");
+                        }
+                    });
+                });
+
+
+                     // View product details
+                    $(document).on('click', '.ViewDetails', function () {
+                    const table = $('#listGrid').DataTable();
+                    const row = $(this).closest('tr');
+                    const rowData = table.row(row).data();
+                    const id = rowData.maDonHang;
+                    $('#tt123').show();
+                    // Gọi API lấy chi tiết tài khoản
+                    $.ajax({
+                        url: `http://localhost:7177/DonHang/ChiTiet?madh=${id}`,
+                        type: 'GET',
+                        success: function (response) {
+                            if (!response || !response.data) {
+                                alert('Chi tiết đơn hàng không tìm thấy.');
+                                return;
+                            }
+                            console.log(response);
+                          const data = response.data;
+                          var cityName = cityList.find(city => city.code == parseInt(data.diaChiTP));
+                          var nameTP = cityName ? cityName.name : 'Không tìm thấy';
+
+                          var dictrictName = districtList.find(city => city.code == parseInt(data.diaChiHuyen));
+                          var nameHuyen = dictrictName ? dictrictName.name : 'Không tìm thấy';
+
+                          var wardName = wardList.find(city => city.code == parseInt(data.diaChiXa));
+                          var nameXa = wardName ? wardName.name : 'Không tìm thấy';
+                          console.log(data.thanhTien);
+                            // Gán dữ liệu vào form
+                            $("#thoten").val(data.tenDatMua);
+                            $("#temail").val(data.mail);
+                            $("#tmadonhang").val(data.maDonHang);
+                            $("#tttvanchuyen").val(data.trangThaiVanChuyen);
+                            $("#tptthanhtoan").val(data.phuongthucthanhtoan);
+                            $("#tttthanhtoan").val(data.trangThaiThanhToan.toString());
+                            $("#ttiengiam").val(data.soTienGiam.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                            $("#ttongtien").val(data.tongTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                            $("#tthanhtien").val(data.thanhTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                            $("#ttennguoinhan").val(data.tenNhanHang);
+                            $("#tsdtnhan").val(data.sdtNhanHang);
+                            $("#tthanhpho").val(nameTP);
+                            $("#thuyen").val(nameHuyen);
+                            $("#txa").val(nameXa);
+                            $("#tchitiet").val(data.diaChiChiTiet);
+
+                            // Hiển thị tab form
+                            $('#Update').show();
+                            $('#formTabTitle').text('Chi tiết');
+                            $('a[href="#subjectFormTab"]').tab('show');
+                        },
+                        error: function () {
+                            alert('Lỗi khi lấy chi tiết danh sách sản phẩm mua.');
+                        }
+                    });
+                });
+
+
+
+                     // fill data in listGrid1
+                                      function loadChiTietSanPham(madh) {
+                                                        $.ajax({
+                                                        url: `http://localhost:7177/DonHang/DanhSachSP?madonhang=${madh}`,
+                                                        type: 'GET',
+                                                        success: function (response) {
+                                                        if (response && response.data && response.data.length > 0) {
+                                                        let dulieu = response.data;
+                                                        console.log(dulieu);
+                                                        $('#listGrid1').DataTable({
+                                                        dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                        destroy: true,
+                                                        lengthChange: true,
+                                                        autoWidth: false,
+                                                        searching: false,
+                                                        ordering: true,
+                                                        paging: true,
+                                                        data: dulieu,
+                                                        columns: [
+                                                            { data: "tenSanPham", width: "20%" },
+                                                              { "data": "giaTien", "width": "20%",
+                                                                  render: function (data, type, row) {
+                      let formatted = "";
+                     return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                                                                 },
+                                                              { "data": "giaGiam", "width": "20%",
+                                                                  render: function (data, type, row) {
+                      let formatted = "";
+                     return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                                                                 },
+                                                            { data: "soLuong", width: "20%" },
+                                                             { "data": "tongTien", "width": "20%",
+                                                                  render: function (data, type, row) {
+                      let formatted = "";
+                     return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                                                                 },
+
+                                                        ],
+                                                        language: {
+                                                        search: "Tìm kiếm:",
+                                                        info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ sản phẩm",
+                                                        zeroRecords: "Không tìm thấy kết quả nào."
+                                                        }
+                                                        });
+                                                        } else {
+                                    // Không có dữ liệu: reset bảng và xoá sessionStorage
+                                                        if ($.fn.DataTable.isDataTable('#listGrid1')) {
+                                                        $('#listGrid1').DataTable().clear().draw();
+                                                        }
+                                                        }
+                                                        },
+                                                        error: function () {
+
+                                                        }
+                                                        });
+                                      }
+
+                     // Details List products
+                                      $(document).on('click', '.DeleteSubject', function () {
+                                                        $('#listGrid').hide();
+                                                        $('#listGrid_filter').hide();
+                                                        $('#listGrid_info').hide();
+                                                        $('#listGrid_paginate').hide();
+                                                        $('#listGrid1').show();
+                                                        $('#backbutton').show();
+                                                        $('#listGrid1_filter').show();
+                                                        $('#listGrid1_info').show();
+                                                        $('#listGrid1_paginate').show();
+                                                        $('.form2').show();
+                                                        $('.form4').show();
+                                                        $('.form1').hide();
+                                                        $('.form3').hide();
+                                                        $('#tt2').hide();
+                                                        $('#tt').hide();
+                                                        $('#tt10').show();
+                                                        $('#tt10').show();
+                                                        $('#tt1').show();
+                                                        $('#tt11').show();
+                                                        $('#tt123').hide();
+                                                        $('#backbt1').show();
+                                                        $('#backbt').hide();
+                                                        $('.form11').show();
+                                                        $('.form10').hide();
+                                                        $('#searchButton1').show();
+                                                        $('#searchButton').hide();
+                                                        let table = $('#listGrid').DataTable();
+                                                        let row = $(this).closest('tr');
+                                                        let rowData = table.row(row).data();
+                                                        let id = rowData.maDonHang;
+                                                        sessionStorage.setItem("madonhang", id);
+                                                        console.log(id);
+                                                        loadChiTietSanPham(id);
+                                       });
+        //View pdf hóa đơn
+                       $(document).on('click', '.Viewpdf', function () {
+                           var id = parseInt(this.getAttribute('data-id'));
+                           console.log(id);
+                            window.location.href = '/DonHang/XemHoaDon?id=' + id;
+                        });
+
+                     // Update
+                    $('#Update').click(function () {
+                    const madonhang = parseInt($("#tmadonhang").val());
+                    const ttvanchuyen = $("#tttvanchuyen").val();
+                    const ttthanhtoan = $("#tttthanhtoan").val() === "" ? null : $("#tttthanhtoan").val() === "true";
+                    const ngaycapnhat = new Date().toISOString();
+
+                    // Xây URL có query string
+                    const url = `http://localhost:7177/DonHang/CapNhat?madonhang=${madonhang}&ttvanchuyen=${encodeURIComponent(ttvanchuyen)}&ttthanhtoan=${ttthanhtoan}&ngaycapnhat=${encodeURIComponent(ngaycapnhat)}`;
+                    console.log(url);
+                    $.ajax({
+                        url: url,
+                        type: "PUT",
+                        success: function (res) {
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: res.message,
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            loadGridData();
+                        },
+                        error: function (xhr) {
+                            Swal.fire({
+                                title: 'Thất bại!',
+                                text: xhr.responseJSON?.message || 'Đã xảy ra lỗi khi cập nhật đơn hàng.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    });
+                });
+
+
+
+                     // Search
+                                        $('#searchButton').on('click', function () {
+                                                        let searchData = {
+                                                        trangThaiVanChuyen: $("#strangthaivanchuyen").val() || null,
+                                                        ptthanhtoan: parseInt($("#shinhthucvanchuyen").val()) || null,
+                                                        trangthaiThanhToan: $("#strangthaithanhtoan").val() === "" ? null : $("#strangthaithanhtoan").val() === "true",
+                                                        ngayBatDau: $("#sngaydau").val() || null,
+                                                        ngayKetThuc: $("#sngaycuoi").val() || null
+                                                        };
+                                                        console.log(searchData);
+                                                        $.ajax({
+                                                        url: 'http://localhost:7177/DonHang/TimKiem',
+                                                        method: 'POST',
+                                                        contentType: 'application/json',
+                                                        data: JSON.stringify(searchData),
+                                                         success: function (res) {
+                                                                                                              console.log(res);
+                                                         $('#listGrid').DataTable({
+                                                         dom: '<"top"f>rt<"bottom"ip><"clear">',
+                                                         destroy: true,
+                                                         lengthChange: true,
+                                                         autoWidth: false,
+                                                         searching: false,
+                                                         ordering: true,
+                                                         paging: true,
+                                                         data: res.data,
+                                                           columns: [
+                                                                 { "data": "tenDatMua", "width": "10%" },
+                                                                 { "data": "trangThaiVanChuyen", "width": "12%" },
+                                                                        {
+                  data: "tienGiam",
+                  width: "11%",
+                  render: function (data, type, row) {
+                      let formatted = "";
+                    if (!data || !row) return formatted = parseFloat(0.0).toLocaleString("vi-VN", { style: "currency", currency: "VND" });;
+
+
+                    if (row.loaiGiamGia && row.loaiGiamGia.includes("Giảm theo %")) {
+                      const tongTien = row.tongTien || 0;
+                      const giam = (data * tongTien) / 100;
+                      formatted = giam.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                    } else if(row.loaiGiamGia && row.loaiGiamGia.includes("Giảm tiền mặt")) {
+                      formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                    }
+                    else
+                    {
+                         formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                    }
+                    return formatted;
+                  }
+                },
+
+                                                                 { "data": "thanhTien", "width": "11%",
+                                                                  render: function (data, type, row) {
+                      let formatted = "";
+                     return formatted = parseFloat(data).toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+                  }
+                                                                 },
+                                                                 { "data": "phuongthucthanhtoan", "width": "17%" },
+                                                                  {
+                                                                     data: "trangThaiThanhToan",
+                                                                     width: "15%",
+                                                                     render: function (data, type, row) {
+                                                                     return data === true ? "Đã thanh toán" : "Chưa thanh toán";
+                                                                     }
+                                                                 },
+                                                                              {
+                  data: "ngayTao",  // giữ nguyên kiểu DateTime
+                  width: "13%",
+                  render: function (data, type, row) {
+                    if (!data) return "";
+
+                    // Khi sắp xếp, trả về data gốc để đảm bảo đúng kiểu
+                    if (type === "sort" || type === "type") {
+                      return data;
+                    }
+
+                    const date = new Date(data);
+                    const pad = n => n.toString().padStart(2, '0');
+                    return pad(date.getDate()) + "/" +
+                           pad(date.getMonth() + 1) + "/" +
+                           date.getFullYear() + " " +
+                           pad(date.getHours()) + ":" +
+                           pad(date.getMinutes()) + ":" +
+                           pad(date.getSeconds());
+                  }
+                }
+                ,
+
+                                                                 {
+                                                                     "data": "maDonHang",
+                                                                     "width":"16%",
+                                                                     render: function (data) {
+                                                                     let editButton = `
+                                                                     <button class='ViewDetails btn btn-link' data-id="${data}">
+                                                                     <i class="bi bi-pencil-fill"></i>
+                                                                     </button>`;
+
+                                                                     let DetailsButton = `
+                                                                     <button class='DeleteSubject btn btn-link' data-id="${data}">
+                                                                     <i class="bi bi-list"></i>
+                                                                     </button>`;
+                                                                     let PdfButton = `
+                                                                     <button class='Viewpdf btn btn-link' data-id="${data}">
+                                                                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                                                                     </button>`;
+                                                                     return editButton + DetailsButton + PdfButton;
+                                                                     }
+                                                                     }
+                                                 ],
+                                                         language: {
+                                                         search: "Tìm kiếm:",
+                                                         info: "Hiển thị từ _START_ đến _END_ của _TOTAL_ đơn hàng",
+                                                         zeroRecords: "Không tìm thấy kết quả nào."
+                                                         }
+                                                         });
+                                                         },
+                                                         error: function (err) {
+                                                         }
+                                                         });
+                                     });
+                     });
     </script>
 }
 

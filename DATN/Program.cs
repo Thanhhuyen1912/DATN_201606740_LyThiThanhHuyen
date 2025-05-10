@@ -10,7 +10,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddHttpClient<ILocationService, LocationService>();
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
