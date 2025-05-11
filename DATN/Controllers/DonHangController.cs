@@ -550,73 +550,81 @@ namespace DATN.Controllers
         [RequiredLogin]
         public async Task<IActionResult> XemHoaDon(int id)
         {
-            ViewBag.TieuDe = "Xuất hóa đơn";
-            var donhang = _context.ChiTietDonHang
-               .Where(p => p.MaDonHang == id)
-               .Select(dh => new Chitietdh
-               {
-                   MaSanPham = _context.ChiTietSanPham
-                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
-                       .Select(ct => ct.MaSanPham)
-                       .FirstOrDefault(),
-
-                   GiaTien = _context.ChiTietSanPham
-                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
-                       .Select(ct => ct.Gia)
-                       .FirstOrDefault(),
-
-                   GiaGiam = _context.ChiTietSanPham
-                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
-                       .Select(ct => ct.GiaGiam)
-                       .FirstOrDefault(),
-
-                   TenSanPham = (from ct in _context.ChiTietSanPham
-                                 join sp in _context.SanPham on ct.MaSanPham equals sp.MaSanPham
-                                 where ct.MaChiTietSP == dh.MaChiTietSP
-                                 select sp.TenSanPham).FirstOrDefault(),
-
-                   SoLuong = dh.SoLuong,
-                   TongTien = dh.TongTien
-               })
-               .ToList();
-            int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
-
-            var dg = _context.DanhGia.ToList();
-
-            var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
-            decimal sotienduocgiam = 0;
-            var giatrigiam = _context.MaGiamGia.Where(gg => gg.MMaGiamGia == don.MMaGiamGia).FirstOrDefault();
-            if (giatrigiam != null)
+            string? role = HttpContext.Session.GetString("Role");
+            if (role != null && (role.Contains("0") || role.Contains("1")))
             {
-                sotienduocgiam = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri;
+                ViewBag.TieuDe = "Xuất hóa đơn";
+                var donhang = _context.ChiTietDonHang
+                   .Where(p => p.MaDonHang == id)
+                   .Select(dh => new Chitietdh
+                   {
+                       MaSanPham = _context.ChiTietSanPham
+                           .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                           .Select(ct => ct.MaSanPham)
+                           .FirstOrDefault(),
+
+                       GiaTien = _context.ChiTietSanPham
+                           .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                           .Select(ct => ct.Gia)
+                           .FirstOrDefault(),
+
+                       GiaGiam = _context.ChiTietSanPham
+                           .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                           .Select(ct => ct.GiaGiam)
+                           .FirstOrDefault(),
+
+                       TenSanPham = (from ct in _context.ChiTietSanPham
+                                     join sp in _context.SanPham on ct.MaSanPham equals sp.MaSanPham
+                                     where ct.MaChiTietSP == dh.MaChiTietSP
+                                     select sp.TenSanPham).FirstOrDefault(),
+
+                       SoLuong = dh.SoLuong,
+                       TongTien = dh.TongTien
+                   })
+                   .ToList();
+                int mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
+
+                var dg = _context.DanhGia.ToList();
+
+                var don = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
+                decimal sotienduocgiam = 0;
+                var giatrigiam = _context.MaGiamGia.Where(gg => gg.MMaGiamGia == don.MMaGiamGia).FirstOrDefault();
+                if (giatrigiam != null)
+                {
+                    sotienduocgiam = giatrigiam.LoaiGiamGia.Contains("Giảm theo %") ? ((decimal)giatrigiam.GiaTri / 100) * don.TongTien : (decimal)giatrigiam.GiaTri;
+                }
+                var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
+
+                var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
+                var xa1 = await _locationService.GetWardNameByIdAsync(int.Parse(diachi.Xa), int.Parse(diachi.Huyen));
+                var tp1 = await _locationService.GetProvinceNameByIdAsync(int.Parse(diachi.ThanhPho));
+
+                diachi.Huyen = huyen1; diachi.ThanhPho = tp1; diachi.Xa = xa1;
+
+                var taikhoan = _context.TaiKhoan.Where(tk => tk.MaTaiKhoan == don.MaTaiKhoan).FirstOrDefault();
+
+                var pttt = _context.PhuongThucThanhToan.Where(pt => pt.MaPhuongThuc == don.MaPhuongThucThanhToan).Select(pt => pt.TenPhuongThuc).FirstOrDefault();
+                var nd = new NdChitiet
+                {
+                    chitiet = donhang,
+                    id = id,
+                    dh = don,
+                    danhgia = dg,
+                    mataikhoan = mataikhoan,
+                    diachi = diachi,
+                    taikhoan = taikhoan,
+                    phuongthucthanhtoan = pttt,
+                    ttthanhtoan = don.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán",
+                    giamgia = sotienduocgiam
+                };
+                ViewBag.TongTienChu = NumberToText.DocTien((long)(nd.dh.TongTien + 30000 - nd.giamgia));
+                ViewBag.TongTienSo = nd.dh.TongTien + 30000 - nd.giamgia;
+                return View(nd);
             }
-            var diachi = _context.DiaChi.Where(dc => dc.MaDiaChi == don.MaDiaChi).FirstOrDefault();
-
-            var huyen1 = await _locationService.GetDistrictNameByIdAsync(int.Parse(diachi.Huyen));
-            var xa1 = await _locationService.GetWardNameByIdAsync(int.Parse(diachi.Xa), int.Parse(diachi.Huyen));
-            var tp1 = await _locationService.GetProvinceNameByIdAsync(int.Parse(diachi.ThanhPho));
-
-            diachi.Huyen = huyen1; diachi.ThanhPho = tp1; diachi.Xa = xa1;
-
-            var taikhoan = _context.TaiKhoan.Where(tk => tk.MaTaiKhoan == don.MaTaiKhoan).FirstOrDefault();
-
-            var pttt = _context.PhuongThucThanhToan.Where(pt => pt.MaPhuongThuc == don.MaPhuongThucThanhToan).Select(pt => pt.TenPhuongThuc).FirstOrDefault();
-            var nd = new NdChitiet
+            else
             {
-                chitiet = donhang,
-                id = id,
-                dh = don,
-                danhgia = dg,
-                mataikhoan = mataikhoan,
-                diachi = diachi,
-                taikhoan = taikhoan,
-                phuongthucthanhtoan = pttt,
-                ttthanhtoan = don.TrangThaiThanhToan == true ? "Đã thanh toán" : "Chưa thanh toán",
-                giamgia = sotienduocgiam
-            };
-            ViewBag.TongTienChu = NumberToText.DocTien((long)(nd.dh.TongTien + 30000 - nd.giamgia));
-            ViewBag.TongTienSo = nd.dh.TongTien + 30000 - nd.giamgia;
-            return View(nd);
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         public static class NumberToText
