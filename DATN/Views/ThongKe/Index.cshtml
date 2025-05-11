@@ -4,7 +4,16 @@
 }
 <!-- jQuery - cần trước nếu dùng $ -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<style>
+    .xuatfile{
+        background-color: #fdb9a4;
+        color: white;
+        padding: 7px;
+        border-radius: 4px;
+        display: block;
+        text-align: center;
+    }
+</style>
 <!-- Highcharts core + modules -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -12,6 +21,10 @@
 <script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
 <div>
+    <div class="col-md-12 mt-3" style="display: flex; justify-content: center">
+        <button class="btn xuatfile" id="downloadExcel">Xuất báo cáo</button>
+    </div>
+
     <div class="d-flex col-12">
         <figure class="highcharts-figure  col-4 bg-black">
             <div id="container6"></div>
@@ -32,18 +45,6 @@
             </div>
         </figure>
     </div>
-@*     <div class="d-flex col-12">
-        <figure class="highcharts5-figure5 col-3">
-            <div>
-                <div id="container5"></div>
-            </div>
-        </figure>
-        <figure class="highcharts6-figure6 col-3">
-            <div>
-                <div id="container6"></div>
-            </div>
-        </figure>
-    </div> *@
     <div class="d-flex col-12">
         <figure class="highcharts1-figure1 col-2">
             <div>
@@ -572,7 +573,83 @@
             data: data_top5e
         }]
     });
+
+
+    function getCSVData() {
+             return {
+                 sheet1: document.getElementById("csv").textContent,
+                 sheet2: document.getElementById("csv1").textContent,
+                 sheet3: document.getElementById("csv2").textContent,
+                 sheet4: document.getElementById("csv3").textContent,
+                 sheet5: document.getElementById("csv4").textContent,
+                 sheet6: document.getElementById("csv5").textContent,
+                 sheet7: document.getElementById("csv6").textContent,
+                 sheet8: document.getElementById("csv7").textContent
+             };
+         }
+
+         // Chuyển đổi CSV thành một mảng 2 chiều
+         function csvToArray(csv) {
+             const rows = csv.split('\n');
+             return rows.map(row => row.split(','));
+         }
+
+         // Chuyển đổi CSV thành Excel và tải file
+         function convertCSVToExcel() {
+            const wb = XLSX.utils.book_new(); // Tạo một workbook mới
+            const csvData = getCSVData(); // Lấy dữ liệu CSV từ các thẻ <pre>
+
+            // Duyệt qua từng dữ liệu CSV và thêm vào một sheet
+            for (const [sheetKey, csvContent] of Object.entries(csvData)) {
+                const dataArray = csvToArray(csvContent); // Chuyển CSV thành mảng 2 chiều
+                const ws = XLSX.utils.aoa_to_sheet(dataArray); // Chuyển mảng 2 chiều thành sheet
+
+                // Đặt tên cho các sheet
+                let sheetName = '';
+                switch(sheetKey) {
+                    case 'sheet1':
+                       sheetName = 'Doanh thu tháng';
+                        break;
+                    case 'sheet2':
+                        sheetName = 'Thương hiệu';
+                        break;
+                    case 'sheet3':
+                        sheetName = 'Nhóm hương';
+                        break;
+                    case 'sheet4':
+                        sheetName = 'Giới tính';
+                        break;
+                    case 'sheet5':
+                        sheetName = 'Xuất xứ';
+                        break;
+                    case 'sheet6':
+                        sheetName = 'Tổng doanh thu';
+                        break;
+                    case 'sheet7':
+                        sheetName = 'Top 5 sản phẩm chạy';
+                        break;
+                    case 'sheet8':
+                        sheetName = 'Top 5 sản phẩm tồn';
+                        break;
+                    default:
+                        sheetName = 'null';
+                }
+
+                // Thêm sheet vào workbook với tên tùy chỉnh
+                XLSX.utils.book_append_sheet(wb, ws, sheetName);
+            }
+            // Lấy ngày hiện tại
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().split('T')[0]; // Định dạng theo yyyy-mm-dd
+            // Tải file Excel
+            XLSX.writeFile(wb, `BaoCao_${formattedDate}.xlsx`);
+
+        }
+
+        // Gán sự kiện click cho nút tải file Excel
+        document.getElementById('downloadExcel').addEventListener('click', convertCSVToExcel);
 </script>
+
 
 
 
