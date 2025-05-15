@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLib", "Lib Core\CoreLib
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E602C30D-F565-4B43-9D14-EA0EF4602D7C}"
 	ProjectSection(SolutionItems) = preProject
-		..\SQL_DATN.sql = ..\SQL_DATN.sql
+		..\..\DATN_201606740_LyThiThanhHuyen.sql = ..\..\DATN_201606740_LyThiThanhHuyen.sql
 	EndProjectSection
 EndProject
 Global

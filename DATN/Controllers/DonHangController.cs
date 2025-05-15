@@ -202,38 +202,57 @@ namespace DATN.Controllers
         [HttpPost]
         public IActionResult ApDungMaGiamGia([FromBody] MaGiamGiaRequest request)
         {
+            int? mataikhoan = int.Parse(HttpContext.Session.GetString("MaTaiKhoan"));
             try
             {
+                if (mataikhoan <= 0)
+                    return Json(new { code = 1, message = "Không xác định được người dùng" });
+
                 var giamgia = _context.MaGiamGia.FirstOrDefault(m => m.MaHienThi == request.magiamgia);
                 if (giamgia == null)
                     return Json(new { code = 1, message = "Mã giảm giá không tồn tại" });
+
+                // Kiểm tra nếu người dùng đã sử dụng mã
+                var magiamgia = _context.MaGiamGia.Where(gg => gg.MaHienThi == request.magiamgia).FirstOrDefault();
+                var daSuDung = _context.DonHang
+                                .Any(x => x.MaTaiKhoan == mataikhoan && x.MMaGiamGia == magiamgia.MMaGiamGia);
+                if (daSuDung)
+                    return Json(new { code = 1, message = "Bạn đã sử dụng mã giảm giá này rồi" });
+
+                if (DateTime.Now >= giamgia.NgayKetThuc || giamgia.NgayBatDau >= DateTime.Now)
+                    return Json(new { code = 1, message = "Thời gian áp dụng mã không phù hợp" });
+
                 decimal tongmoi = 0;
                 decimal giagtrigiam = 0;
                 string loaigiamgia = giamgia.LoaiGiamGia;
-                if (DateTime.Now >= giamgia.NgayKetThuc || giamgia.NgayBatDau >= DateTime.Now)
-                {
-                    return Json(new { code = 1, message = "Thời gian áp dụng mã không phù hợp" });
-                }
+
                 if (loaigiamgia.Contains("Giảm theo %"))
                 {
                     tongmoi = request.tongtien * (1 - (decimal)giamgia.GiaTri / 100);
                     giagtrigiam = (decimal)(giamgia.GiaTri / 100) * request.tongtien;
-                    if (tongmoi < 0) tongmoi = 0;
                 }
                 else
                 {
                     tongmoi = request.tongtien - (decimal)giamgia.GiaTri;
                     giagtrigiam = (decimal)giamgia.GiaTri;
-
-                    if (tongmoi < 0) tongmoi = 0;
                 }
-                return Json(new { code = 0, tongtien = tongmoi, giamgia = giagtrigiam, message = "Thành công áp dụng mã giảm giá" });
+
+                if (tongmoi < 0) tongmoi = 0;               
+
+                return Json(new
+                {
+                    code = 0,
+                    tongtien = tongmoi,
+                    giamgia = giagtrigiam,
+                    message = "Thành công áp dụng mã giảm giá"
+                });
             }
-            catch (Exception ex)
+            catch
             {
                 return Json(new { code = 1, message = "Không thể áp dụng mã giảm giá" });
             }
         }
+
         [RequiredLogin]
         [HttpGet]
         public async Task<IActionResult> XacNhanThanhToan()
