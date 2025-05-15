@@ -299,7 +299,7 @@
                                 error: function (xhr) {
                                     Swal.fire({
                                         title: 'Thất bại!',
-                                        text: 'Đã xảy ra lỗi khi thêm kích thước.',
+                                        text: xhr.responseJSON?.message || 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
                                         icon: 'error',
                                         confirmButtonText: 'OK'
                                     });

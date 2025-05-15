@@ -45,6 +45,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.PhuongThucThanhToan
+                   .FirstOrDefault(k => k.TenPhuongThuc.Trim().ToLower() == th.TenPhuongThuc.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên phương thức đã tồn tại", code = 1 });
+                }
                 _context.PhuongThucThanhToan.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
@@ -59,6 +66,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.PhuongThucThanhToan
+                    .FirstOrDefault(k => k.TenPhuongThuc.Trim().ToLower() == th.TenPhuongThuc.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên phương thức đã tồn tại", code = 1 });
+                }
                 _context.PhuongThucThanhToan.Add(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Thêm thành công", code = 0 });

@@ -56,6 +56,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.NhomHuong
+                   .FirstOrDefault(k => k.TenNhomHuong.Trim().ToLower() == th.TenNhomHuong.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên nhóm hương đã tồn tại", code = 1 });
+                }
                 _context.NhomHuong.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
@@ -70,6 +77,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.NhomHuong
+                    .FirstOrDefault(k => k.TenNhomHuong.Trim().ToLower() == th.TenNhomHuong.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên nhóm hương đã tồn tại", code = 1 });
+                }
                 _context.NhomHuong.Add(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Thêm thành công", code = 0 });

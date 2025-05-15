@@ -786,7 +786,7 @@
                                          error: function (xhr) {
                                          Swal.fire({
                                          title: 'Thất bại!',
-                                         text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
+                                         text: xhr.responseJSON?.message || 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
                                          icon: 'error',
                                          confirmButtonText: 'OK'
                                          });
@@ -849,7 +849,7 @@
                                                  console.log("Lỗi:", xhr.responseText);
                                                  Swal.fire({
                                                  title: 'Thất bại!',
-                                                 text: 'Đã xảy ra lỗi khi thêm sản phẩm.',
+                                                 text: xhr.responseJSON?.message || 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
                                                  icon: 'error',
                                                  confirmButtonText: 'OK'
                                                  });

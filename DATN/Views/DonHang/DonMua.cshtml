@@ -60,7 +60,7 @@
                         </form>
                         @if (!item.TrangThaiThanhToan && item.MaPhuongThucThanhToan == 2)
                         {
-                            <a class="tt btn btn-sm me-1" id="btnXacNhan" >
+                            <a class="tt btn btn-sm me-1" id="btnXacNhan">
                                 <i class="bi bi-currency-dollar"></i>
                             </a>
                         }
@@ -182,27 +182,37 @@
             showPage(1);
         }
     });
- 
-    let sortDirection = {}; // theo dõi chiều sắp xếp từng cột
+
+         let sortDirection = {};
 
     function sortTable(columnIndex) {
         const table = document.getElementById("donmuaTable");
         const tbody = table.tBodies[0];
         const rows = Array.from(tbody.rows);
 
-        // Xác định kiểu dữ liệu (số hay chữ)
-        const isNumeric = columnIndex === 2; // Cột "Tổng tiền"
-
-        // Đảo chiều nếu đã sắp xếp rồi
+        // Đảo chiều sắp xếp
         sortDirection[columnIndex] = !sortDirection[columnIndex];
+
+        // Đoán kiểu dữ liệu dựa vào giá trị dòng đầu tiên
+        const sampleValue = rows[0]?.cells[columnIndex]?.innerText?.trim() || "";
+        const dataType = detectDataType(sampleValue);
+
+        // Cập nhật icon sắp xếp
+        updateSortIcons(columnIndex, sortDirection[columnIndex]);
 
         rows.sort((a, b) => {
             let valA = a.cells[columnIndex].innerText.trim();
             let valB = b.cells[columnIndex].innerText.trim();
 
-            if (isNumeric) {
-                valA = parseInt(valA.replace(/\D/g, '')) || 0;
-                valB = parseInt(valB.replace(/\D/g, '')) || 0;
+            if (dataType === "date") {
+                valA = parseDate(valA);
+                valB = parseDate(valB);
+            } else if (dataType === "currency") {
+                valA = parseCurrency(valA);
+                valB = parseCurrency(valB);
+            } else if (dataType === "number") {
+                valA = parseFloat(valA.replace(/[^0-9.-]+/g, '')) || 0;
+                valB = parseFloat(valB.replace(/[^0-9.-]+/g, '')) || 0;
             } else {
                 valA = valA.toLowerCase();
                 valB = valB.toLowerCase();
@@ -213,8 +223,41 @@
             return 0;
         });
 
-        // Cập nhật lại thứ tự hàng trong tbody
         rows.forEach(row => tbody.appendChild(row));
     }
+
+    function detectDataType(value) {
+        const datePattern = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
+        const currencyPattern = /^[\d\s.]+[₫đvndVNĐ]*$/i;
+        const numberPattern = /^[\d\s,.]+$/;
+
+        if (datePattern.test(value)) return "date";
+        if (currencyPattern.test(value)) return "currency"; // phải trước number
+        if (numberPattern.test(value)) return "number";
+        return "string";
+    }
+
+    function parseDate(str) {
+        const parts = str.split(/[-\/]/);
+        if (parts.length !== 3) return new Date("Invalid");
+        const [day, month, year] = parts.map(p => parseInt(p));
+        return new Date(year, month - 1, day);
+    }
+
+    function parseCurrency(str) {
+        // Bỏ dấu chấm và ký hiệu tiền tệ
+        return parseFloat(str.replace(/\./g, "").replace(/[^\d]/g, "")) || 0;
+    }
+
+    function updateSortIcons(activeIndex, isAsc) {
+        const headers = document.querySelectorAll("#donmuaTable thead th");
+        headers.forEach((th, index) => {
+            const icon = th.querySelector(".sort-icon");
+            if (icon) {
+                icon.textContent = index === activeIndex ? (isAsc ? "▲" : "▼") : "";
+            }
+        });
+    }
+
 </script>
 

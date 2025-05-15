@@ -56,6 +56,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.ThuongHieu
+                    .FirstOrDefault(k => k.TenThuongHieu.Trim().ToLower() == th.TenThuongHieu.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên kích thước đã tồn tại", code = 1 });
+                }
                 _context.ThuongHieu.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
@@ -70,6 +77,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.ThuongHieu
+                    .FirstOrDefault(k => k.TenThuongHieu.Trim().ToLower() == th.TenThuongHieu.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên kích thước đã tồn tại", code = 1 });
+                }
                 _context.ThuongHieu.Add(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Thêm thương hiệu thành công", code = 0 });

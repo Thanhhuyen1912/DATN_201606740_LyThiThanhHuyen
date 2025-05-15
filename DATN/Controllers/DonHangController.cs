@@ -13,16 +13,12 @@ namespace DATN.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILocationService _locationService;
-        private readonly IWebHostEnvironment _hostEnvironment;
-        private readonly ICompositeViewEngine _viewEngine;
 
 
-        public DonHangController(ICompositeViewEngine viewEngine, AppDbContext context, ILocationService locationService, IWebHostEnvironment hostEnvironment)
+        public DonHangController(AppDbContext context, ILocationService locationService)
         {
             _context = context;
             _locationService = locationService;
-            _hostEnvironment = hostEnvironment;
-            _viewEngine = viewEngine;
         }
         //Admin
         [RequiredLogin]

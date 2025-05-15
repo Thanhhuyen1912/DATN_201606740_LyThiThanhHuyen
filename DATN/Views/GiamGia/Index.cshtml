@@ -363,7 +363,7 @@
                                 method: "POST",
                                 contentType: "application/json",
                                 data: JSON.stringify(productData),
-                                success: function () {
+                                success: function (response) {
                                     $("#mahienthi").val('');
                                     $("#giatri").val('');
                                     Swal.fire({
@@ -377,7 +377,7 @@
                                 error: function (xhr) {
                                     Swal.fire({
                                         title: 'Thất bại!',
-                                        text: 'Đã xảy ra lỗi khi thêm mã giảm giá.',
+                                        text: xhr.responseJSON?.message || 'Đã xảy ra lỗi. Vui lòng kiểm tra lại.',
                                         icon: 'error',
                                         confirmButtonText: 'OK'
                                     });

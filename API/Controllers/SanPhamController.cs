@@ -133,6 +133,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.SanPham
+                    .FirstOrDefault(k => k.TenSanPham.Trim().ToLower() == tk.TenSanPham.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Sản phẩm đã tồn tại", code = 1 });
+                }
                 _context.SanPham.Add(tk);
                 _context.SaveChanges();
                 return Ok(new { code = 0, message = "Thêm SP thành công", data = tk.MaSanPham });
@@ -151,6 +158,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.SanPham
+                    .FirstOrDefault(k => k.TenSanPham.Trim().ToLower() == tk.TenSanPham.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Sản phẩm đã tồn tại", code = 1 });
+                }
                 // 1. Cập nhật thông tin sản phẩm
                 _context.SanPham.Update(tk);
 

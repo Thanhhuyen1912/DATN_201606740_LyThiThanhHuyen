@@ -57,6 +57,13 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.KichThuoc
+                    .FirstOrDefault(k => k.TenKichThuoc.Trim().ToLower() == th.TenKichThuoc.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên kích thước đã tồn tại", code = 1 });
+                }
                 _context.KichThuoc.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
@@ -67,18 +74,28 @@ namespace API.Controllers
         }
         [HttpPost]
         [Route("/KichThuoc/them")]
-        public IActionResult post(KichThuoc th)
+        public IActionResult Post(KichThuoc th)
         {
             try
             {
+                var existing = _context.KichThuoc
+                    .FirstOrDefault(k => k.TenKichThuoc.Trim().ToLower() == th.TenKichThuoc.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Tên kích thước đã tồn tại", code = 1 });
+                }
+
                 _context.KichThuoc.Add(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Thêm thành công", code = 0 });
             }
-            catch
-            { return BadRequest(); }
-
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Lỗi: " + ex.Message, code = -1 });
+            }
         }
+
         [HttpPost]
         [Route("/KichThuoc/TimKiem")]
         public IActionResult TimKiem([FromBody] SearchKichThuoc dto)

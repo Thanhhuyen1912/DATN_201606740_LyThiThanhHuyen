@@ -44,12 +44,19 @@ namespace API.Controllers
         {
             try
             {
+                var existing = _context.MaGiamGia
+                  .FirstOrDefault(k => k.MaHienThi.Trim().ToLower() == th.MaHienThi.Trim().ToLower());
+
+                if (existing != null)
+                {
+                    return BadRequest(new { message = "Mã giảm giá đã tồn tại", code = 1 });
+                }
                 _context.MaGiamGia.Update(th);
                 _context.SaveChanges();
                 return Ok(new { message = "Cập nhật thông tin thành công", code = 0 });
             }
             catch
-            { return BadRequest(); }
+            { return BadRequest(new { message = "Cập nhật thông tin thất bại" }); }
 
         }
         [HttpPost]
@@ -57,16 +64,33 @@ namespace API.Controllers
         public IActionResult post(MaGiamGia th)
         {
             if (th.NgayBatDau > th.NgayKetThuc)
-            { return BadRequest(); }
-            try
             {
-                _context.MaGiamGia.Add(th);
-                _context.SaveChanges();
-                return Ok(new { message = "Thêm thành công", code = 0 });
+                return BadRequest(new { message = "Ngày áp dụng không hợp lệ" });
             }
-            catch
-            { return BadRequest(); }
+            else if (th.LoaiGiamGia.Contains("Giảm theo %") && th.GiaTri > 100)
+            {
+                return BadRequest(new {message = "Mã giảm giá không được lớn hơn 100%"});
+            }
+            else
+            {
+                try
+                {
+                    var existing = _context.MaGiamGia
+                   .FirstOrDefault(k => k.MaHienThi.Trim().ToLower() == th.MaHienThi.Trim().ToLower());
 
+                    if (existing != null)
+                    {
+                        return BadRequest(new { message = "Mã giảm giá đã tồn tại", code = 1 });
+                    }
+                    _context.MaGiamGia.Add(th);
+                    _context.SaveChanges();
+                    return Ok(new { message = "Thêm thành công", code = 0 });
+                }
+                catch
+                {
+                    return BadRequest();
+                }
+            }
         }
         [HttpPost]
         [Route("/GiamGia/TimKiem")]
