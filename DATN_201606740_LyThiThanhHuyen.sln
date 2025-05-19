@@ -9,9 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API", "API\API.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLib", "Lib Core\CoreLib.csproj", "{EE19ECEF-B139-42BD-8074-42F3BA459EA4}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{E602C30D-F565-4B43-9D14-EA0EF4602D7C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LyThiThanhHuyen_2021606740", "LyThiThanhHuyen_2021606740", "{D16CB5E9-FBC2-488E-84E4-7C3957F33C09}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\DATN_201606740_LyThiThanhHuyen.sql = ..\..\DATN_201606740_LyThiThanhHuyen.sql
+		..\..\LyThiThanhHuyen_2021606740\BaoCao_LyThiThanhHuyen_2021606740.docx = ..\..\LyThiThanhHuyen_2021606740\BaoCao_LyThiThanhHuyen_2021606740.docx
+		..\..\LyThiThanhHuyen_2021606740\Datebase_DATN_LyThiThanhHuyen_2021606740.sql = ..\..\LyThiThanhHuyen_2021606740\Datebase_DATN_LyThiThanhHuyen_2021606740.sql
+		..\..\LyThiThanhHuyen_2021606740\Phiếu tiến độ_LyThiThanhHuyen_2021606740.docx = ..\..\LyThiThanhHuyen_2021606740\Phiếu tiến độ_LyThiThanhHuyen_2021606740.docx
+		..\..\LyThiThanhHuyen_2021606740\Poster_LyThiThanhHuyen_2021606740.pdf = ..\..\LyThiThanhHuyen_2021606740\Poster_LyThiThanhHuyen_2021606740.pdf
 	EndProjectSection
 EndProject
 Global
