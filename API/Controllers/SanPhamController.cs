@@ -157,15 +157,7 @@ namespace API.Controllers
                                       [FromForm] List<int> deletedImageIds)
         {
             try
-            {
-                var existing = _context.SanPham
-                    .FirstOrDefault(k => k.TenSanPham.Trim().ToLower() == tk.TenSanPham.Trim().ToLower());
-
-                if (existing != null)
-                {
-                    return BadRequest(new { message = "Sản phẩm đã tồn tại", code = 1 });
-                }
-                // 1. Cập nhật thông tin sản phẩm
+            {              
                 _context.SanPham.Update(tk);
 
                 // 2. Xóa các ảnh bị người dùng xóa
