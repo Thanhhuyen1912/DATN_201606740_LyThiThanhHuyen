@@ -1,4 +1,5 @@
 ﻿using CoreLib.AppDbContext;
+using CoreLib.DTO;
 using CoreLib.Entity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -102,6 +103,36 @@ namespace API.Controllers
         [Route("/DonHang/ChiTiet")]
         public IActionResult getDetails(int madh)
         {
+            var chitietdonhang = _context.ChiTietDonHang
+               .Where(p => p.MaDonHang == madh)
+               .Select(dh => new Chitietdh
+               {
+                   MaSanPham = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.MaSanPham)
+                       .FirstOrDefault(),
+
+                   GiaTien = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.Gia)
+                       .FirstOrDefault(),
+
+                   GiaGiam = _context.ChiTietSanPham
+                       .Where(ct => ct.MaChiTietSP == dh.MaChiTietSP)
+                       .Select(ct => ct.GiaGiam)
+                       .FirstOrDefault(),
+
+                   TenSanPham = (from ct in _context.ChiTietSanPham
+                                 join sp in _context.SanPham on ct.MaSanPham equals sp.MaSanPham
+                                 where ct.MaChiTietSP == dh.MaChiTietSP
+                                 select sp.TenSanPham).FirstOrDefault(),
+
+                   SoLuong = dh.SoLuong,
+                   TongTien = dh.TongTien,
+
+               })
+               .ToList();
+            var tongtienhang = chitietdonhang.Sum(dh => dh.TongTien);
             var donhang = _context.DonHang
      .Where(sp => sp.MaDonHang == madh)
      .Select(sp => new
@@ -110,12 +141,11 @@ namespace API.Controllers
          sp.MaTaiKhoan,
          sp.MaDiaChi,
          sp.MaPhuongThucThanhToan,
-         sp.MMaGiamGia,
-         sp.TongTien,
+         sp.MMaGiamGia,         
          sp.NgayTao,
          sp.TrangThaiThanhToan,
          sp.TrangThaiVanChuyen,
-
+         TongTien = tongtienhang,
          TenDatMua = _context.TaiKhoan
              .Where(nh => nh.MaTaiKhoan == sp.MaTaiKhoan)
              .Select(nh => nh.HoTen)
@@ -159,7 +189,7 @@ namespace API.Controllers
 
              .FirstOrDefault(),
 
-         ThanhTien = sp.TongTien -
+         ThanhTien = sp.TongTien + 30000 -
              _context.MaGiamGia
                  .Where(th => th.MMaGiamGia == sp.MMaGiamGia)
                  .Select(th => th.LoaiGiamGia.Contains("Giảm theo %")

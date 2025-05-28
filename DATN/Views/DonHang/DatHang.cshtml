@@ -125,7 +125,7 @@
             </div>
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between">
-                    <span>Tiền hàng</span><strong id="tien">@ViewBag.Tongtien.ToString("C0", culture)</strong>
+                    <span>Tiền hàng</span><strong data-tongtien="@ViewBag.Tongtien" id="tien">@ViewBag.Tongtien.ToString("C0", culture)</strong>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
                     <span>Phí vận chuyển</span><strong>30.000đ</strong>
@@ -148,11 +148,15 @@
     </div>
 </div>
 <script>
+        function tinhTongTien(listsp) {
+        return listsp.reduce((tong, item) => tong + item.TongTien, 0);
+    }
+
     $("#dathang").click(function () {
         const diachi = parseInt($("input[name='MaDiaChi']:checked").val());
         const maphuongthuc = parseInt($("input[name='MaPhuongThuc']:checked").val());
         const magiamgia = $("#magiamgia").val();
-        const thanhtien = $("#thanhtien").text().replace(/[^\d]/g, '');
+        const thanhtien = $("#tien").text().replace(/[^\d]/g, '');
 
         const listsp = [];
 
@@ -169,6 +173,8 @@
                 SoLuong: soluong,
                 TongTien: gia * soluong
             });
+
+            let tongTienHang = tinhTongTien(listsp);
         });
 
         const data = {
@@ -176,7 +182,7 @@
             listsp: listsp,
             maphuongthuc: maphuongthuc,
             magiamgia: magiamgia,
-            thanhtien: parseFloat(thanhtien)
+            thanhtien: thanhtien
         };
            $.ajax({
         url: '/DonHang/XacNhan',
@@ -205,7 +211,7 @@
         e.preventDefault();
 
         const magiamgia = $("#magiamgia").val();
-        const tongtienGoc = parseFloat($("#thanhtien").data("thanhtien"));
+        const tongtienGoc = parseFloat($("#tien").data("tongtien"));
         $.ajax({
             url: '/DonHang/ApDungMaGiamGia',
             type: 'POST',
@@ -216,7 +222,7 @@
             }),
             success: function (res) {
                 if (res.code === 0) {
-                    const tongtienMoi = res.tongtien;
+                    const tongtienMoi = res.tongtienmoi;
                     const giamgia = res.giamgia;
 
                     // Cập nhật text hiển thị tiền (format số và thêm "đ")

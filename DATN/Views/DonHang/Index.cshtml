@@ -192,6 +192,14 @@
                             </div>
                             <div class="form-group row nopadding">
                                 <div class="col-md-3">
+                                    <label class="col-form-label">Tiền vận chuyển</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="tienvanchuyen" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row nopadding">
+                                <div class="col-md-3">
                                     <label class="col-form-label">Số tiền giảm giá</label>
                                 </div>
                                 <div class="col-md-4">
@@ -550,6 +558,7 @@
                             }
                             console.log(response);
                           const data = response.data;
+                          var tienvanchuyen = 30000;
                           var cityName = cityList.find(city => city.code == parseInt(data.diaChiTP));
                           var nameTP = cityName ? cityName.name : 'Không tìm thấy';
 
@@ -569,6 +578,7 @@
                             $("#ttiengiam").val(data.soTienGiam.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
                             $("#ttongtien").val(data.tongTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
                             $("#tthanhtien").val(data.thanhTien.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
+                            $("#tienvanchuyen").val(tienvanchuyen.toLocaleString("vi-VN", { style: "currency", currency: "VND" }));
                             $("#ttennguoinhan").val(data.tenNhanHang);
                             $("#tsdtnhan").val(data.sdtNhanHang);
                             $("#tthanhpho").val(nameTP);

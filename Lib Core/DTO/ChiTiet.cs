@@ -32,6 +32,7 @@ namespace CoreLib.DTO
         public string thuonghieu { get; set; }
         public string nhomhuong {  get; set; }
         public string xuatxu { get; set; }
+
     }
 
     public class NdChitiet
@@ -46,6 +47,7 @@ namespace CoreLib.DTO
         public string phuongthucthanhtoan { get; set; }
         public string ttthanhtoan { get; set; }
         public decimal giamgia {  get; set; }
+        public decimal tongtienhang { get; set; }
 
     }
     public class HienThiChiTiet
