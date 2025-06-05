@@ -434,12 +434,34 @@ namespace DATN.Controllers
         [HttpPost]
         public IActionResult huydonhang(int id, int page = 1)
         {
-            var donhang = _context.DonHang.Where(dh => dh.MaDonHang == id).FirstOrDefault();
-            if (donhang.TrangThaiVanChuyen == "Chờ xác nhận")
+            var donhang = _context.DonHang.FirstOrDefault(dh => dh.MaDonHang == id);
+            if (donhang != null && donhang.TrangThaiVanChuyen == "Chờ xác nhận")
             {
+                // Lấy danh sách chi tiết đơn hàng
+                var chiTietDonHang = _context.ChiTietDonHang
+                    .Where(ct => ct.MaDonHang == id)
+                    .ToList();
+
+                foreach (var item in chiTietDonHang)
+                {
+                    // Tìm chi tiết sản phẩm tương ứng
+                    var ctsp = _context.ChiTietSanPham
+                        .FirstOrDefault(ct => ct.MaChiTietSP == item.MaChiTietSP);
+
+                    if (ctsp != null)
+                    {
+                        // Cộng lại số lượng
+                        ctsp.SoLuong += item.SoLuong;
+                    }
+                }
+
+                // Cập nhật trạng thái đơn hàng
                 donhang.TrangThaiVanChuyen = "Đã hủy";
+
+                // Lưu thay đổi
                 _context.SaveChanges();
-                TempData["Message"] = "Hủy đơn hàng thành công.";
+
+                TempData["Message"] = "Hủy đơn hàng thành công và hoàn lại số lượng.";
             }
             else
             {
@@ -448,6 +470,7 @@ namespace DATN.Controllers
 
             return RedirectToAction("DonMua", "DonHang", new { page });
         }
+
 
 
         [RequiredLogin]
